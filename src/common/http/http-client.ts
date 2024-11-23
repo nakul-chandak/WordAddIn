@@ -9,7 +9,7 @@ export type ResponseInterceptor = { onFulfilled: FullFilled<AxiosResponse>; onRe
 export const IS_RETRY_HEADER = "Is-Retry";
 
 class HttpClientImpl {
-    private hostname = "https://api.azdev.guardrail.tech";
+    private hostname = "https://api.azstage.guardrail.tech/guardrail";
     private apiVersion = "v1";
     private http!: AxiosInstance;
     private requestInterceptors: RequestInterceptor[] = [];
@@ -17,7 +17,6 @@ class HttpClientImpl {
 
     private mergeConfig(config?: AxiosRequestConfig, portNumber?: number): AxiosRequestConfig {
         const hostname = process.env.REACT_APP_API_URL;
-        // const hostname = "https://api.azdev.guardrail.tech";
         this.hostname = hostname ?? this.hostname;
         const envPortNumber = parseInt(process.env.REACT_APP_API_PORT || "0");
         if (portNumber) {

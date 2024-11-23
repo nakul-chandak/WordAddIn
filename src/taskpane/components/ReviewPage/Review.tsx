@@ -1,6 +1,8 @@
 import { Dropdown, DropdownProps, makeStyles, typographyStyles, useId } from '@fluentui/react-components';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ReviewDetails } from './ReviewDetails';
+import { LlmService } from '../../../common/services/llm/llm.service';
+import { IReview } from '../../../interfaces/review';
 
 
 const useStyles = makeStyles({
@@ -10,7 +12,25 @@ const useStyles = makeStyles({
   text: typographyStyles.title2,
 });
 
-function Review(props: Partial<DropdownProps>) {
+function Review(props: any) {
+  const [result,setResult] = useState([]); 
+  
+  const loadPrompt=()=>{
+    LlmService.getLlms(props.promptRequest).then(res=>{
+      setResult([]);
+      console.log("result of Get llms API");
+      console.log(res);
+      Object.keys(res.output).map(function(key) {
+        const data:IReview = { promptType:key,description:res.output[key],buttonCaption:"Fact Checker",isDisLike:!res.isFavorite,isLike:res.isFavorite};
+        setResult(oldResult=>[...oldResult,data]);
+    });
+
+    console.log(result);
+    })
+  }
+
+  useEffect(() => loadPrompt(),[]); 
+
   const options = [
     "Change Tone"
   ]
@@ -51,7 +71,7 @@ function Review(props: Partial<DropdownProps>) {
           </option>  ))}
         </Dropdown>
       </div>
-    <ReviewDetails/>
+    <ReviewDetails data= {result}/>
     </>
     
 

@@ -2,6 +2,7 @@ import { HttpClient } from "../../http";
 import { HttpErrorResponse } from "../article/models/ArticleResponse";
 import { ChatGptRequest } from "./models/ChatGptRequest";
 import { LlmResponse } from "./models/llmResponse";
+import { promptRequest } from "./models/promptRequest";
 
 class LlmServiceImpl {
     processLlm(request: ChatGptRequest): Promise<LlmResponse> {
@@ -15,6 +16,14 @@ class LlmServiceImpl {
         });
     }
 
+    getLlms(request: promptRequest): Promise<any> {
+        const baseURL = '/llms';
+        return HttpClient.post<any>(baseURL,request,{
+            headers: { 'Content-Type': 'application/json' },
+        }).then(response => response.data).catch((err: HttpErrorResponse) => {
+            throw err;
+        });
+    }
 }
 const LlmService = new LlmServiceImpl();
 
