@@ -119,8 +119,39 @@ const logoArray = [
 function HomePage() {
     const styles = useStyles();
     const navigate = useNavigate();
+    const [loading, setLoading] = React.useState<boolean>(false); // Loading state
+    const [error, setError] = React.useState<string | null>(null); // Error state
+
     const [selectedOptions, setSelectedOptions] = React.useState<string[] | null>([]);
     const [textInput, setTextInput] = React.useState("");
+
+    const handleApiCall = async () => {
+        setLoading(true);
+        setError(null); // Clear any previous error
+        try {
+          const res = await fetch('https://api.azstage.guardrail.tech/guardrail/v1/llm/prompt_optimization', {
+            method: 'POST',
+            headers: {
+              'accept': 'application/json, text/plain, */*',
+              'authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im9yZ2FuaXphdGlvbnMiOlt7Il9pZCI6IjY2MGQ1N2YwYTgwNDBiMTk5ZGIxNmFiMSIsIl9yb2xlSWQiOiI2NGViMTA4Y2E3YzkxNjA0ZjViZmViZmIiLCJyb2xlIjoiVXNlciIsInN0YXR1cyI6IkFjdGl2ZSJ9XSwiZmlyc3ROYW1lIjoiRnJuZCIsImxhc3ROYW1lIjoiQkIiLCJlbWFpbCI6ImZybmRiYkBnbWFpbC5jb20iLCJpc1BsYXRmb3JtQWRtaW4iOmZhbHNlLCJzdWJzY3JpcHRpb24iOnsicGxhbk5hbWUiOiJQcm8iLCJwbGFuSWQiOiJwcmljZV8xUHBuekRMdnM4TmQ0Q051WkZLenhOZXYiLCJjdXN0b21lcklkIjoiY3VzX1F5djU2VnNORGlMdlFuIiwic3RhcnREYXRlIjoiMjAyNC0xMS0wNlQxNjoyNDoxMy4wMDBaIiwiZW5kRGF0ZSI6IjIwMjQtMTItMDZUMTY6MjQ6MTMuMDAwWiIsInN0YXR1cyI6ImFjdGl2ZSIsInN1YnNjcmlwdGlvbklkIjoic3ViXzFRNnhGaEx2czhOZDRDTnUxaUlEN09QYiJ9LCJwZXJtaXNzaW9ucyI6WyJBY2Nlc3NHdWFyZHJhaWwxMjMiLCJQcm9jZXNzRmFjdENoZWNrZXIiLCJBY2Nlc3NHYXRlV2F5U2VydmljZSIsIkFjY2Vzc0ZhY3RDaGVja1NlcnZpY2UiLCJBY2Nlc3NQcm9tb3RQcm90ZWN0U2VydmljZSIsIkFkZFJlbW92ZUZhdm9yaXRlcyIsImNhblVwbG9hZFN5c3RlbVBhdHRlcm5MaWJyYXJ5IiwiVmlld01hbmFnZUhpc3RvcnkiLCJBY2Nlc3NEb3dubG9hZCIsImNhblVwbG9hZFN5c3RlbVBhdHRlcm5MaWJyYXJ5IiwiQWNjZXNzR2F0ZVdheVNlcnZpY2UiLCJBY2Nlc3NGYWN0Q2hlY2tTZXJ2aWNlIiwiQWNjZXNzUHJvbW90UHJvdGVjdFNlcnZpY2UiLCJjYW5VcGxvYWRTeXN0ZW1MaWJyYXJ5IiwiY2FuVXBsb2FkQ3VzdG9tTGlicmFyeSIsImNhblVwbG9hZEN1c3RvbVBhdHRlcm5MaWJyYXJ5IiwiU2hhcmVDb250ZW50IiwiUHJvY2Vzc0ZhY3RDaGVja2VyIiwiRGVsZXRlSGlzdG9yeSIsIkFjY2Vzc0ZhY3RDaGVja2VyIiwiUHJvY2Vzc0ZhY3RDaGVja2VyIiwiQWNjZXNzQ29kZUFuYWx5emVyIiwiQWNjZXNzUHJvbW90UHJvdGVjdCIsIkFjY2Vzc1Byb2plY3RzIiwiQWNjZXNzU3VtbWFyaXphdGlvbiIsIkFjY2Vzc1N5c3RlbVBhdHRlcm4iLCJBY2Nlc3NQYXR0ZXJuTWFuYWdlbWVudCIsIkdlbmVyYXRlUERGIiwiQ29uZmlndXJlVXNlclNldHRpbmdzIiwiVXBkYXRlUGVyc29uYWxJbmZvIiwiU3VibWl0UmVxdWVzdHMiLCJBZGRVc2VycyIsIkNvbmZpZ3VyZVN5c3RlbVNldHRpbmdzIiwiV3JpdGVBY2Nlc3NUb0JpbGxpbmdBbmRTdWJzY3JpcHRpb24iLCJBY2Nlc3NEZXZlbG9wbWVudEVudmlyb25tZW50cyIsIkdlbmVyYXRlQVBJS2V5cyIsIkNvbmZpZ3VyZURhdGFTb3VyY2VzIiwiQ29uZmlndXJlRXh0ZXJuYWxTZWFyY2giLCJNb2RpdHlVc2VycyIsIkRlbGV0ZVVzZXJzIiwiQWNjZXNzRGFzaGJvYXJkIiwiTWFuYWdlQWNjZXNzUGVybWlzc2lvbnMiLCJjYW5VcGxvYWRTeXN0ZW1QYXR0ZXJuTGlicmFyeSIsIkFjY2Vzc0d1YXJkcmFpbDEyMyJdfSwic3ViIjoiNjcwMmI4ZTQyNmVhNzVmMDNiNTNmZDQyIiwiaWF0IjoxNzMyMjkzNTI0LCJleHAiOjE3MzIzNzk5MjR9.slX3VvTO2Lw6vIj07KR0CmIUzeWVba8iTmhpxyN81yM', // Replace with your actual token
+              'content-type': 'application/json',
+              'origin': 'https://app.azstage.guardrail.tech',
+            },
+            body: JSON.stringify({ initial_prompt: textInput }),
+          });
+    
+          const data = await res.json();
+          navigate('/optimized-prompt',{state:data});
+          //setResponse(data.optimized_prompt);
+          // You can save or process the data as needed, e.g., storing it in state
+          console.log("API Response:", data);
+    
+        } catch (err) {
+          setError("Failed to fetch data");
+        } finally {
+          setLoading(false);
+        }
+      };
     
     const handleSubmit = (e: React.FormEvent) => {
         const data:promptRequest = {
@@ -132,7 +163,7 @@ function HomePage() {
         console.log("Form submitted");
         console.log("Selected Options:", selectedOptions);
         console.log("Textarea Input:", textInput);
-        navigate('/information',{state:data}); // Pass data via state
+        handleApiCall();
     };
 
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -220,9 +251,6 @@ function HomePage() {
                 </div>
             </form>
         </div>
-
-
-
 
     )
 }
