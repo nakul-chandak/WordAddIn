@@ -5,7 +5,7 @@ import Propmt from "../PromptPage/Propmt";
 import FactCheck from "../FactCheckPage/FactCheck";
 import Review from "../ReviewPage/Review";
 import GetPrompt from "./GetPrompts";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import HomePage from "./HomePage";
 
 const useStyles = makeStyles({
@@ -34,6 +34,8 @@ const useStyles = makeStyles({
  
 const InformationPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location.state);
   const [selectedValue, setSelectedValue] =  React.useState<TabValue>("review");
   const onTabSelect = (event: SelectTabEvent, data: SelectTabData) => {
     event = event;
@@ -55,7 +57,7 @@ const InformationPage = () => {
       </TabList>
       <div>
         {selectedValue === "prompt" && <HomePage/>}
-        {selectedValue === "review" && <Review />}
+        {selectedValue === "review" && <Review promptRequest={location.state} />}
         {selectedValue === "factCheck" && <FactCheck />}
       </div>
     </div>

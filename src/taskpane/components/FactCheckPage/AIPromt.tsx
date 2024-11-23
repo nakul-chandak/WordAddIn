@@ -3,7 +3,7 @@ import { AddRegular, TextEditStyleRegular } from "@fluentui/react-icons";
 import React from "react";
 import icon32 from "../../../../assets/icon-32.png";
 import chatGPT from "../../../../assets/chatgpt.png";
-import copilot from "../../../../assets/Copilot.png";
+import copilot from "../../../../assets/copilot.png";
 
 const useStyles = makeStyles({
     root: {

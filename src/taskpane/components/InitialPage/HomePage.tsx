@@ -1,12 +1,14 @@
 import { makeStyles, Image, Checkbox, Button, CounterBadge, Textarea } from "@fluentui/react-components";
 import * as React from "react";
 import log from "../../../../assets/logo.png";
-import GuardrailLogo from "../../../../assets/icon-80.png";
-import chatGPTLogo from "../../../../assets/chatgpt.png"
-import CopilotLogo from "../../../../assets/Copilot.png"
-import GeminiLogo from "../../../../assets/gemini.png"
+import guardraiLogo from "../../../../assets/AI_Logos/guardrail.png";
+import chatgpt3Logo from "../../../../assets/AI_Logos/chatgpt3.png";
+import chatgpt4Logo from "../../../../assets/AI_Logos/chatgpt4.png";
+import geminiLogo from "../../../../assets/AI_Logos/gemini1.png";
+import copilotLogo from "../../../../assets/AI_Logos/copilot.png";
 import { InfoLabel, InfoLabelProps } from "@fluentui/react-components";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
+import { promptRequest } from "../../../common/services/llm/models/promptRequest";
 const useStyles = makeStyles({
     root: {
         alignItems: "flex-start",
@@ -92,28 +94,27 @@ const useStyles = makeStyles({
 const getLogo = (id: string) => {
     switch (id) {
         case "guardrail":
-            return GuardrailLogo;
-        case "openai":
-            return chatGPTLogo;
+            return guardraiLogo;
+        case "gpt3":
+            return chatgpt3Logo;
+        case "gpt4":
+            return chatgpt4Logo;
         case "copilot":
-            return CopilotLogo;
+            return copilotLogo;
         case "gemini":
-            return GeminiLogo;
+            return geminiLogo;
         default:
             return "";
     }
 };
 const logoArray = [
-    { label: "Guardrail", id: "guardrail" },
-    { label: "OpenAI", id: "openai" },
-    { label: "Copilot", id: "copilot" },
+    
+    { label: "GPT 3", id: "gpt3" },
+    { label: "GPT 4", id: "gpt4" },
     { label: "Gemini", id: "gemini" },
+    { label: "Guardrail LLM", id: "guardrail" },
+    { label: "Microsoft Copilot", id: "copilot" }
 ];
-
-
-
-
-
 
 function HomePage() {
     const styles = useStyles();
@@ -122,17 +123,22 @@ function HomePage() {
     const [textInput, setTextInput] = React.useState("");
     
     const handleSubmit = (e: React.FormEvent) => {
+        const data:promptRequest = {
+            prompt:textInput,
+            optimisedResponse:false,
+            sourceTypes:selectedOptions
+        };
         e.preventDefault();
         console.log("Form submitted");
         console.log("Selected Options:", selectedOptions);
         console.log("Textarea Input:", textInput);
-        navigate('/information'); // Pass data via state
+        navigate('/information',{state:data}); // Pass data via state
     };
 
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { value, checked } = e.target;
+        const { id, checked } = e.target;
         setSelectedOptions((prev) =>
-            checked ? [...prev, value] : prev.filter((option) => option !== value)
+            checked ? [...prev, id] : prev.filter((option) => option !== id)
         );
     };
 
