@@ -1,12 +1,14 @@
-import { CounterBadge } from "@fluentui/react-components";
+import { CounterBadge, Display, Field, InfoLabel, Radio, RadioGroup } from "@fluentui/react-components";
 import React from "react";
 import { makeStyles, Image, Checkbox, Button, Textarea } from "@fluentui/react-components";
 import log from "../../../../assets/logo.png";
-import GuardrailLogo from "../../../../assets/icon-80.png";
-import chatGPTLogo from "../../../../assets/chatgpt.png"
-import CopilotLogo from "../../../../assets/Copilot.png"
-import GeminiLogo from "../../../../assets/gemini.png"
-import { useNavigate } from "react-router-dom";
+import guardraiLogo from "../../../../assets/AI_Logos/guardrail.png";
+import chatgpt3Logo from "../../../../assets/AI_Logos/chatgpt3.png";
+import chatgpt4Logo from "../../../../assets/AI_Logos/chatgpt4.png";
+import geminiLogo from "../../../../assets/AI_Logos/gemini1.png";
+import copilotLogo from "../../../../assets/AI_Logos/copilot.png";
+import { useLocation, useNavigate } from "react-router-dom";
+import { promptRequest } from "../../../common/services/llm/models/promptRequest";
 
 const useStyles = makeStyles({
     root: {
@@ -37,7 +39,7 @@ const useStyles = makeStyles({
         marginRight: "10px",
     },
     bottomPortion: {
-        height: '365px',
+        height: 'auto',
         background: 'rgb(247,247,247)'
     },
     checkboxContainer: {
@@ -61,8 +63,6 @@ const useStyles = makeStyles({
         marginTop: "10px",
     },
     container: {
-        //position: "relative",
-        //width: "300px", // Adjust based on your layout
         display: "flex",
         alignItems: "center",
         position: 'relative',
@@ -87,35 +87,71 @@ const useStyles = makeStyles({
         position: 'relative',
         bottom: '4rem',
         left: '0.5rem'
+    },
+    bottomDiv: {
+        padding: '15px',
+        position: 'relative',
+        bottom: '4.5rem',
+        color: 'black',
+        height: '380px',
+
+    },
+    innerDiv: {
+        height: 'auto',
+        width: '100%',
+        marginTop: '1rem',
+        border: 'solid grey 1px',
+        borderRadius: '10px',
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: 'rgb(241,225, 227)'
+    },
+    btn: {
+        borderRadius: '10px',
+    },
+    originalPrompt: {
+        height: 'auto',
+        wordBreak: 'break-all'
     }
 });
 
 const getLogo = (id: string) => {
     switch (id) {
         case "guardrail":
-            return GuardrailLogo;
-        case "openai":
-            return chatGPTLogo;
+            return guardraiLogo;
+        case "gpt3":
+            return chatgpt3Logo;
+        case "gpt4":
+            return chatgpt4Logo;
         case "copilot":
-            return CopilotLogo;
+            return copilotLogo;
         case "gemini":
-            return GeminiLogo;
+            return geminiLogo;
         default:
             return "";
     }
 };
 const logoArray = [
-    { label: "Guardrail", id: "guardrail" },
-    { label: "OpenAI", id: "openai" },
-    { label: "Copilot", id: "copilot" },
+    { label: "GPT 3", id: "gpt3" },
+    { label: "GPT 4", id: "gpt4" },
     { label: "Gemini", id: "gemini" },
+    { label: "Guardrail LLM", id: "guardrail" },
+    { label: "Microsoft Copilot", id: "copilot" }
 ];
+
+
 
 
 const OptimizedPromts = () => {
     const styles = useStyles();
     const navigate = useNavigate();
+    const location = useLocation();
     const [selectedOptions, setSelectedOptions] = React.useState<string[] | null>([]);
+    const [originalPrompt, setOriginalPrompt] = React.useState<string>('');
+    const [optimizedPrompt, setOptimizedPrompt] = React.useState<string>('');
+
+    //test
+    const [value, setValue] = React.useState("banana");
     const handleSubmit = (event: any) => {
         //throw new Error("Function not implemented.");
         console.log(event);
@@ -126,7 +162,36 @@ const OptimizedPromts = () => {
             checked ? [...prev, value] : prev.filter((option) => option !== value)
         );
     };
+    const handleClick = () => {
+        let prompt = originalPrompt || optimizedPrompt;
+        let selectedOptions = location.state.selectedOptions;
+        const data: promptRequest = {
+            prompt: prompt,
+            optimisedResponse: false,
+            sourceTypes: selectedOptions
+        };
+        navigate('/information', { state: data })
+    };
 
+    // const setPrompt1 = (e:any) => {
+    //     //alert('this is alrrt')
+    //     setOriginalPrompt(e.value)
+    //     setOptimizedrompt('')
+    // }
+    // const setPrompt2 = (e:any) => {
+    //     setOptimizedrompt(e.value);
+    //     setOriginalPrompt('')
+    // }
+
+    const setPrompt1 = (_e: any, data: { value: string }) => {
+        setOriginalPrompt(data.value);
+        setOptimizedPrompt(''); // Reset the other radio group
+      };
+    
+      const setPrompt2 = (_e: any, data: { value: string }) => {
+        setOptimizedPrompt(data.value);
+        setOriginalPrompt(''); // Reset the other radio group
+      };
     return (
         <div style={{ margin: "auto" }}>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'relative', top: '1rem' }}>
@@ -156,13 +221,77 @@ const OptimizedPromts = () => {
                                     id={id}
                                     name="checkboxOptions"
                                     value={label}
+                                    checked={location.state.selectedOptions.includes(id)}
                                     onChange={handleCheckboxChange}
                                 />
                                 <img height={id === 'guardrail' ? '25' : '20'} src={getLogo(id)} alt={`${label} logo`} />
                             </div>
                         ))}
                     </div>
-   
+                    <div className={styles.bottomDiv}>
+                        Prompt Optimizer - get better AI results
+                        <div className={styles.innerDiv}>
+                            <div style={{ flex: '1', borderRadius: '10px' }}>
+                                <div style={{ padding: '10px' }}>
+                                    <p style={{ fontWeight: 'bold' }}>ORIGINAL PROMPT</p>
+                                    <Field label="">
+                                        <RadioGroup value={originalPrompt} onChange={setPrompt1}>
+                                            <Radio value={location.state.originalInput} label={location.state.originalInput}></Radio>
+                                        </RadioGroup>
+                                    </Field>
+                                </div>
+                            </div>
+
+                            <div style={{ flex: '2', backgroundColor: 'white', borderRadius: '0 0 10px 10px' }}>
+                                <div style={{ padding: '10px', display: 'flex', flexDirection: 'column' }}>
+                                    <p style={{ fontWeight: 'bold' }}>SUGGESTED PROMPT</p>
+                                    <Field label="">
+                                        <RadioGroup value={optimizedPrompt} onChange={setPrompt2}>
+                                            <Radio value={location.state.optimized_prompt} label={location.state.optimized_prompt}></Radio>
+                                        </RadioGroup>
+                                    </Field>
+
+                                    <div style={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-start',
+                                        alignItems: 'center',
+                                        gap: '4rem'
+                                    }}>
+                                        <div>Select one optimal prompt and continue</div>
+                                        <Button onClick={handleClick} className={styles.btn}>Next</Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style={{ padding: '10px' }}>
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    position: 'relative',
+                                }}>
+                                    <div
+
+                                        style={{
+                                            display: 'flex'
+                                        }}>
+                                        <div>icon</div>
+                                        <div>More Prompts</div>
+                                    </div>
+                                    <div >
+                                        <InfoLabel
+                                            info={
+                                                <>
+                                                    This is example information for prompting .
+                                                </>
+                                            }
+                                        >
+                                        </InfoLabel>Prompting Tips
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

@@ -18,8 +18,23 @@ class LlmServiceImpl {
 
     getLlms(request: promptRequest): Promise<any> {
         const baseURL = '/llms';
-        return HttpClient.post<any>(baseURL,request,{
-            headers: { 'Content-Type': 'application/json' },
+        return HttpClient.post<any>(`https://api.azstage.guardrail.tech/guardrail/v1${baseURL}`,request,{
+            headers: { 
+                'Content-Type': 'application/json',
+                'authorization': 'Bearer TOKEN',
+            },
+        }).then(response => response.data).catch((err: HttpErrorResponse) => {
+            throw err;
+        });
+    }
+
+    getOptimizedPrompts(request:any):Promise<any>{
+        const baseURL = '/llm/prompt_optimization';
+        return HttpClient.post<any>(`https://api.azstage.guardrail.tech/guardrail/v1${baseURL}`,request,{
+            headers: { 
+                'Content-Type': 'application/json',
+                'authorization': 'Bearer TOKEN',
+            },
         }).then(response => response.data).catch((err: HttpErrorResponse) => {
             throw err;
         });
