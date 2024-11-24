@@ -172,17 +172,6 @@ const OptimizedPromts = () => {
         };
         navigate('/information', { state: data })
     };
-
-    // const setPrompt1 = (e:any) => {
-    //     //alert('this is alrrt')
-    //     setOriginalPrompt(e.value)
-    //     setOptimizedrompt('')
-    // }
-    // const setPrompt2 = (e:any) => {
-    //     setOptimizedrompt(e.value);
-    //     setOriginalPrompt('')
-    // }
-
     const setPrompt1 = (_e: any, data: { value: string }) => {
         setOriginalPrompt(data.value);
         setOptimizedPrompt(''); // Reset the other radio group
@@ -258,7 +247,7 @@ const OptimizedPromts = () => {
                                         gap: '4rem'
                                     }}>
                                         <div>Select one optimal prompt and continue</div>
-                                        <Button onClick={handleClick} className={styles.btn}>Next</Button>
+                                        <Button disabled={ originalPrompt === '' && optimizedPrompt === ''} onClick={handleClick} className={styles.btn}>Next</Button>
                                     </div>
                                 </div>
                             </div>
