@@ -218,7 +218,7 @@ const OptimizedPromts = () => {
                         ))}
                     </div>
                     <div className={styles.bottomDiv}>
-                        Prompt Optimizer - get better AI results
+                        Optimize Prompt
                         <div className={styles.innerDiv}>
                             <div style={{ flex: '1', borderRadius: '10px' }}>
                                 <div style={{ padding: '10px' }}>
