@@ -13,6 +13,7 @@ import HomePage from "./InitialPage/HomePage";
 import { createHashRouter, RouterProvider, useNavigate } from "react-router-dom";
 import InformationPage from "./InitialPage/Info";
 import Header from "./Header";
+import OptimizedPromts from "./Prompt-optimizer/OptimizedPrompt";
 const ChatUI = React.lazy(() => import('./Chat'));
 const OnboardingForm = React.lazy(() => import('./OnboardingForm'));
 const FlyoutMenu = React.lazy(() => import('./FlyoutMenu'));
@@ -167,6 +168,10 @@ const App = (props: AppProps) => {
     {
       path: "/",
       element: <HomePage />,
+    },
+    {
+      path:'/optimized-prompt',
+      element : <OptimizedPromts/>
     },
     {
       path: "/information",

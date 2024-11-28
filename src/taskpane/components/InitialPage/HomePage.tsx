@@ -9,6 +9,7 @@ import copilotLogo from "../../../../assets/AI_Logos/copilot.png";
 import { InfoLabel, InfoLabelProps } from "@fluentui/react-components";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
 import { promptRequest } from "../../../common/services/llm/models/promptRequest";
+import { LlmService } from "../../../common/services/llm/llm.service";
 const useStyles = makeStyles({
     root: {
         alignItems: "flex-start",
@@ -38,8 +39,9 @@ const useStyles = makeStyles({
         marginRight: "10px",
     },
     bottomPortion: {
-        height: '365px',
-        background: 'rgb(247,247,247)'
+        height: '350px',
+        background: 'rgb(247,247,247)',
+        overflowX:'hidden'
     },
     checkboxContainer: {
         display: "flex",
@@ -119,20 +121,26 @@ const logoArray = [
 function HomePage() {
     const styles = useStyles();
     const navigate = useNavigate();
+
     const [selectedOptions, setSelectedOptions] = React.useState<string[] | null>([]);
     const [textInput, setTextInput] = React.useState("");
+
+    const handleApiCall = async () => {
+        LlmService.getOptimizedPrompts({ initial_prompt: textInput }).then((res: any) => {
+            const data = res;
+            data.originalInput = textInput;
+            data.selectedOptions = selectedOptions;
+            navigate('/optimized-prompt', { state: data });
+            console.log("API Response:", data);
+        })
+    };
     
     const handleSubmit = (e: React.FormEvent) => {
-        const data:promptRequest = {
-            prompt:textInput,
-            optimisedResponse:false,
-            sourceTypes:selectedOptions
-        };
         e.preventDefault();
         console.log("Form submitted");
         console.log("Selected Options:", selectedOptions);
         console.log("Textarea Input:", textInput);
-        navigate('/information',{state:data}); // Pass data via state
+        handleApiCall();
     };
 
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,7 +171,6 @@ function HomePage() {
                 Prompt Protect and Fact <br />
                 Checker in just 3 easy steps
             </div>
-
 
             <div className={styles.headerBar}>
                 <CounterBadge
@@ -196,7 +203,7 @@ function HomePage() {
                             onChange={handleTextareaChange}
                         />
                         <Button
-                        disabled={textInput.length === 0 && selectedOptions.length === 0}
+                        disabled={textInput.length === 0 || selectedOptions.length === 0}
                             appearance="primary"
                             type="submit"
                             name="checkBoxButton"
@@ -220,9 +227,6 @@ function HomePage() {
                 </div>
             </form>
         </div>
-
-
-
 
     )
 }
