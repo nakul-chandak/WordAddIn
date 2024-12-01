@@ -9,6 +9,7 @@ import geminiLogo from "../../../../assets/AI_Logos/gemini1.png";
 import copilotLogo from "../../../../assets/AI_Logos/copilot.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { promptRequest } from "../../../common/services/llm/models/promptRequest";
+import { FontWeights } from "@fluentui/react";
 
 const useStyles = makeStyles({
     root: {
@@ -218,7 +219,7 @@ const OptimizedPromts = () => {
                         ))}
                     </div>
                     <div className={styles.bottomDiv}>
-                        Optimize Prompt
+                        <span style={{fontWeight:'bolder'}}>Optimize Prompt - get better AI results</span>
                         <div className={styles.innerDiv}>
                             <div style={{ flex: '1', borderRadius: '10px' }}>
                                 <div style={{ padding: '10px' }}>
@@ -244,10 +245,25 @@ const OptimizedPromts = () => {
                                         display: 'flex',
                                         justifyContent: 'flex-start',
                                         alignItems: 'center',
-                                        gap: '4rem'
+                                        gap: '1rem'
                                     }}>
-                                        <div>Select one optimal prompt and continue</div>
-                                        <Button disabled={ originalPrompt === '' && optimizedPrompt === ''} onClick={handleClick} className={styles.btn}>Next</Button>
+                                        <div 
+                                            style={{
+                                                fontSize:'11px',
+                                                color:'grey'
+                                            }}
+                                        >Select one optimal prompt and continue</div>
+                                        <Button appearance="primary"
+                                            type="submit" disabled={ originalPrompt === '' && optimizedPrompt === ''} onClick={handleClick} className={styles.btn}>Next</Button>
+                                        {/* <Button
+                                            disabled={textInput.length === 0 || selectedOptions.length === 0}
+                                            appearance="primary"
+                                            type="submit"
+                                            name="checkBoxButton"
+                                            className={styles.button}
+                                        >
+                                            Submit
+                                        </Button> */}
                                     </div>
                                 </div>
                             </div>

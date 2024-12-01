@@ -29,6 +29,10 @@ function Review(props: any) {
     })
   }
 
+  const onFactCheckClick = () => {
+    props.onFactCheckClick(result);
+  }
+
   useEffect(() => loadPrompt(),[]); 
 
   const options = [
@@ -71,7 +75,7 @@ function Review(props: any) {
           </option>  ))}
         </Dropdown>
       </div>
-    <ReviewDetails data= {result}/>
+    <ReviewDetails data= {result} onFactCheckClick={onFactCheckClick} />
     </>
     
 
