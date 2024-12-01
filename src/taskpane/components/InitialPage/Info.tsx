@@ -6,6 +6,7 @@ import Review from "../ReviewPage/Review";
 import GetPrompt from "./GetPrompts";
 import { useLocation, useNavigate } from "react-router-dom";
 import HomePage from "./HomePage";
+import { LlmService } from "../../../common/services/llm/llm.service";
 
 const useStyles = makeStyles({
   root: {
@@ -53,21 +54,39 @@ const InformationPage = () => {
   const redirectToHomeScreen = () => {
     navigate('/');
   };
+  const redirectToFactCheck = (data: any) => {
+    console.log('factcheck data' + data);
+    const request = {
+      article: data[0].description,
+      assertions: [],
+      checkForSimilarity: true,
+      recursion_level: 3,
+      sourceType: data.promptType,
+      top_k: 10,
+      top_n: 5
+    }
+    // LlmService.getArticles(request).then((response: any) => {
+    //   console.log(response);
+    // })
+    setSelectedValue('factCheck');
+  }
 
   return (
     <div className={styles.root}>
-      <Button onClick={redirectToHomeScreen}>Back</Button>
       <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
-        <Tab value="prompt">
+        <Tab value="prompt"
+         style={{ pointerEvents: selectedValue !== 'prompt' ? 'none' :'auto' }}>
           <CounterBadge
             appearance="filled"
-            style={selectedValue === "prompt" ? { backgroundColor: "#8647D6", color: "white" } : { backgroundColor: "#ebebeb", color: "#616161" }}
+            style={selectedValue === "prompt" ? { backgroundColor: "#8647D6", color: "white", pointerEvents:'none' } : { backgroundColor: "#ebebeb", color: "#616161" }}
             count={1}
             className={styles.badge}
           />
           Prompt
         </Tab>
-        <Tab value="review">
+        <Tab value="review" 
+        style={{ pointerEvents: selectedValue !== 'review' ? 'none' :'auto' }}
+        >
           <CounterBadge
             appearance="filled"
             style={selectedValue === "review" ? { backgroundColor: "#8647D6", color: "white" } : { backgroundColor: "#ebebeb", color: "#616161" }}
@@ -76,10 +95,14 @@ const InformationPage = () => {
           />
           Review
         </Tab>
-        <Tab value="factCheck">
+        <Tab
+          value="factCheck"
+          style={{ pointerEvents: selectedValue !== 'factCheck' ? 'none' :'auto' }}>
           <CounterBadge
             appearance="filled"
-            style={selectedValue === "factCheck" ? { backgroundColor: "#8647D6", color: "white" } : { backgroundColor: "#ebebeb", color: "#616161" }}
+            style={selectedValue === "factCheck"
+              ? { backgroundColor: "#8647D6", color: "white", pointerEvents: 'none' }
+              : { backgroundColor: "#ebebeb", color: "#616161" }}
             count={3}
             className={styles.badge}
           />
@@ -89,21 +112,13 @@ const InformationPage = () => {
 
       <div>
         {selectedValue === "prompt" && <HomePage/>}
-        {selectedValue === "review" && <Review promptRequest={location.state} />}
+        {selectedValue === "review" && <Review promptRequest={location.state} onFactCheckClick={ redirectToFactCheck} />}
         {selectedValue === "factCheck" && <FactCheck />}
       </div>
 
       {/* Error and Loading States */}
       {loading && <div>Loading...</div>}
       {error && <div style={{ color: "red" }}>{error}</div>}
-
-      {/* Display the passed data (for debugging purposes) */}
-      {location.state && (
-        <div>
-          <h3>API Response:</h3>
-          <pre>{response}</pre>
-        </div>
-      )}
     </div>
   );
 };

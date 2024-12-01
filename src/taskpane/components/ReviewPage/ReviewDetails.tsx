@@ -8,6 +8,7 @@ import copilot from "../../../../assets/AI_Logos/copilot.png";
 
 
 import { CheckmarkRegular, Info16Regular, ThumbDislike16Filled, ThumbDislike16Regular, ThumbLike16Filled, ThumbLike16Regular, TriangleDown12Filled } from '@fluentui/react-icons';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles({
   subtitle2: typographyStyles.subtitle2,
@@ -15,6 +16,7 @@ const useStyles = makeStyles({
 
 export const ReviewDetails = (props:any) => {
   const styles = useStyles();
+  const navigate = useNavigate();
   // need to call API and map data here....
   const reviews = props.data;
   console.log("Reviews in review details page.") 
@@ -68,6 +70,9 @@ export const ReviewDetails = (props:any) => {
          return "Guardrail LLM";
     }
   }
+  function handleClick(){
+    props.onFactCheckClick();
+  }
 
 
 
@@ -109,7 +114,7 @@ export const ReviewDetails = (props:any) => {
 
               <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm6">
-                  <Button style={{ backgroundColor: "#8647D6", color: "white" }} size='small'>
+                  <Button style={{ backgroundColor: "#8647D6", color: "white" }} size='small' onClick={handleClick}>
                     <Badge style={{ backgroundColor: "#BE8BFF", color: "white", marginRight: "5px" }} size="small" icon={< CheckmarkRegular />} />{r.buttonCaption} </Button>
                 </div>
 
