@@ -73,15 +73,13 @@ export const ReviewDetails = (props:any) => {
   function handleClick(){
     props.onFactCheckClick();
   }
-
-
-
+  
   return (
     <>
       {
         reviews?.map((r, index: number) => {
           return (
-            <div key={index} className="ms-Grid" dir="ltr" style={{marginTop:"10px"}}>
+            <div key={index} className="ms-Grid" dir="ltr" style={{marginTop:"20px"}}>
               <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm10 ms-xl12" style={{display:"inline-flex"}}> <Image height={30} src={getLogo(r.promptType)} /><span className={styles.subtitle2} style={{margin:"3px 0px 0px 10px"}}>{getAIName(r.promptType)}</span> </div>
 
@@ -96,9 +94,9 @@ export const ReviewDetails = (props:any) => {
                 } */}
 
               </div>
-              <div className="ms-Grid-row">
+              <div className="ms-Grid-row" style={{marginTop:"10px"}}>
                 <div className="ms-Grid-col ms-sm12 ms-xl12" style={{ display: "inline-flex", marginTop: "-10px" }}><p>{r.description}</p>
-                  <Divider style={{ marginLeft: "15px", marginBottom: "-15px" }} vertical />
+                  {/* <Divider style={{ marginLeft: "15px", marginBottom: "-15px" }} vertical /> */}
                 </div>
                 <div className="ms-Grid-col ms-sm1">
                   {r?.names?.map((name: string, idx: number) => {
@@ -118,10 +116,10 @@ export const ReviewDetails = (props:any) => {
                     <Badge style={{ backgroundColor: "#BE8BFF", color: "white", marginRight: "5px" }} size="small" icon={< CheckmarkRegular />} />{r.buttonCaption} </Button>
                 </div>
 
-                <div className="ms-Grid-col ms-sm6" style={{ marginBottom: "10px", paddingRight: "25px" }}>
+                {/* <div className="ms-Grid-col ms-sm6" style={{ marginBottom: "10px", paddingRight: "25px" }}>
                   {getDisLikeIcon(r.isDisLike)}
                   {getLikeIcon(r.isLike)}
-                </div>
+                </div> */}
                 <div className="ms-Grid-col ms-sm2" />
               </div>
 

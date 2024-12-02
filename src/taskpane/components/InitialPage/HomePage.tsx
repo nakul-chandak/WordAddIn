@@ -37,6 +37,8 @@ const useStyles = makeStyles({
         color: "white",
         fontSize: "16px",
         marginRight: "10px",
+        height: "23px !important",
+        width: "23px !important"
     },
     bottomPortion: {
         height: '350px',
@@ -114,8 +116,7 @@ const logoArray = [
     { label: "GPT 3", id: "gpt3" },
     { label: "GPT 4", id: "gpt4" },
     { label: "Gemini", id: "gemini" },
-    { label: "Guardrail LLM", id: "guardrail" },
-    { label: "Microsoft Copilot", id: "copilot" }
+    { label: "Guardrail LLM", id: "guardrail" }
 ];
 
 function HomePage() {
@@ -167,7 +168,7 @@ function HomePage() {
             </div>
 
             <div style={{ marginTop: "50px", backgroundColor: "#3977D1", padding: "40px", color: "white", textAlign: "center" }}>
-                Generate Better AI result with <br />
+                {/* Generate Better AI result with <br /> */}
                 Prompt Protect and Fact <br />
                 Checker in just 3 easy steps
             </div>
@@ -190,8 +191,9 @@ function HomePage() {
                                     name="checkboxOptions"
                                     value={label}
                                     onChange={handleCheckboxChange}
+                                    disabled={id === 'guardrail' ? true : false}
                                 />
-                                <img height={id === 'guardrail' ? '25' : '20'} src={getLogo(id)} alt={`${label} logo`} />
+                                <img style={{ marginTop: "-1px", float: "left", marginLeft:id === 'guardrail' ? '-0.7x' : '0px' }} height={id === 'guardrail' ? '22' : '20'} src={getLogo(id)} alt={`${label} logo`} />
                             </div>
                         ))}
                     </div>
@@ -212,16 +214,17 @@ function HomePage() {
                             Submit
                         </Button>
                     </div>
-                    <div>
+                    <div style={{width: "119px"}}>
                         <div className={styles.infoLabel}>
                             <InfoLabel
                                 info={
                                     <>
-                                        This is example information for prompting .
+                                        This is example information for prompting.
                                     </>
                                 }
                             >
-                            </InfoLabel>Prompting Tips
+                            </InfoLabel>
+                            <span style={{marginTop: "0px", float: "right"}}>Prompting Tips</span>
                         </div>
                     </div>
                 </div>

@@ -78,7 +78,7 @@ const InformationPage = () => {
          style={{ pointerEvents: selectedValue !== 'prompt' ? 'none' :'auto' }}>
           <CounterBadge
             appearance="filled"
-            style={selectedValue === "prompt" ? { backgroundColor: "#8647D6", color: "white", pointerEvents:'none' } : { backgroundColor: "#ebebeb", color: "#616161" }}
+            style={selectedValue === "prompt" ? { backgroundColor: "#8647D6", color: "white", pointerEvents:'none', height: "23px !important", width: "23px !important"  } : { backgroundColor: "#ebebeb", color: "#616161", height: "23px !important", width: "23px !important" }}
             count={1}
             className={styles.badge}
           />
@@ -89,7 +89,7 @@ const InformationPage = () => {
         >
           <CounterBadge
             appearance="filled"
-            style={selectedValue === "review" ? { backgroundColor: "#8647D6", color: "white" } : { backgroundColor: "#ebebeb", color: "#616161" }}
+            style={selectedValue === "review" ? { backgroundColor: "#8647D6", color: "white", height: "23px !important", width: "23px !important" } : { backgroundColor: "#ebebeb", color: "#616161", height: "23px !important", width: "23px !important" }}
             count={2}
             className={styles.badge}
           />
@@ -101,8 +101,8 @@ const InformationPage = () => {
           <CounterBadge
             appearance="filled"
             style={selectedValue === "factCheck"
-              ? { backgroundColor: "#8647D6", color: "white", pointerEvents: 'none' }
-              : { backgroundColor: "#ebebeb", color: "#616161" }}
+              ? { backgroundColor: "#8647D6", color: "white", pointerEvents: 'none', height: "23px !important", width: "23px !important" }
+              : { backgroundColor: "#ebebeb", color: "#616161", height: "23px !important", width: "23px !important" }}
             count={3}
             className={styles.badge}
           />

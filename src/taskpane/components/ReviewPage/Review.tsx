@@ -3,37 +3,46 @@ import React, { useEffect, useState } from 'react'
 import { ReviewDetails } from './ReviewDetails';
 import { LlmService } from '../../../common/services/llm/llm.service';
 import { IReview } from '../../../interfaces/review';
+import { useNavigate } from 'react-router-dom';
 
 
 const useStyles = makeStyles({
-  root :{
-    
+  root: {
+
   },
   text: typographyStyles.title2,
 });
 
 function Review(props: any) {
-  const [result,setResult] = useState([]); 
-  
-  const loadPrompt=()=>{
-    LlmService.getLlms(props.promptRequest).then(res=>{
-      setResult([]);
-      console.log("result of Get llms API");
-      console.log(res);
-      Object.keys(res.output).map(function(key) {
-        const data:IReview = { promptType:key,description:res.output[key],buttonCaption:"Fact Checker",isDisLike:!res.isFavorite,isLike:res.isFavorite};
-        setResult(oldResult=>[...oldResult,data]);
-    });
+  const [result, setResult] = useState([]);
+  const navigate = useNavigate();
 
-    console.log(result);
-    })
+  const loadPrompt = () => {    
+    if (props != undefined && props.promptRequest != undefined 
+      && props.promptRequest.prompt != undefined 
+      && props.promptRequest.prompt != ''
+      && props.promptRequest.prompt != null) {
+      LlmService.getLlms(props.promptRequest).then(res => {
+        setResult([]);
+        console.log("result of Get llms API");
+        console.log(res);
+        Object.keys(res.output).map(function (key) {
+          const data: IReview = { promptType: key, description: res.output[key], buttonCaption: "Fact Checker", isDisLike: !res.isFavorite, isLike: res.isFavorite };
+          setResult(oldResult => [...oldResult, data]);
+        });
+
+        console.log(result);
+      })
+    }else{
+      navigate('/');
+    }
   }
 
   const onFactCheckClick = () => {
     props.onFactCheckClick(result);
   }
 
-  useEffect(() => loadPrompt(),[]); 
+  useEffect(() => loadPrompt(), []);
 
   const options = [
     "Change Tone"
@@ -47,37 +56,39 @@ function Review(props: any) {
   const defaultValue2 = options2[0];
   return (
     <>
-    <div>
-      <Dropdown style={{marginLeft:"5px",minWidth:"100px"}}
+      <div style={{ width: "100%" }}>
+        <Dropdown style={{ marginLeft: "5px", minWidth: "100px" }}
           aria-labelledby={`${comboId}-small`}
           placeholder="Select"
           size="small"
           id="drop1"
           defaultValue={defaultValue}
+          disabled="true"
           {...props}
         >
-        {options.map((option) => (
-          <option key={option}>
-            <span>{option}</span>
-          </option>  ))}
+          {options.map((option) => (
+            <option key={option}>
+              <span>{option}</span>
+            </option>))}
         </Dropdown>
-      <Dropdown style={{marginLeft:"5px",minWidth:"100px"}}
+        <Dropdown style={{ marginLeft: "5px", minWidth: "100px" }}
           aria-labelledby={`${comboId}-small`}
           placeholder="Select"
           size="small"
           id="drop2"
+          disabled="true"
           defaultValue={defaultValue2}
           {...props}
         >
-        {options2.map((option) => (
-          <option key={option}>
-            <span>{option}</span>
-          </option>  ))}
+          {options2.map((option) => (
+            <option key={option}>
+              <span>{option}</span>
+            </option>))}
         </Dropdown>
       </div>
-    <ReviewDetails data= {result} onFactCheckClick={onFactCheckClick} />
+      <ReviewDetails data={result} onFactCheckClick={onFactCheckClick} />
     </>
-    
+
 
   )
 }

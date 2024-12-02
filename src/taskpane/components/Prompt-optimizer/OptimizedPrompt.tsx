@@ -85,9 +85,10 @@ const useStyles = makeStyles({
         zIndex: 1,
     },
     infoLabel: {
-        position: 'relative',
+        position: 'unset',
         bottom: '4rem',
-        left: '0.5rem'
+        left: '0.5rem',
+        marginTop: '8px'
     },
     bottomDiv: {
         padding: '15px',
@@ -136,8 +137,7 @@ const logoArray = [
     { label: "GPT 3", id: "gpt3" },
     { label: "GPT 4", id: "gpt4" },
     { label: "Gemini", id: "gemini" },
-    { label: "Guardrail LLM", id: "guardrail" },
-    { label: "Microsoft Copilot", id: "copilot" }
+    { label: "Guardrail LLM", id: "guardrail" }
 ];
 
 
@@ -176,12 +176,12 @@ const OptimizedPromts = () => {
     const setPrompt1 = (_e: any, data: { value: string }) => {
         setOriginalPrompt(data.value);
         setOptimizedPrompt(''); // Reset the other radio group
-      };
-    
-      const setPrompt2 = (_e: any, data: { value: string }) => {
+    };
+
+    const setPrompt2 = (_e: any, data: { value: string }) => {
         setOptimizedPrompt(data.value);
         setOriginalPrompt(''); // Reset the other radio group
-      };
+    };
     return (
         <div style={{ margin: "auto" }}>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'relative', top: '1rem' }}>
@@ -213,13 +213,14 @@ const OptimizedPromts = () => {
                                     value={label}
                                     checked={location.state.selectedOptions.includes(id)}
                                     onChange={handleCheckboxChange}
+                                    disabled={id === 'guardrail' ? true : false}
                                 />
-                                <img height={id === 'guardrail' ? '25' : '20'} src={getLogo(id)} alt={`${label} logo`} />
+                                <img style={{ marginTop: "-1px", float: "left", marginLeft: id === 'guardrail' ? '-0.7x' : '0px' }} height={id === 'guardrail' ? '22' : '20'} src={getLogo(id)} alt={`${label} logo`} />
                             </div>
                         ))}
                     </div>
                     <div className={styles.bottomDiv}>
-                        <span style={{fontWeight:'bolder'}}>Optimize Prompt - get better AI results</span>
+                        <span style={{ fontWeight: 'bolder' }}>Optimize Prompt - get better AI results</span>
                         <div className={styles.innerDiv}>
                             <div style={{ flex: '1', borderRadius: '10px' }}>
                                 <div style={{ padding: '10px' }}>
@@ -242,19 +243,32 @@ const OptimizedPromts = () => {
                                     </Field>
 
                                     <div style={{
-                                        display: 'flex',
-                                        justifyContent: 'flex-start',
-                                        alignItems: 'center',
-                                        gap: '1rem'
+                                        // display: 'flex',
+                                        // justifyContent: 'flex-start',
+                                        // alignItems: 'center',
+                                        gap: '1rem',
+                                        marginTop: '10px',
+                                        float: 'right'
                                     }}>
-                                        <div 
-                                            style={{
-                                                fontSize:'11px',
-                                                color:'grey'
+                                        <div
+                                            style={{                                                
+                                                float: 'right'
                                             }}
-                                        >Select one optimal prompt and continue</div>
+                                        ><span style={{
+                                            fontSize: '11px',
+                                            color: 'grey',
+                                            float: 'left',
+                                            marginTop: '5px',
+                                            marginRight: '10px'
+                                        }}>Select one optimal prompt and continue</span>
+                                        <div style={{                                                
+                                                float: 'right'
+                                            }}>
                                         <Button appearance="primary"
-                                            type="submit" disabled={ originalPrompt === '' && optimizedPrompt === ''} onClick={handleClick} className={styles.btn}>Next</Button>
+                                            type="submit" disabled={originalPrompt === '' && optimizedPrompt === ''} onClick={handleClick} className={styles.btn}>Next</Button>
+                                            </div>
+                                        </div>
+                                        
                                         {/* <Button
                                             disabled={textInput.length === 0 || selectedOptions.length === 0}
                                             appearance="primary"
@@ -268,32 +282,17 @@ const OptimizedPromts = () => {
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <div style={{ padding: '10px' }}>
-                                <div style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    position: 'relative',
-                                }}>
-                                    <div
-
-                                        style={{
-                                            display: 'flex'
-                                        }}>
-                                        <div>icon</div>
-                                        <div>More Prompts</div>
-                                    </div>
-                                    <div >
-                                        <InfoLabel
-                                            info={
-                                                <>
-                                                    This is example information for prompting .
-                                                </>
-                                            }
-                                        >
-                                        </InfoLabel>Prompting Tips
-                                    </div>
-                                </div>
+                        <div style={{ width: "119px" }}>
+                            <div className={styles.infoLabel}>
+                                <InfoLabel
+                                    info={
+                                        <>
+                                            This is example information for prompting.
+                                        </>
+                                    }
+                                >
+                                </InfoLabel>
+                                <span style={{ marginTop: "0px", float: "right" }}>Prompting Tips</span>
                             </div>
                         </div>
                     </div>
