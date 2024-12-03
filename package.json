@@ -31,10 +31,12 @@
     "@fluentui/react-icons": "^2.0.242",
     "core-js": "^3.37.1",
     "es6-promise": "^4.2.8",
+    "formik": "^2.4.6",
     "react": "^18.3.1",
     "react-router-dom": "^6.28.0",
     "regenerator-runtime": "^0.13.11",
-    "update": "^0.4.2"
+    "update": "^0.7.4",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
