@@ -21,7 +21,7 @@ class LlmServiceImpl {
         return HttpClient.post<any>(`https://api.azstage.guardrail.tech/guardrail/v1${baseURL}`,request,{
             headers: { 
                 'Content-Type': 'application/json',
-                'authorization': 'Bearer TOKEN',
+                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: HttpErrorResponse) => {
             throw err;
@@ -33,7 +33,7 @@ class LlmServiceImpl {
         return HttpClient.post<any>(`https://api.azstage.guardrail.tech/guardrail/v1${baseURL}`,request,{
             headers: { 
                 'Content-Type': 'application/json',
-                'authorization': 'Bearer TOKEN',
+                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: HttpErrorResponse) => {
             throw err;
