@@ -4,6 +4,9 @@ import { Button, makeStyles, useId } from '@fluentui/react-components';
 import * as Yup from 'yup';
 import { ErrorMessage, Field, Formik, FormikHelpers, FormikValues } from 'formik';
 import componyLogo from "../../../../assets/login-logo.png"
+import { useNavigate } from 'react-router-dom';
+import { userLogin } from '../../../common/services/user/models/userLogin';
+import { UserService } from '../../../common/services/user/user.service';
 
 // Style classes
 const useStyles = makeStyles({
@@ -36,12 +39,27 @@ const useStyles = makeStyles({
 
 function SignIn() {
     const styles = useStyles();
+    
+    const navigate = useNavigate();
+    function navigateToHome() {
+      navigate('/home');
+    };
 
     // Handle submit button
     const handleSubmit = (values:FormikValues, {setSubmitting}:FormikHelpers<FormikValues>) => {
         setSubmitting(false);
         console.log("Form submitted");
         console.log(values);
+        // call API here to get token and store in session.
+        const login = new userLogin();
+        login.username =values.userName;
+        login.password = values.password;
+        UserService.logIn(login).then(res=>{
+         window.sessionStorage.setItem("token",res.accessToken);
+         window.sessionStorage.setItem("userId",res.userId);
+         window.sessionStorage.setItem("LoggedIn","true");
+        navigateToHome();
+        });
     };
 
     // field Ids

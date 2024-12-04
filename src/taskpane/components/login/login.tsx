@@ -2,7 +2,14 @@ import { Body1Strong, Button, Caption1 } from '@fluentui/react-components'
 import React from 'react'
 import backgroundIng from "../../../../assets/login-background.png"; 
 import componyLogo from "../../../../assets/login-logo.png"
+import { useNavigate } from 'react-router-dom';
+
 function LogIn() {
+  const navigate = useNavigate();
+  
+  function navigateSigInPage() {
+    navigate('/signin');
+  };
   return (
     <>
           <div>
@@ -22,7 +29,7 @@ function LogIn() {
             <div id='landing-right' style={{ textAlign: "center", flexGrow: 1, flexShrink: 1, justifyContent: "center" }}>
               <h1> Get Started</h1>
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <Button appearance="primary" type="submit" name="login"> Sign In </Button>
+                <Button appearance="primary" type="submit" name="login" onClick={navigateSigInPage}> Sign In </Button>
                 <Button style={{ marginLeft: "15px", marginRight: "20px" }} appearance="primary" type="submit" name="createAccount"> Create Account </Button>
               </div>
             </div>
