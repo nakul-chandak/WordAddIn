@@ -64,7 +64,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
       <div style={{ width: '100%' }}>
         <div style={{ marginTop: "10px", float: 'left' }}>
           <ul style={{ listStyleType: 'none', paddingLeft: "5px" }}>
-            <Image style={{ marginTop: "7px" }} height={40} src={GuardrailLogo} />
+            <Image style={{ marginTop: "7px", marginBottom: "7px" }} height={40} src={GuardrailLogo} />
           </ul>
         </div>
 

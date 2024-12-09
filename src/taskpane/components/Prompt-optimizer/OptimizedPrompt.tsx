@@ -188,8 +188,8 @@ const OptimizedPromts = () => {
                 <Image
                     alt="Guardrail"
                     src={log}
-                    height={80}
-                    width={'400px'}
+                    height={70}
+                    width={'200px'}
                     style={{ padding: '10px' }}
                 />
             </div>

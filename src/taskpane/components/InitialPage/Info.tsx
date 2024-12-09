@@ -110,7 +110,7 @@ const InformationPage = () => {
         </Tab>
       </TabList>
 
-      <div>
+      <div style={{width: '100%'}}>
         {selectedValue === "prompt" && <HomePage/>}
         {selectedValue === "review" && <Review promptRequest={location.state} onFactCheckClick={ redirectToFactCheck} />}
         {selectedValue === "factCheck" && <FactCheck />}

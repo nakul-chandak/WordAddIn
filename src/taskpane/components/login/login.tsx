@@ -1,7 +1,7 @@
 import { Body1Strong, Button, Caption1 } from '@fluentui/react-components'
-import React from 'react'
+import React, { useEffect } from 'react'
 import backgroundIng from "../../../../assets/login-background.png"; 
-import componyLogo from "../../../../assets/login-logo.png"
+import componyLogo from "../../../../assets/logo.png"
 import { useNavigate } from 'react-router-dom';
 
 function LogIn() {
@@ -10,14 +10,28 @@ function LogIn() {
   function navigateSigInPage() {
     navigate('/signin');
   };
+
+  useEffect(() => {
+    // Simulate a load event
+    const isAuthenticated = window.sessionStorage.getItem("LoggedIn");
+    if(isAuthenticated != undefined 
+      && isAuthenticated != '' 
+      && isAuthenticated != null 
+      && isAuthenticated === 'true')
+    {
+      navigate('/home');
+      console.log("isAuthenticated :: " + isAuthenticated);
+    }
+  }, []);
+
   return (
     <>
-          <div>
-            <img style={{width:"200px", height:"50px"}} src={componyLogo}/>
+          <div style={{marginTop :"10px", marginLeft:"10px", marginBottom:"5px"}}>
+            <img style={{marginTop :"10px", width:"200px", height:"50px"}} src={componyLogo}/>            
           </div>
 
           <div style={{ minHeight: "85vh", alignItems: "center", display: "flex", backgroundImage: "url(" + backgroundIng + ")" }}>
-            <div id='landing-left' style={{ marginLeft: "3.5rem", alignItems: "center", textAlign: "left", flexGrow: 1, flexShrink: 1, justifyContent: "center", width: "55%" }}>
+            <div id='landing-left' style={{ marginLeft: "3.5rem", alignItems: "center", textAlign: "left", flexGrow: 1, flexShrink: 1, justifyContent: "center", width: "50%" }}>
               <h1 style={{lineHeight:"2rem"}}>Take control of AI Generated Content</h1>
               <div style={{ display: "grid" }}>
                     <Body1Strong>What is the original source ?</Body1Strong>

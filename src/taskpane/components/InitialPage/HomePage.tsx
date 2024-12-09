@@ -161,13 +161,13 @@ function HomePage() {
                 <Image
                     alt="Guardrail"
                     src={log}
-                    height={80}
-                    width={'400px'}
+                    height={70}
+                    width={'200px'}
                     style={{ padding: '10px' }}
                 />
             </div>
 
-            <div style={{ marginTop: "50px", backgroundColor: "#3977D1", padding: "40px", color: "white", textAlign: "center" }}>
+            <div style={{ marginTop: "50px", backgroundColor: "#3977D1", padding: "15px", color: "white", textAlign: "center" }}>
                 {/* Generate Better AI result with <br /> */}
                 Prompt Protect and Fact <br />
                 Checker in just 3 easy steps

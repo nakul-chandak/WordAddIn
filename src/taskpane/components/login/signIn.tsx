@@ -1,9 +1,9 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import backgroundIng from "../../../../assets/login-background.png"; 
 import { Button, makeStyles, useId } from '@fluentui/react-components';
 import * as Yup from 'yup';
 import { ErrorMessage, Field, Formik, FormikHelpers, FormikValues } from 'formik';
-import componyLogo from "../../../../assets/login-logo.png"
+import componyLogo from "../../../../assets/logo.png"
 import { useNavigate } from 'react-router-dom';
 import { userLogin } from '../../../common/services/user/models/userLogin';
 import { UserService } from '../../../common/services/user/user.service';
@@ -44,6 +44,19 @@ function SignIn() {
     function navigateToHome() {
       navigate('/home');
     };
+
+    useEffect(() => {
+      // Simulate a load event
+      const isAuthenticated = window.sessionStorage.getItem("LoggedIn");
+      if(isAuthenticated != undefined 
+        && isAuthenticated != '' 
+        && isAuthenticated != null 
+        && isAuthenticated === 'true')
+      {
+        navigate('/home');
+        console.log("isAuthenticated :: " + isAuthenticated);
+      }
+    }, []);
 
     // Handle submit button
     const handleSubmit = (values:FormikValues, {setSubmitting}:FormikHelpers<FormikValues>) => {
