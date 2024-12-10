@@ -25,15 +25,16 @@ jobs:
         with:
           app_location: "/" # App source code path
           api_location: "" # Api source code path - optional
-          app_build_command : 'npm install --force'
+          app_build_command : ''
           output_location: "build" # Built app content directory - optional
-          api_build_command : 'npm install --force'
+          api_build_command : ''
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_LIVELY_CLIFF_0122EBC0F }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-         
+        env:
+          NPM_CONFIG_LEGACY_PEER_DEPS: true 
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
