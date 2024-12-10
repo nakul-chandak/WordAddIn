@@ -1,0 +1,39 @@
+node_modules
+# ignore ALL .log files
+*.log
+
+# ignore ALL files in ANY directory named temp
+temp/
+
+# ignore package lock file
+/package-lock.json
+dist/commands.html
+dist/commands.js
+dist/commands.js.map
+dist/manifest.xml
+dist/polyfill.js
+dist/polyfill.js.map
+dist/taskpane.html
+dist/taskpane.js
+dist/taskpane.js.map
+dist/vendor.js
+dist/vendor.js.map
+dist/assets/chatgpt_WithName.png
+dist/assets/chatgpt.png
+dist/assets/chatgpt3.png
+dist/assets/chatgpt4.png
+dist/assets/copilot_withname.png
+dist/assets/copilot.png
+dist/assets/gemini.png
+dist/assets/gemini1.png
+dist/assets/Guardrail_WithName.png
+dist/assets/guardrail.png
+dist/assets/icon-16.png
+dist/assets/icon-32.png
+dist/assets/icon-64.png
+dist/assets/icon-80.png
+dist/assets/icon-128.png
+dist/assets/login-background.png
+dist/assets/login-logo.png
+dist/assets/logo-filled.png
+dist/assets/logo.png

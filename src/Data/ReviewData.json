@@ -1,0 +1,26 @@
+
+[{
+"promptType":"GuardrailAi",
+"description":"Anemia is a condition characterized bya lack of healthy red blood cells, which are responsible for carrying oxygen throughout body.Anemia is a problem of not having enough healthy red blood cells or hemoglobin to carry oxygen to the body's tissues. Hemoglobin is a protein found in red cells that carries oxygen from the lungs to all other organs in the body. Having anemia can cause tiredness, weakness and shortness of breath.            There are many forms of anemia. Each has its own cause. Anemia can be short term or long term. It can range from mild to severe. Anemia can be a warning sign of serious illness.Treatments for anemia might involve taking supplements or having medical procedures. Eating a healthy diet might prevent some forms of anemia.",
+"buttonCaption":"View Fact Checked Result",
+"isLike":true,
+"isDisLike":false,
+"names":["Sujit Basu", "Nakul Chandak"]
+},
+{
+    "promptType":"ChatGPT",
+    "description":"Anemia is a condition characterized by a deficiency of red blood cells or hemoglobin, leading to reduced oxygen transport in the body. Common symptoms include fatigue, weakness, pallor, and shortness of breath. There are various types of anemia, with iron-deficiency anemia being the most prevalent. Causes can include poor diet, chronic illness, or genetic factors. Diagnosis typically involves blood tests to measure hemoglobin levels and assess red blood cell count. Treatment often focuses on dietary changes, iron supplements, or addressing underlying conditions. Maintaining adequate iron intake through foods like red meat, beans, and leafy greens can help prevent anemia.",
+    "buttonCaption":"Fact Checking...",
+    "isLike":false,
+    "isDisLike":true,
+    "names":["Anil Avhad", "Sujit Basu"]
+},
+{
+    "promptType":"Copilot",
+    "description":"Anemia is a condition where the body lacks enough healthy red blood cells to carry adequate oxygen to tissues, making you feel tired and weak. It has various types, such as iron-deficiency anemia, vitamin deficiency anemia, and hemolytic anemia. Common causes include blood loss, lack of red blood cell production, and high rates of red blood cell destruction. Symptoms range from fatigue, pale skin, and shortness of breath to dizziness and irregular heartbeats. Treatment varies depending on the cause, but it often includes dietary changes, supplements, medications, or procedures to treat underlying issues. Left untreated, it can lead to severe health complications.",
+    "buttonCaption":"Run Fast Checker",
+    "isLike":false,
+    "isDisLike":false,
+    "names":["Anil Avhad"]
+}
+]
