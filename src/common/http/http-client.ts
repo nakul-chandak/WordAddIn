@@ -9,7 +9,7 @@ export type ResponseInterceptor = { onFulfilled: FullFilled<AxiosResponse>; onRe
 export const IS_RETRY_HEADER = "Is-Retry";
 
 class HttpClientImpl {
-    private hostname = "https://api.azstage.guardrail.tech/guardrail";
+    private hostname = "https://api.azstage.guardrail.tech";
     private apiVersion = "v1";
     private http!: AxiosInstance;
     private requestInterceptors: RequestInterceptor[] = [];
@@ -31,7 +31,7 @@ class HttpClientImpl {
             headers: {
                 ...config.headers,
             },
-            baseURL: `${this.hostname}/${this.apiVersion}`,
+            baseURL: `${this.hostname}/${this.apiVersion}`
         };
     }
 
@@ -60,24 +60,28 @@ class HttpClientImpl {
     }
 
     post<ResponseType>(url: string, body?: any, config?: { portNumber?: number; enableVersion?: boolean } & AxiosRequestConfig) {
-        return this.http.post<ResponseType>(url, body, this.mergeConfig(config, config?.portNumber));
+        const apiUrl = `${this.hostname}/${url}`;
+        return this.http.post<ResponseType>(apiUrl, body, this.mergeConfig(config, config?.portNumber));
     }
 
     put<ResponseType>(url: string, body?: any, config?: { portNumber?: number } & AxiosRequestConfig) {
-        return this.http.put<ResponseType>(url, body, this.mergeConfig(config, config?.portNumber));
+        const apiUrl = `${this.hostname}/${url}`;
+        return this.http.put<ResponseType>(apiUrl, body, this.mergeConfig(config, config?.portNumber));
     }
 
     patch<ResponseType>(url: string, body?: any, config?: { portNumber?: number } & AxiosRequestConfig) {
-        return this.http.patch<ResponseType>(url, body, this.mergeConfig(config, config?.portNumber));
+        const apiUrl = `${this.hostname}/${url}`;
+        return this.http.patch<ResponseType>(apiUrl, body, this.mergeConfig(config, config?.portNumber));
     }
 
     get<ResponseType>(url: string, config?: { portNumber?: number } & AxiosRequestConfig) {
-        const fullUrl = `${this.hostname}/${this.apiVersion}/${url}`;
+        const fullUrl = `${this.hostname}/${url}`;
         return this.http.get<ResponseType>(fullUrl, this.mergeConfig(config, config?.portNumber));
     }
 
     delete<ResponseType>(url: string, config?: { portNumber?: number } & AxiosRequestConfig) {
-        return this.http.delete<ResponseType>(url, this.mergeConfig(config, config?.portNumber));
+        const apiUrl = `${this.hostname}/${url}`;
+        return this.http.delete<ResponseType>(apiUrl, this.mergeConfig(config, config?.portNumber));
     }
 }
 

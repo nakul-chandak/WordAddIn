@@ -5,9 +5,9 @@ import InformationPage from "./InitialPage/Info";
 import Header from "./Header";
 import OptimizedPromts from "./Prompt-optimizer/OptimizedPrompt";
 import ProtectedRoute from "../../route/ProtectedRoute";
-import LogIn from "./login/logIn";
-import SignIn from "./login/signIn";
+import SignIn from "./logIn/signIn";
 import PageNotFound from "./notFound/PageNotFound";
+import LogIn from "./logIn/logIn";
 
 interface AppProps {
   title: string;
