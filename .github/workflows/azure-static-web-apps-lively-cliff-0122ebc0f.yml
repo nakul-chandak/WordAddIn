@@ -26,7 +26,7 @@ jobs:
           app_location: "/" # App source code path
           app_build_command: 'npm run build'
           api_location: "" # Api source code path - optional
-          output_location: "dist" # Built app content directory - optional          
+          output_location: "" # Built app content directory - optional          
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_LIVELY_CLIFF_0122EBC0F }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
