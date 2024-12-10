@@ -29,7 +29,6 @@ jobs:
           app_artifact_location: "dist"
           skip_api_build: true
           skip_app_build: true
-          path_to_publish: '$(build.ArtifactStagingDirectory)'
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_LIVELY_CLIFF_0122EBC0F }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
