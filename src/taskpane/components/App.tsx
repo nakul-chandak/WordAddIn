@@ -5,7 +5,7 @@ import InformationPage from "./InitialPage/Info";
 import Header from "./Header";
 import OptimizedPromts from "./Prompt-optimizer/OptimizedPrompt";
 import ProtectedRoute from "../../route/ProtectedRoute";
-import LogIn from "./login/logIn";
+import LogIn from "./login/login";
 import SignIn from "./login/signIn";
 import PageNotFound from "./notFound/PageNotFound";
 
