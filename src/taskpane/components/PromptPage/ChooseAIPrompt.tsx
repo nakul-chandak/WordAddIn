@@ -17,21 +17,18 @@ function ChooseAIPrompt() {
     const styles = useStyles();
   
     return (        
-      <div style={{margin:"auto", width: "60%", padding: "10px"}}>
-        <Image
-                            alt="Guardrail"
-                            src={log}
-                            height={100}
-                        />
+        <div style={{ margin: "auto", width: "60%", padding: "10px" }}>
+            <Image
+                alt="Guardrail"
+                src={log}
+                height={100}
+            />
 
-                        <div style={{ marginTop: "50px", width: "376px", backgroundColor: "#3977D1", padding: "40px", color:"white", textAlign: "center" }}>
-                            Generate Better AI result with <br/>
-                            Prompt Protect and Fact <br/>
-                            Checker in just 3 easy steps
-                        </div>
-
-
-                        {/* <Button style={{backgroundColor:"#8647D6",color:"white"}} size='small'>Go</Button> */}
+            <div style={{ marginTop: "25px", backgroundColor: "#3977D1", padding: "15px", color: "white", textAlign: "center" }}>
+                {/* Generate Better AI result with <br /> */}
+                Prompt Protect and Fact <br />
+                Checker in just 3 easy steps
+            </div>
         </div>    
     )
   }
