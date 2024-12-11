@@ -32,9 +32,7 @@ function ChooseAIPrompt() {
 
 
                         {/* <Button style={{backgroundColor:"#8647D6",color:"white"}} size='small'>Go</Button> */}
-        </div>
-    
-    
+        </div>    
     )
   }
   
