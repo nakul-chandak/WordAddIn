@@ -6,7 +6,7 @@ import { promptRequest } from "./models/promptRequest";
 
 class LlmServiceImpl {
     processLlm(request: ChatGptRequest): Promise<LlmResponse> {
-        const baseURL = '/llm/clientApp';
+        const baseURL = 'llm/clientApp';
         return HttpClient.post<LlmResponse>(baseURL, request, {
             // portNumber: 80,
             headers: { 'Content-Type': 'application/json' },
@@ -17,8 +17,8 @@ class LlmServiceImpl {
     }
 
     getLlms(request: promptRequest): Promise<any> {
-        const baseURL = '/llms';
-        return HttpClient.post<any>(`https://api.azstage.guardrail.tech/guardrail/v1${baseURL}`,request,{
+        const baseURL = 'guardrail/v1/llms';
+        return HttpClient.post<any>(`${baseURL}`,request,{
             headers: { 
                 'Content-Type': 'application/json',
                 'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
@@ -29,8 +29,8 @@ class LlmServiceImpl {
     }
 
     getOptimizedPrompts(request:any):Promise<any>{
-        const baseURL = '/llm/prompt_optimization';
-        return HttpClient.post<any>(`https://api.azstage.guardrail.tech/guardrail/v1${baseURL}`,request,{
+        const baseURL = 'guardrail/v1/llm/prompt_optimization';
+        return HttpClient.post<any>(`${baseURL}`,request,{
             headers: { 
                 'Content-Type': 'application/json',
                 'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,

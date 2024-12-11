@@ -15,8 +15,8 @@ const useStyles = makeStyles({
 
 function ChooseAIPrompt() {
     const styles = useStyles();
-
-    return (
+  
+    return (        
         <div style={{ margin: "auto", width: "60%", padding: "10px" }}>
             <Image
                 alt="Guardrail"
@@ -29,13 +29,8 @@ function ChooseAIPrompt() {
                 Prompt Protect and Fact <br />
                 Checker in just 3 easy steps
             </div>
-
-
-            {/* <Button style={{backgroundColor:"#8647D6",color:"white"}} size='small'>Go</Button> */}
-        </div>
-
-
+        </div>    
     )
-}
-
-export default ChooseAIPrompt
+  }
+  
+  export default ChooseAIPrompt
