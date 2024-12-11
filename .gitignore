@@ -7,3 +7,5 @@ temp/
 
 # ignore package lock file
 /package-lock.json
+dist/taskpane.js
+dist/taskpane.js.map
