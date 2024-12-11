@@ -6,8 +6,9 @@ import Header from "./Header";
 import OptimizedPromts from "./Prompt-optimizer/OptimizedPrompt";
 import ProtectedRoute from "../../route/ProtectedRoute";
 import SignIn from "./logIn/signIn";
-import PageNotFound from "./notFound/PageNotFound";
 import LogIn from "./logIn/logIn";
+import PageNotFound from "./notFound/PageNotFound";
+
 
 interface AppProps {
   title: string;
