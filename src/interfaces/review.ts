@@ -5,5 +5,6 @@ export interface IReview {
     description: string;
     buttonCaption: string;
     isLike:boolean,
-    isDisLike:boolean
+    isDisLike:boolean,
+    isDisable:boolean
   }

@@ -39,7 +39,10 @@ const InformationPage = () => {
   const [error, setError] = React.useState<string | null>(null); // Error state
   const [apiCalled, setApiCalled] = React.useState<boolean>(false); // To track if API has been called
   const [response, setResponse]=React.useState<String>('');
+  const [data, setData]=React.useState();
   const styles = useStyles();
+  const [request, setRequest]=React.useState({});
+  const [promptType, setPromptType]= React.useState();
 
   React.useEffect(() => {
     // Check if location.state is available
@@ -54,20 +57,15 @@ const InformationPage = () => {
   const redirectToHomeScreen = () => {
     navigate('/');
   };
+
+
+
   const redirectToFactCheck = (data: any) => {
     console.log('factcheck data' + data);
-    const request = {
-      article: data[0].description,
-      assertions: [],
-      checkForSimilarity: true,
-      recursion_level: 3,
-      sourceType: data.promptType,
-      top_k: 10,
-      top_n: 5
-    }
-    // LlmService.getArticles(request).then((response: any) => {
-    //   console.log(response);
-    // })
+    setPromptType(data.promptType)
+    // setRequest(request);
+    console.log(data);
+    setResponse(data);
     setSelectedValue('factCheck');
   }
 
@@ -110,10 +108,10 @@ const InformationPage = () => {
         </Tab>
       </TabList>
 
-      <div style={{width: '100%'}}>
+      <div style={{width:'100%', border:'solid 1px'}}>
         {selectedValue === "prompt" && <HomePage/>}
         {selectedValue === "review" && <Review promptRequest={location.state} onFactCheckClick={ redirectToFactCheck} />}
-        {selectedValue === "factCheck" && <FactCheck />}
+        {selectedValue === "factCheck" && <FactCheck state={location.state} data={data} promptType={promptType} response={response}/>}
       </div>
 
       {/* Error and Loading States */}

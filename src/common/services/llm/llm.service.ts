@@ -39,6 +39,17 @@ class LlmServiceImpl {
             throw err;
         });
     }
+    getArticles(request:any):Promise<any>{
+        const baseURL = '/articles';
+        return HttpClient.post<LlmResponse>(baseURL, request, {
+            headers: { 
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+            },
+        }).then(response => response.data).catch((err: HttpErrorResponse) => {
+            throw err;
+        })
+    }
 }
 const LlmService = new LlmServiceImpl();
 

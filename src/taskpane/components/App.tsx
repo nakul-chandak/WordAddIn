@@ -8,6 +8,7 @@ import ProtectedRoute from "../../route/ProtectedRoute";
 import SignIn from "./logIn/signIn";
 import LogIn from "./logIn/logIn";
 import PageNotFound from "./notFound/PageNotFound";
+import SignUp from "./logIn/signUp";
 
 
 interface AppProps {
@@ -28,6 +29,10 @@ const App = (props: AppProps) => {
     {
       path: "/signin",
       element: <SignIn />
+    },
+    {
+      path:'/signup',
+      element:<SignUp />
     },
     {
       path: '/',
