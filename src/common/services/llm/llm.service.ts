@@ -40,7 +40,7 @@ class LlmServiceImpl {
         });
     }
     getArticles(request:any):Promise<any>{
-        const baseURL = '/articles';
+        const baseURL = 'guardrail/v1/articles';
         return HttpClient.post<LlmResponse>(baseURL, request, {
             headers: { 
                 'Content-Type': 'application/json',
