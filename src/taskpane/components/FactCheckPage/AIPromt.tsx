@@ -408,6 +408,7 @@ function AIPrompt(props: any) {
         if (defaultTab) {
             setSelectedValue(defaultTab);
             //onTabSelect(defaultTab)
+            setSelectedGPT(defaultTab);
             setData(props.data.result);
         }
     }, [props.state.sourceTypes, selectedPromptType]);
