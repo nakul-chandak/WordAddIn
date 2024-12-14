@@ -23,7 +23,9 @@ function LogIn() {
       console.log("isAuthenticated :: " + isAuthenticated);
     }
   }, []);
-
+  const navigateSignUpPage = () =>{
+    navigate('/signup')
+  }
   return (
     <>
           <div style={{marginTop :"10px", marginLeft:"10px", marginBottom:"5px"}}>
@@ -44,7 +46,7 @@ function LogIn() {
               <h1> Get Started</h1>
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <Button appearance="primary" type="submit" name="login" onClick={navigateSigInPage}> Sign In </Button>
-                <Button style={{ marginLeft: "15px", marginRight: "20px" }} appearance="primary" type="submit" name="createAccount"> Create Account </Button>
+                <Button style={{ marginLeft: "15px", marginRight: "20px" }} onClick={navigateSignUpPage} appearance="primary" type="submit" name="createAccount"> Create Account </Button>
               </div>
             </div>
           </div>

@@ -70,8 +70,8 @@ export const ReviewDetails = (props:any) => {
          return "Guardrail LLM";
     }
   }
-  function handleClick(){
-    props.onFactCheckClick();
+  function handleClick(promptType:string){
+    props.onFactCheckClick(promptType);
   }
   
   return (
@@ -112,7 +112,7 @@ export const ReviewDetails = (props:any) => {
 
               <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm6">
-                  <Button style={{ backgroundColor: "#8647D6", color: "white" }} size='small' onClick={handleClick}>
+                  <Button disabled={r.isDisable} style={{ backgroundColor: "#8647D6", color: "white" }} size='small' onClick={()=>handleClick(r.promptType)}>
                     <Badge style={{ backgroundColor: "#BE8BFF", color: "white", marginRight: "5px" }} size="small" icon={< CheckmarkRegular />} />{r.buttonCaption} </Button>
                 </div>
 
