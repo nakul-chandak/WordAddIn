@@ -86,7 +86,7 @@ const ContentPanel = (props: any) => {
     const [colors, setColors] = useState<string[]>([]);
     const [selectedChildTab, setChildTab] = useState('tab-0');
     const [checkedItems, setCheckedItems] = useState<any[]>([]);
-    
+    const [topRanks, setTopRanks] = useState()
     // Safely check and set the articles based on props.data
     const [articles, setArticles] = React.useState(
         props?.data && props?.data[0]?.articles ? props?.data[0].articles : { assertions: [] }
@@ -122,10 +122,18 @@ const ContentPanel = (props: any) => {
             }
             return [...prev, item];
         });
+        //props.sendRanksDetails();
     };
     const onChildTabSelect = (value: any) => {
         setChildTab(value.currentTarget.value);
+        sendRanksDetails([])
     };
+
+    const sendRanksDetails = (value:any) =>{
+        value = value.map((v:any) => v.split('_')[1])
+        setTopRanks(value);
+        console.log('top ranks details as ', value)
+    }
      
     const addTextToDocument = async () => {
         if (checkedItems.length > 0) {
@@ -244,7 +252,7 @@ const ContentPanel = (props: any) => {
                         );
                     })}
                 </TabList>
-                <TablePanel data={articles.assertions} selectedChildTab={selectedChildTab} />
+                <TablePanel data={articles.assertions} selectedChildTab={selectedChildTab} sendRanksDetails={sendRanksDetails} />
             </div>
         </div>
     );
@@ -265,7 +273,7 @@ const TablePanel = (props: any) => {
     let tRanks = props.data[childTab]?.topRanks || [];
     tRanks = tRanks.map((_item, _index) => ({
         ..._item,
-        id: _index +'-'+ props.data[childTab]?.id
+        id: _index +'_'+ props.data[childTab]?.id
       }));
 
     // Update childTab based on selectedChildTab prop
@@ -281,6 +289,7 @@ const TablePanel = (props: any) => {
             }
             return [...prev, item];
         });
+        props.sendRanksDetails(checkedItems)
         console.log(checkedItems)
     };
 
@@ -321,9 +330,9 @@ const TablePanel = (props: any) => {
                         <TableCell style={{ textAlign: 'center', padding: '8px' }}>
                             <Checkbox
                                 label=""
-                                id={`topRank + ${index}`}
-                                checked={checkedItems.includes(`topRank + ${index}`)}
-                                onChange={() => handleCheckboxChange(`topRank + ${index}`)}
+                                id={rank.id}
+                                checked={checkedItems.includes(rank.id)}
+                                onChange={() => handleCheckboxChange(rank.id)}
                             />
                         </TableCell>
                         <TableCell

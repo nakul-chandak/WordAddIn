@@ -1,9 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Dropdown, makeStyles, typographyStyles, useId } from "@fluentui/react-components";
+import { Dropdown, makeStyles, ToastBody, typographyStyles, useId } from "@fluentui/react-components";
 import { ReviewDetails } from "./ReviewDetails";
 import { LlmService } from "../../../common/services/llm/llm.service";
 import { IReview } from "../../../interfaces/review";
 import { useNavigate } from "react-router-dom";
+import {
+  Button,
+  Field,
+  RadioGroup,
+  Radio,
+  Spinner,
+  Avatar,
+  Toaster,
+  useToastController,
+  ToastTitle,
+  Toast,
+  ToastIntent,
+} from "@fluentui/react-components";
 
 const useStyles = makeStyles({
   root: {},
@@ -17,31 +30,74 @@ function Review(props: any) {
   const [lazyLoading, setLazyLoading] = useState(false); // For tracking lazy loading state
   const response = props.data;
   const navigate = useNavigate();
+  const toasterId = useId("toaster");
+  const { dispatchToast } = useToastController(toasterId);
+
+  const showErrorToast = (error: any) => {
+    let msg = "An unexpected error occurred.";
+    let route = '';
+    if (error?.statusCode === 400) {
+      msg = "Bad Request: Please check your input.";
+    } else if (error?.statusCode === 404) {
+      msg = "Unauthorized: Please singup.";
+      route = '/signin';
+    } else if (error?.statusCode === 500) {
+      msg = "Server Error: Please try again later.";
+      route = '/signin';
+    } else if (error?.statusCode === 429) {
+      msg = "You have exceeded your daily limit.";
+      route = '/signin';
+    } else if (error?.message) {
+      msg = error.message;
+    }
+    dispatchToast(
+      <Toast>
+        {/* <ToastTitle action={<Link>Undo</Link>}>Email sent</ToastTitle> */}
+        <ToastBody>{msg}</ToastBody>
+        {/* <ToastFooter>
+          <Link>Action</Link>
+          <Link>Action</Link>
+        </ToastFooter> */}
+      </Toast>,
+      { intent: "error" }
+    );
+    navigate(route);
+  };
 
   const loadPrompt = () => {
     if (
       props?.promptRequest?.prompt &&
       props.promptRequest.prompt.trim() !== ""
     ) {
-      LlmService.getLlms(props.promptRequest).then((res) => {
-        const promptResults = Object.keys(res.output).map((key) => ({
-          promptType: key,
-          description: res.output[key],
-          buttonCaption: "Fact Checker",
-          isDisLike: !res.isFavorite,
-          isLike: res.isFavorite,
-          isDisable: true
-        }));
-        setResult(promptResults);
-        console.log("Prompt loaded:", promptResults);
-        loadLazy(promptResults, promptResults); // Continue with lazy loading
-      });
+      LlmService.getLlms(props.promptRequest)
+        .then((res) => {
+          const promptResults = Object.keys(res.output).map((key) => ({
+            promptType: key,
+            description: res.output[key],
+            buttonCaption: "Fact Checker",
+            isDisLike: !res.isFavorite,
+            isLike: res.isFavorite,
+            isDisable: true,
+          }));
+          setResult(promptResults);
+          console.log("Prompt loaded:", promptResults);
+          loadLazy(promptResults, promptResults); // Continue with lazy loading
+        })
+        .catch((error) => {
+        // Log detailed error information for debugging
+        if (error.response) {
+          console.log("Error response status:", error.response.status);
+          console.log("Error response data:", error.response.data);
+        }
+
+        showErrorToast(error);
+        });
     } else {
       navigate("/");
     }
   };
 
-  const loadLazy = (promptResults: IReview[], res:any) => {
+  const loadLazy = (promptResults: IReview[], res: any) => {
     setLazyLoading(true);
     const requests = promptResults.map((data) => {
       const request = {
@@ -54,46 +110,41 @@ function Review(props: any) {
       };
       return LlmService.getArticles(request);
     });
-  
+
     Promise.all(requests)
       .then((responses) => {
         const allArticles = responses.map((response, index) => ({
           promptType: promptResults[index].promptType,
           articles: response,
         }));
-        
-        // Update articles state
+
         setArticles(allArticles);
-        
-        // Adjust 'isDisable' based on which prompts received data
-        // let updatedResult = res.map((_rs, _index) => {
-        //   const isReceivedData = responses[_index]?.length > 0; // Check if data was received
-        //   return {
-        //     ..._rs,
-        //     isDisable: !isReceivedData, // Disable if no data received
-        //   };
-        // });
-        // Create a Map from res to allow for O(1) lookups by promptType
+
         const resultMap = new Map(res.map((r: any) => [r.promptType, r]));
         let finalRes = [];
         allArticles.forEach((article: any) => {
-          const r:any = resultMap.get(article.promptType);
-          r.isDisable = false;
+          const r: any = resultMap.get(article.promptType);
           if (r) {
-            //setResult(r);
-            finalRes.push(r)
-            //navigate('review')
+            r.isDisable = false;
+            finalRes.push(r);
           }
         });
 
         setResult(finalRes);
-        //setResult(updatedResult); // Update the results accordingly
         console.log("Articles loaded:", allArticles);
       })
-      .catch((error) => console.error("Error fetching articles:", error))
+      .catch((error) => {
+        console.error("Error fetching articles:", error);
+        // Log detailed error information for debugging
+        if (error.response) {
+          console.log("Error response status:", error.response.status);
+          console.log("Error response data:", error.response.data);
+        }
+
+        showErrorToast(error);
+      })
       .finally(() => setLazyLoading(false));
   };
-  
 
   const onFactCheckClick = (promptType: string) => {
     const finalResult = {
@@ -116,6 +167,7 @@ function Review(props: any) {
 
   return (
     <>
+      <Toaster toasterId={toasterId} />
       <div style={{ width: "100%" }}>
         <Dropdown
           style={{ marginLeft: "5px", minWidth: "100px" }}
@@ -151,7 +203,6 @@ function Review(props: any) {
         </Dropdown>
       </div>
 
-      {/* Render ReviewDetails immediately after loadPrompt */}
       {result.length > 0 && (
         <ReviewDetails
           data={result}
@@ -160,7 +211,6 @@ function Review(props: any) {
         />
       )}
 
-      {/* Optionally display a loading indicator for lazy loading */}
       {lazyLoading && <p>Loading additional data...</p>}
     </>
   );
