@@ -38,10 +38,15 @@ function Review(props: any) {
     let route = '';
     if (error?.statusCode === 400) {
       msg = "Bad Request: Please check your input.";
-    } else if (error?.statusCode === 404) {
+    } else if (error?.statusCode === 402) {
       msg = "Unauthorized: Please singup.";
       route = '/signin';
-    } else if (error?.statusCode === 500) {
+    }
+    else if (error?.statusCode === 404) {
+      msg = "Request end point not found.";
+      route = '/signin';
+    }
+    else if (error?.statusCode === 500) {
       msg = "Server Error: Please try again later.";
       route = '/signin';
     } else if (error?.statusCode === 429) {
@@ -61,7 +66,7 @@ function Review(props: any) {
       </Toast>,
       { intent: "error" }
     );
-    navigate(route);
+    //navigate(route);
   };
 
   const loadPrompt = () => {
@@ -89,7 +94,6 @@ function Review(props: any) {
           console.log("Error response status:", error.response.status);
           console.log("Error response data:", error.response.data);
         }
-
         showErrorToast(error);
         });
     } else {
