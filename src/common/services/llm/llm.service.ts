@@ -23,7 +23,7 @@ class LlmServiceImpl {
                 'Content-Type': 'application/json',
                 'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
             },
-        }).then(response => response.data).catch((err: HttpErrorResponse) => {
+        }).then(response => response.data).catch((err: any) => {
             throw err;
         });
     }
@@ -46,7 +46,7 @@ class LlmServiceImpl {
                 'Content-Type': 'application/json',
                 'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
             },
-        }).then(response => response.data).catch((err: HttpErrorResponse) => {
+        }).then(response => response.data).catch((err: any) => {
             throw err;
         })
     }
