@@ -37,3 +37,6 @@ dist/assets/login-background.png
 dist/assets/login-logo.png
 dist/assets/logo-filled.png
 dist/assets/logo.png
+dist/polyfill.js.LICENSE.txt
+dist/taskpane.js.LICENSE.txt
+dist/vendor.js.LICENSE.txt
