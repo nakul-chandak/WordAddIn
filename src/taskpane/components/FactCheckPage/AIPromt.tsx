@@ -126,7 +126,7 @@ const ContentPanel = (props: any) => {
     const onChildTabSelect = (value: any) => {
         setChildTab(value.currentTarget.value);
     };
-    
+     
     const addTextToDocument = async () => {
         if (checkedItems.length > 0) {
             try {
@@ -262,7 +262,11 @@ const TablePanel = (props: any) => {
         setTopRanks(currentTopRanks); // Only update topRanks if it changes
     }, [childTab]);
 
-    const tRanks = props.data[childTab]?.topRanks || [];
+    let tRanks = props.data[childTab]?.topRanks || [];
+    tRanks = tRanks.map((_item, _index) => ({
+        ..._item,
+        id: _index +'-'+ props.data[childTab]?.id
+      }));
 
     // Update childTab based on selectedChildTab prop
     useEffect(() => {
@@ -277,6 +281,7 @@ const TablePanel = (props: any) => {
             }
             return [...prev, item];
         });
+        console.log(checkedItems)
     };
 
     const columns = [
