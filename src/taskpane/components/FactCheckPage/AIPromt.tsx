@@ -126,7 +126,7 @@ const ContentPanel = (props: any) => {
     const onChildTabSelect = (value: any) => {
         setChildTab(value.currentTarget.value);
     };
-
+    
     const addTextToDocument = async () => {
         if (checkedItems.length > 0) {
             try {
@@ -163,82 +163,61 @@ const ContentPanel = (props: any) => {
     };
     
 
-
-
-//    function addTextToDocument(){
-//     if (checkedItems.length > 0) {
-//         try {
-//              Word.run(async (context) => {
-//                 // Get the current selection in the Word document
-//                 const range = context.document.getSelection();
-
-//                 // Add selected content (for each selected item, you can customize what to add)
-//                 checkedItems.forEach((item:any) => {
-//                     // Assuming `item` is an object with `articleName` and `excerpt` properties
-//                     const textToInsert = `Article`;
-//                     range.insertText(textToInsert, Word.InsertLocation.end);
-//                 });
-
-//                 // Sync to apply changes
-//                 await context.sync();
-//             });
-//         } catch (error) {
-//             console.error('Error inserting content into Word:', error);
-//         }
-//     }
-//     }
-
     return (
         <div>
-            <div className={styles.buttonWrapper} style={{ display: "flex", justifyContent: "space-around" }}>
+            <div className={styles.buttonWrapper} style={{ position:'relative', left:'5rem'}}>
                 <Button shape="circular" icon={<AddRegular/>} onClick={addTextToDocument}>Add Text To Document</Button>
-                <Button shape="circular" icon={<TextEditStyleRegular />}>Edit Text</Button>
             </div>
             <div style={{ display: "flex", padding: "0.5rem" }}>
-                <div style={{ width: "10%" }}>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                        {articles.assertions.map((art:any, index: any) => (
-                            <Checkbox
-                                label=""
-                                id={`checkbox-${index}`}
-                                key={`checkbox-${index}`}
-                                checked={checkedItems.includes(art.id)}
-                                onChange={() => handleCheckboxChange(art.id)}
-                            />
-                        ))}
-                    </div>
-                </div>
-                <div style={{ width: "90%", borderRadius: "5px", borderRight: '0', borderTop: '0', border: "solid 1px grey", fontSize: "small", padding: "1rem" }}>
-                    <div style={{ marginBottom: "1rem" }}>
-                        {articles.assertions.map((assertion, index) => {
+                <div style={{ display: "flex", padding: "0.5rem" }}>
+                    {/* Single loop for both checkbox and article name */}
+                    <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                        {articles.assertions.map((art: any, index: any) => {
                             const color = colors[index] || '#FFFFFF'; // Default color if undefined
                             return (
-                                <span
-                                    key={`span-${index}`}
-                                    style={{
-                                        margin: "0 0.5rem",
-                                        backgroundColor: color,
-                                        padding: "5px",
-                                    }}
-                                >
-                                    {assertion.articleName}
-                                    &nbsp;&nbsp;
-                                    <sup
+                                <div key={`item-${index}`} style={{ display: "flex", alignItems: "center" }}>
+                                    {/* Checkbox */}
+                                    <Checkbox
+                                        label=""
+                                        id={`checkbox-${index}`}
+                                        checked={checkedItems.includes(art.id)}
+                                        onChange={() => handleCheckboxChange(art.id)}
                                         style={{
-                                            position: "relative",
-                                            background: color,
-                                            display: "inline-block",
-                                            padding: "0 9px",
-                                            left: "0.3rem",
+                                            marginRight: "0.5rem", // Ensure space between checkbox and article name
+                                        }}
+                                    />
+                                    {/* Article name with corresponding style */}
+                                    <span
+                                        style={{
+                                            margin: "0 0.5rem",
+                                            backgroundColor: color,
+                                            padding: "5px",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            fontSize:'small',
                                         }}
                                     >
-                                        {index + 1}
-                                    </sup>
-                                </span>
+                                        {art.articleName}
+                                        &nbsp;&nbsp;
+                                        <sup
+                                            style={{
+                                                position: "relative",
+                                                background: color,
+                                                display: "inline-block",
+                                                padding: "0 9px",
+                                                left: "0.3rem",
+                                                bottom:'1rem'
+                                            }}
+                                        >
+                                            {index + 1}
+                                        </sup>
+                                    </span>
+                                </div>
                             );
                         })}
                     </div>
                 </div>
+
             </div>
             <div style={{ display: "flex", padding: "0.5rem", flexDirection: "column", fontSize: "small" }}>
                 <TabList className={styles.tabList} selectedValue={selectedChildTab} onTabSelect={onChildTabSelect}>
@@ -337,8 +316,9 @@ const TablePanel = (props: any) => {
                         <TableCell style={{ textAlign: 'center', padding: '8px' }}>
                             <Checkbox
                                 label=""
-                                checked={checkedItems.includes(rank.id)}
-                                onChange={() => handleCheckboxChange(rank.id)}
+                                id={`topRank + ${index}`}
+                                checked={checkedItems.includes(`topRank + ${index}`)}
+                                onChange={() => handleCheckboxChange(`topRank + ${index}`)}
                             />
                         </TableCell>
                         <TableCell
@@ -408,14 +388,14 @@ function AIPrompt(props: any) {
         if (defaultTab) {
             setSelectedValue(defaultTab);
             //onTabSelect(defaultTab)
-            setSelectedGPT(defaultTab);
+            setSelectedGPT(defaultTab === 'chatGPT' ? 'gpt3' : defaultTab === 'chatGPT4' ? 'gpt4': defaultTab);
             setData(props.data.result);
         }
     }, [props.state.sourceTypes, selectedPromptType]);
 
     const onTabSelect = (value: any) => {
         let finalValue = value.currentTarget.value === 'chatGPT' ? 'gpt3' : value.currentTarget.value === 'chatGPT4' ? 'gpt4':value.currentTarget.value;
-        setSelectedGPT(finalValue);
+        setSelectedGPT(finalValue === 'chatGPT' ? 'gpt3' : finalValue === 'chatGPT4' ? 'gpt4':finalValue);
         setSelectedValue(value.currentTarget.value);
     };
 
@@ -451,6 +431,7 @@ function AIPrompt(props: any) {
                 </TabList>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", margin: "1rem 0" }}>
+
                 <div className={styles.panels}>
                     {selectedValue === "guardrail" && props.state.sourceTypes.includes("guardrail") && (
                         <ContentPanel title="Guardrail Content" data={ data && data.filter((d:any) => d.promptType === selectedGPT)} />
