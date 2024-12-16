@@ -7,6 +7,7 @@ import componyLogo from "../../../../assets/logo.png"
 import { useNavigate } from 'react-router-dom';
 import { userLogin } from '../../../common/services/user/models/userLogin';
 import { UserService } from '../../../common/services/user/user.service';
+import { useToaster } from '../../../hooks/useToast';
 
 // Style classes
 const useStyles = makeStyles({
@@ -39,7 +40,7 @@ const useStyles = makeStyles({
 
 function SignIn() {
     const styles = useStyles();
-    
+     const toaster = useToaster();
     const navigate = useNavigate();
     function navigateToHome() {
       navigate('/home');
@@ -68,11 +69,16 @@ function SignIn() {
         login.username =values.userName;
         login.password = values.password;
         UserService.logIn(login).then(res=>{
-         window.sessionStorage.setItem("token",res.accessToken);
-         window.sessionStorage.setItem("userId",res.userId);
-         window.sessionStorage.setItem("LoggedIn","true");
-        navigateToHome();
-        });
+          if(res.accessToken){
+            window.sessionStorage.setItem("token",res.accessToken);
+            window.sessionStorage.setItem("userId",res.userId);
+            window.sessionStorage.setItem("LoggedIn","true");
+            toaster.success("logged in successfully.")
+            navigateToHome();
+          }
+        },(error=>{
+          toaster.error(error.message? error.message :"Unable to login application.");
+        }));
     };
 
     // field Ids
