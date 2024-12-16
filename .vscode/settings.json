@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/7ead1daf-1afb-46b3-80d8-7c462377feb5/resourceGroups/Office-Addins/providers/Microsoft.Web/sites/guardrail-technology",
+    "appService.deploySubpath": "dist"
+}
