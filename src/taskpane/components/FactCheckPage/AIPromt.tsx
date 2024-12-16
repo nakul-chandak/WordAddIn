@@ -86,7 +86,7 @@ const ContentPanel = (props: any) => {
     const [colors, setColors] = useState<string[]>([]);
     const [selectedChildTab, setChildTab] = useState('tab-0');
     const [checkedItems, setCheckedItems] = useState<any[]>([]);
-    const [topRanks, setTopRanks] = useState()
+    const [topRanks, setTopRanks] = useState<any[]>([]);
     // Safely check and set the articles based on props.data
     const [articles, setArticles] = React.useState(
         props?.data && props?.data[0]?.articles ? props?.data[0].articles : { assertions: [] }
@@ -130,7 +130,7 @@ const ContentPanel = (props: any) => {
     };
 
     const sendRanksDetails = (value:any) =>{
-        value = value.map((v:any) => v.split('_')[1])
+        // value = value.map((v:any) => v.split('_')[1])
         setTopRanks(value);
         console.log('top ranks details as ', value)
     }
@@ -169,12 +169,50 @@ const ContentPanel = (props: any) => {
             }
         }
     };
+
+    const addTextToDocumentFooter = async () =>{
+        if(topRanks.length > 0){
+            try {
+                await Word.run(async (context) => {
+                    const footer = context.document.sections.getFirst().getFooter("Primary");
+                    footer.load("text"); // Load the current footer content for potential debugging
+                
+                    // Prepare to add new content
+                    const previouslyInsertedItems = new Set<string>();
+                
+                    topRanks.forEach((item) => {
+                      if (!previouslyInsertedItems.has(item)) {
+                        const [index, artId] = item.split("_");
+                        const article = articles.assertions.find((a:any) => a.id === artId);
+                
+                        if (article) {
+                          const topRankArticle = article.topRanks[parseInt(index, 10)];
+                
+                          if (topRankArticle) {
+                            const textToInsert = topRankArticle.source; // Use the desired property for insertion
+                            footer.insertText(textToInsert + "\n", Word.InsertLocation.end); // Add content to the footer
+                            previouslyInsertedItems.add(item); // Mark as inserted
+                          }
+                        }
+                      }
+                    });
+    
+                    // Sync to apply changes
+                    await context.sync();
+                });
+                                //     // A set to track items that have already been inserted
+  
+            } catch (error) {
+                console.error('Error inserting content into Word:', error);
+            }
+        }
+    };
     
 
     return (
         <div>
             <div className={styles.buttonWrapper} style={{ position:'relative', left:'5rem'}}>
-                <Button shape="circular" icon={<AddRegular/>} onClick={addTextToDocument}>Add Text To Document</Button>
+                <Button shape="circular" icon={<AddRegular/>} onClick={()=>{addTextToDocument();addTextToDocumentFooter();}}>Add Text To Document</Button>
             </div>
             <div style={{ display: "flex", padding: "0.5rem" }}>
                 <div style={{ display: "flex", padding: "0.5rem" }}>
@@ -260,7 +298,7 @@ const ContentPanel = (props: any) => {
 
 
 const TablePanel = (props: any) => {
-    const [checkedItems, setCheckedItems] = useState<any[]>([]);
+    const [checkedItemsLower, setCheckedItemsLower] = useState<any[]>([]);
     const [topRanks, setTopRanks] = useState<any[]>([]);
     const [childTab, setChildTab] = useState(0);
 
@@ -283,16 +321,18 @@ const TablePanel = (props: any) => {
     }, [props.selectedChildTab]);
 
     const handleCheckboxChange = (item: any) => {
-        setCheckedItems((prev) => {
-            if (prev.includes(item)) {
-                return prev.filter((i) => i !== item);
-            }
-            return [...prev, item];
-        });
-        props.sendRanksDetails(checkedItems)
-        console.log(checkedItems)
-    };
+        setCheckedItemsLower((prev) => {
+            const updatedItems = prev.includes(item)
+                ? prev.filter((i) => i !== item)
+                : [...prev, item];
 
+            props.sendRanksDetails(updatedItems);
+            console.log(updatedItems);
+
+            return updatedItems;
+        });
+    };
+    
     const columns = [
         { columnKey: "checkbox", label: "SELECT", width: "10%" },
         { columnKey: "link", label: "LINK", width: "40%" },
@@ -331,7 +371,7 @@ const TablePanel = (props: any) => {
                             <Checkbox
                                 label=""
                                 id={rank.id}
-                                checked={checkedItems.includes(rank.id)}
+                                checked={checkedItemsLower.includes(rank.id)}
                                 onChange={() => handleCheckboxChange(rank.id)}
                             />
                         </TableCell>
