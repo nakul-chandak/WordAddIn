@@ -2,7 +2,6 @@ import * as React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./components/App";
 import { FluentProvider, webLightTheme } from "@fluentui/react-components";
-import { ToastProvider } from "../context/toastContext";
 
 /* global document, Office, module, require */
 
@@ -15,11 +14,8 @@ const root = createRoot(rootElement);
 Office.onReady(() => {
   root.render(
     <FluentProvider theme={webLightTheme}>
-      <ToastProvider>
-             <App title={title} />
-      </ToastProvider>
+      <App title={title} />
     </FluentProvider>
-    
   );
 });
 

@@ -85,11 +85,16 @@ module.exports = async (env, options) => {
         filename: "taskpane.html",
         template: "./src/taskpane/taskpane.html",
         chunks: ["polyfill", "vendor", "taskpane"],
-      }),
+      }),      
       new HtmlWebpackPlugin({
         filename: "commands.html",
         template: "./src/commands/commands.html",
         chunks: ["commands"],
+      }),
+      new HtmlWebpackPlugin({
+        filename: "index.html",
+        template: "./src/taskpane/index.html",
+        chunks: ["index"],
       }),
       new webpack.ProvidePlugin({
         Promise: ["es6-promise", "Promise"],
