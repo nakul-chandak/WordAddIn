@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Dropdown, makeStyles, ToastBody, typographyStyles, useId } from "@fluentui/react-components";
+import {
+  Dropdown,
+  makeStyles,
+  ToastBody,
+  typographyStyles,
+  useId,
+  Spinner,
+  Toaster,
+  useToastController,
+  Toast,
+} from "@fluentui/react-components";
 import { ReviewDetails } from "./ReviewDetails";
 import { LlmService } from "../../../common/services/llm/llm.service";
 import { IReview } from "../../../interfaces/review";
 import { useNavigate } from "react-router-dom";
-import {
-  Button,
-  Field,
-  RadioGroup,
-  Radio,
-  Spinner,
-  Avatar,
-  Toaster,
-  useToastController,
-  ToastTitle,
-  Toast,
-  ToastIntent,
-} from "@fluentui/react-components";
 
 const useStyles = makeStyles({
   root: {},
@@ -26,47 +23,36 @@ const useStyles = makeStyles({
 function Review(props: any) {
   const [result, setResult] = useState<IReview[]>([]);
   const [articles, setArticles] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [lazyLoading, setLazyLoading] = useState(false); // For tracking lazy loading state
-  const response = props.data;
+  const [loading, setLoading] = useState(false); // Tracks overall loading state
+  const [lazyLoading, setLazyLoading] = useState(false); // Tracks lazy loading state
   const navigate = useNavigate();
   const toasterId = useId("toaster");
   const { dispatchToast } = useToastController(toasterId);
 
   const showErrorToast = (error: any) => {
     let msg = "An unexpected error occurred.";
-    let route = '';
     if (error?.statusCode === 400) {
       msg = "Bad Request: Please check your input.";
     } else if (error?.statusCode === 402) {
-      msg = "Unauthorized: Please singup.";
-      route = '/signin';
-    }
-    else if (error?.statusCode === 404) {
-      msg = "Request end point not found.";
-      route = '/signin';
-    }
-    else if (error?.statusCode === 500) {
+      msg = "Unauthorized: Please sign in.";
+      navigate("/signin");
+    } else if (error?.statusCode === 404) {
+      msg = "Request endpoint not found.";
+    } else if (error?.statusCode === 500) {
       msg = "Server Error: Please try again later.";
-      route = '/signin';
     } else if (error?.statusCode === 429) {
       msg = "You have exceeded your daily limit.";
-      route = '/signin';
+      navigate('/signin');
     } else if (error?.message) {
       msg = error.message;
     }
+
     dispatchToast(
       <Toast>
-        {/* <ToastTitle action={<Link>Undo</Link>}>Email sent</ToastTitle> */}
         <ToastBody>{msg}</ToastBody>
-        {/* <ToastFooter>
-          <Link>Action</Link>
-          <Link>Action</Link>
-        </ToastFooter> */}
       </Toast>,
       { intent: "error" }
     );
-    //navigate(route);
   };
 
   const loadPrompt = () => {
@@ -74,6 +60,7 @@ function Review(props: any) {
       props?.promptRequest?.prompt &&
       props.promptRequest.prompt.trim() !== ""
     ) {
+      setLoading(true); // Show loading spinner
       LlmService.getLlms(props.promptRequest)
         .then((res) => {
           const promptResults = Object.keys(res.output).map((key) => ({
@@ -89,20 +76,21 @@ function Review(props: any) {
           loadLazy(promptResults, promptResults); // Continue with lazy loading
         })
         .catch((error) => {
-        // Log detailed error information for debugging
-        if (error.response) {
-          console.log("Error response status:", error.response.status);
-          console.log("Error response data:", error.response.data);
-        }
-        showErrorToast(error);
-        });
+          console.error("Error loading prompts:", error);
+          if (error.response) {
+            console.log("Error response status:", error.response.status);
+            console.log("Error response data:", error.response.data);
+          }
+          showErrorToast(error);
+        })
+        .finally(() => setLoading(false)); // Hide loading spinner
     } else {
       navigate("/");
     }
   };
 
   const loadLazy = (promptResults: IReview[], res: any) => {
-    setLazyLoading(true);
+    setLazyLoading(true); // Show lazy loading spinner
     const requests = promptResults.map((data) => {
       const request = {
         article: data.description,
@@ -139,15 +127,13 @@ function Review(props: any) {
       })
       .catch((error) => {
         console.error("Error fetching articles:", error);
-        // Log detailed error information for debugging
         if (error.response) {
           console.log("Error response status:", error.response.status);
           console.log("Error response data:", error.response.data);
         }
-
         showErrorToast(error);
       })
-      .finally(() => setLazyLoading(false));
+      .finally(() => setLazyLoading(false)); // Hide lazy loading spinner
   };
 
   const onFactCheckClick = (promptType: string) => {
@@ -162,60 +148,50 @@ function Review(props: any) {
     loadPrompt();
   }, []); // Load prompt on mount
 
-  const options = ["Change Tone"];
-  const options2 = ["Make it concise"];
   const styles = useStyles();
-  const comboId = useId("combobox");
-  const defaultValue = options[0];
-  const defaultValue2 = options2[0];
 
   return (
     <>
       <Toaster toasterId={toasterId} />
       <div style={{ width: "100%" }}>
-        <Dropdown
-          style={{ marginLeft: "5px", minWidth: "100px" }}
-          aria-labelledby={`${comboId}-small`}
-          placeholder="Select"
-          size="small"
-          id="drop1"
-          defaultValue={defaultValue}
-          disabled
-          {...props}
-        >
-          {options.map((option) => (
-            <option key={option}>
-              <span>{option}</span>
-            </option>
-          ))}
-        </Dropdown>
-        <Dropdown
-          style={{ marginLeft: "5px", minWidth: "100px" }}
-          aria-labelledby={`${comboId}-small`}
-          placeholder="Select"
-          size="small"
-          id="drop2"
-          disabled
-          defaultValue={defaultValue2}
-          {...props}
-        >
-          {options2.map((option) => (
-            <option key={option}>
-              <span>{option}</span>
-            </option>
-          ))}
-        </Dropdown>
+        {/* Show Spinner while loading */}
+        {(loading || lazyLoading) ? (
+          <div className="spinner-container">
+            <Spinner size="medium" label="Loading..." />
+          </div>
+        ) : (
+          <>
+            <Dropdown
+              style={{ marginLeft: "5px", minWidth: "100px" }}
+              placeholder="Select"
+              size="small"
+              id="drop1"
+              disabled
+              defaultValue="Change Tone"
+            >
+              <option>Change Tone</option>
+            </Dropdown>
+            <Dropdown
+              style={{ marginLeft: "5px", minWidth: "100px" }}
+              placeholder="Select"
+              size="small"
+              id="drop2"
+              disabled
+              defaultValue="Make it concise"
+            >
+              <option>Make it concise</option>
+            </Dropdown>
+            {/* Render ReviewDetails */}
+            {result.length > 0 && (
+              <ReviewDetails
+                data={result}
+                onFactCheckClick={onFactCheckClick}
+                articles={articles}
+              />
+            )}
+          </>
+        )}
       </div>
-
-      {result.length > 0 && (
-        <ReviewDetails
-          data={result}
-          onFactCheckClick={onFactCheckClick}
-          articles={articles} // Pass articles so child can update dynamically
-        />
-      )}
-
-      {lazyLoading && <p>Loading additional data...</p>}
     </>
   );
 }

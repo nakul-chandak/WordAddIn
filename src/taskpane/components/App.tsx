@@ -9,6 +9,8 @@ import SignIn from "./logIn/signIn";
 import LogIn from "./logIn/logIn";
 import PageNotFound from "./notFound/PageNotFound";
 import SignUp from "./logIn/signUp";
+import ChangePassword from "./logIn/changePassword";
+import CreatePassword from "./logIn/createPassword";
 
 
 interface AppProps {
@@ -33,6 +35,14 @@ const App = (props: AppProps) => {
     {
       path:'/signup',
       element:<SignUp />
+    },
+    {
+      path:'/changePassword',
+      element:<ChangePassword/>
+    },
+    {
+      path:'/createPwd',
+      element:<CreatePassword/>
     },
     {
       path: '/',

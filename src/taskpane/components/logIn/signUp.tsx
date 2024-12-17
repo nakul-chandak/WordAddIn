@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { ErrorMessage, Field, Formik, FormikHelpers, FormikValues } from 'formik';
 import componyLogo from "../../../../assets/login-logo.png"
 import { useNavigate } from 'react-router-dom';
-
+import { UserService } from '../../../common/services/user/user.service';
 // Style classes
 const useStyles = makeStyles({
     root: {
@@ -44,11 +44,32 @@ function SignUp() {
         navigate('/home');
     };
 
-    const handleSubmit = (values: FormikValues, { setSubmitting }: FormikHelpers<FormikValues>) => {
+    const handleSubmit = async (values: FormikValues, { setSubmitting }: FormikHelpers<FormikValues>) => {
         setSubmitting(false);
         console.log("Form submitted");
         console.log(values);
         // Call API here to handle submission
+
+        const user:any = {
+            email: values.email,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            invitationCode: values.invitationCode || "", // If invitationCode is empty, send empty string
+            organizationId: "660d57f0a8040b199db16ab1", // Example organization ID, update as necessary
+            role: "User", // Role can be dynamic depending on your application's requirements
+            roleId: "64eb108ca7c91604f5bfebfb", // Example role ID, update as necessary
+            claims: [{domainId: "DefaultDomain"}]
+        };
+        
+        try {
+            await UserService.registerUser(user);
+            await UserService.requestOtp({email:values.email});
+            navigate('/changePassword', {state:values.email}); // Navigate to home page after successful registration
+        } catch (err) {
+            console.error("Error during registration", err);
+        } finally {
+            setSubmitting(false); // Always stop the submitting state after the API call
+        }
     };
 
     const initialValues = {
@@ -72,7 +93,7 @@ function SignUp() {
             .required("Email is required."), // Email validation
         haveAndInvitationCode: Yup.boolean(),
         invitationCode: Yup.string().when('haveAndInvitationCode', (haveAndInvitationCode, schema) => {
-            return haveAndInvitationCode
+            return !haveAndInvitationCode
                 ? schema.required("Invitation Code is required.")
                 : schema.notRequired();
         }),
