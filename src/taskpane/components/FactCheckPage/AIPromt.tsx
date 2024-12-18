@@ -56,23 +56,28 @@ const useStyles = makeStyles({
     },
     tabList: {
         display: 'flex',
-        borderBottom: '1px solid #dcdcdc', // All tabs will have a bottom border
+        //borderBottom: '1px solid #dcdcdc', // All tabs will have a bottom border
+        marginBottom:'1rem',
+        gap:'0.5rem'
     },
     tab: {
         flex: '1',
-        padding: '10px',
+        //padding: '10px',
         textAlign: 'center',
         position: 'relative',
         cursor: 'pointer',
         borderRight: '1px solid #dcdcdc',
         borderTop: '1px solid #dcdcdc', // All tabs have a border top
+        borderLeft: '1px solid #dcdcdc',
+        borderBottom:'1px solid #dcdcdc'
+
     },
     selectedTab: {
-        borderBottom: 'none', // No border for the selected tab
+        //borderBottom: 'none', // No border for the selected tab
     },
     tabIndicator: {
-        height: '2px',
-        background: 'black',
+        //height: '2px',
+        background: 'white',
         position: 'absolute',
         bottom: 0,
         left: 0,

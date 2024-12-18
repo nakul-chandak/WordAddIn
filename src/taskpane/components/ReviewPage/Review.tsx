@@ -35,14 +35,14 @@ function Review(props: any) {
       msg = "Bad Request: Please check your input.";
     } else if (error?.statusCode === 402) {
       msg = "Unauthorized: Please sign in.";
-      navigate("/signin");
+      //navigate("/signin");
     } else if (error?.statusCode === 404) {
       msg = "Request endpoint not found.";
     } else if (error?.statusCode === 500) {
       msg = "Server Error: Please try again later.";
     } else if (error?.statusCode === 429) {
       msg = "You have exceeded your daily limit.";
-      navigate('/signin');
+      //navigate('/signin');
     } else if (error?.message) {
       msg = error.message;
     }
