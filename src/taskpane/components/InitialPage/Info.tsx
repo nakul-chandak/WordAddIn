@@ -83,7 +83,7 @@ const InformationPage = () => {
           Prompt
         </Tab>
         <Tab value="review" 
-        style={{ pointerEvents: selectedValue !== 'review' ? 'none' :'auto' }}
+        style={{ pointerEvents: 'none'}}
         >
           <CounterBadge
             appearance="filled"
@@ -95,7 +95,7 @@ const InformationPage = () => {
         </Tab>
         <Tab
           value="factCheck"
-          style={{ pointerEvents: selectedValue !== 'factCheck' ? 'none' :'auto' }}>
+          style={{ pointerEvents: 'none'}}>
           <CounterBadge
             appearance="filled"
             style={selectedValue === "factCheck"
