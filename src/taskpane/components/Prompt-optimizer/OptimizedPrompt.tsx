@@ -170,7 +170,7 @@ const OptimizedPromts = () => {
             optimisedResponse: false,
             sourceTypes: selectedOptions
         };
-        navigate('/information', { state: data })
+        navigate('/information', { state: data, replace:true })
     };
     const setPrompt1 = (_e: any, data: { value: string }) => {
         setOriginalPrompt(data.value);
