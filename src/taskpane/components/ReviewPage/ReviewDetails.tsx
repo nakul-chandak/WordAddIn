@@ -79,7 +79,7 @@ export const ReviewDetails = (props:any) => {
       {
         reviews?.map((r, index: number) => {
           return (
-            <div key={index} className="ms-Grid" dir="ltr" style={{marginTop:"20px"}}>
+            <div key={index} className="ms-Grid" dir="ltr" style={{marginTop:"20px", marginBottom: "10px"}}>
               <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm10 ms-xl12" style={{display:"inline-flex"}}> <Image height={30} src={getLogo(r.promptType)} /><span className={styles.subtitle2} style={{margin:"3px 0px 0px 10px"}}>{getAIName(r.promptType)}</span> </div>
 

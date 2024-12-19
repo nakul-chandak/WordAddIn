@@ -1,0 +1,4 @@
+swa deploy ./dist --env production
+az login --tenant 8adca017-c842-4290-a9c8-f339374f3f83
+swa login
+swa deploy

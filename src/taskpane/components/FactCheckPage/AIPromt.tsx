@@ -14,7 +14,7 @@ import {
     TableHeaderCell,
     TableRow,
 } from "@fluentui/react-components";
-import { AddRegular, TextEditStyleRegular } from "@fluentui/react-icons";
+import { AddRegular } from "@fluentui/react-icons";
 import React, { useState, useEffect } from "react";
 import icon32 from "../../../../assets/icon-32.png";
 import chatGPT from "../../../../assets/chatgpt.png";

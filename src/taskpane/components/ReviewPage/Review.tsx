@@ -4,18 +4,10 @@ import { ReviewDetails } from "./ReviewDetails";
 import { LlmService } from "../../../common/services/llm/llm.service";
 import { IReview } from "../../../interfaces/review";
 import { useNavigate } from "react-router-dom";
-import {
-  Button,
-  Field,
-  RadioGroup,
-  Radio,
-  Spinner,
-  Avatar,
+import { 
   Toaster,
   useToastController,
-  ToastTitle,
   Toast,
-  ToastIntent,
 } from "@fluentui/react-components";
 
 const useStyles = makeStyles({
@@ -172,7 +164,7 @@ function Review(props: any) {
   return (
     <>
       <Toaster toasterId={toasterId} />
-      <div style={{ width: "100%" }}>
+      <div style={{ width: "100%", marginTop: "10px" }}>
         <Dropdown
           style={{ marginLeft: "5px", minWidth: "100px" }}
           aria-labelledby={`${comboId}-small`}

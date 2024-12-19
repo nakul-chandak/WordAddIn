@@ -1,6 +1,6 @@
-import { CounterBadge, Display, Field, InfoLabel, Radio, RadioGroup } from "@fluentui/react-components";
+import { CounterBadge, Field, InfoLabel, Radio, RadioGroup } from "@fluentui/react-components";
 import React from "react";
-import { makeStyles, Image, Checkbox, Button, Textarea } from "@fluentui/react-components";
+import { makeStyles, Image, Checkbox, Button } from "@fluentui/react-components";
 import log from "../../../../assets/logo.png";
 import guardraiLogo from "../../../../assets/AI_Logos/guardrail.png";
 import chatgpt3Logo from "../../../../assets/AI_Logos/chatgpt3.png";
@@ -9,7 +9,6 @@ import geminiLogo from "../../../../assets/AI_Logos/gemini1.png";
 import copilotLogo from "../../../../assets/AI_Logos/copilot.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { promptRequest } from "../../../common/services/llm/models/promptRequest";
-import { FontWeights } from "@fluentui/react";
 
 const useStyles = makeStyles({
     root: {
@@ -258,7 +257,7 @@ const OptimizedPromts = () => {
                                             fontSize: '11px',
                                             color: 'grey',
                                             float: 'left',
-                                            marginTop: '5px',
+                                            marginTop: '7px',
                                             marginRight: '10px'
                                         }}>Select one optimal prompt and continue</span>
                                         <div style={{                                                
