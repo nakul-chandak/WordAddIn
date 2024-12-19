@@ -4,27 +4,59 @@ import { registerUser } from "./models/register";
 import { userLogin } from "./models/userLogin";
 
 
-class UserServiceImpl { 
-    logIn(request: userLogin): Promise<any> {
+class UserServiceImpl {
+    async logIn(request: userLogin): Promise<any> {
         const loginURL = 'auth/v1/login';
-        return HttpClient.post<any>(`${loginURL}`,request,{
-            headers: { 
-                'Content-Type': 'application/json'
-            },
-        }).then(response => response.data).catch((err: HttpErrorResponse) => {
+        try {
+            const response = await HttpClient.post<any>(`${loginURL}`, request, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            return response.data;
+        } catch (err) {
             throw err;
-        });
+        }
     }
 
-    registerUser(request: registerUser): Promise<any> {
-        const loginURL = 'platform/v1/user';
-        return HttpClient.post<any>(`${loginURL}`,request,{
-            headers: { 
-                'Content-Type': 'application/json'
-            },
-        }).then(response => response.data).catch((err: HttpErrorResponse) => {
+    async registerUser(request: registerUser): Promise<any> {
+        const url = 'platform/v1/user';
+        try {
+            const response = await HttpClient.post<any>(`${url}`, request, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            return response.data;
+        } catch (err) {
             throw err;
-        });
+        }
+    }
+    async requestOtp(request: any): Promise<any> {
+        const url = 'platform/v1/account/password_reset/request';
+        try {
+            const response = await HttpClient.post<any>(`${url}`, request, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            return response.data;
+        } catch (err) {
+            throw err;
+        }
+    }
+    async validateOtp(request: any): Promise<any> {
+        const url = 'platform/v1/account/password_reset/validate';
+        try {
+            const response = await HttpClient.post<any>(`${url}`, request, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            return response.data;
+        } catch (err) {
+            throw err;
+        }
     }
 }
 

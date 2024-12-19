@@ -56,23 +56,28 @@ const useStyles = makeStyles({
     },
     tabList: {
         display: 'flex',
-        borderBottom: '1px solid #dcdcdc', // All tabs will have a bottom border
+        //borderBottom: '1px solid #dcdcdc', // All tabs will have a bottom border
+        marginBottom:'1rem',
+        gap:'0.5rem'
     },
     tab: {
         flex: '1',
-        padding: '10px',
+        //padding: '10px',
         textAlign: 'center',
         position: 'relative',
         cursor: 'pointer',
         borderRight: '1px solid #dcdcdc',
         borderTop: '1px solid #dcdcdc', // All tabs have a border top
+        borderLeft: '1px solid #dcdcdc',
+        borderBottom:'1px solid #dcdcdc'
+
     },
     selectedTab: {
-        borderBottom: 'none', // No border for the selected tab
+        //borderBottom: 'none', // No border for the selected tab
     },
     tabIndicator: {
-        height: '2px',
-        background: 'black',
+        //height: '2px',
+        background: 'white',
         position: 'absolute',
         bottom: 0,
         left: 0,
@@ -99,7 +104,7 @@ const ContentPanel = (props: any) => {
         } else {
             setArticles({ assertions: [] }); // Fallback if no data or articles exist
         }
-        
+
         // Generate random colors based on the number of assertions
         const generateColors = () => articles.assertions.map(() => getRandomLightColor());
         setColors(generateColors());
@@ -129,90 +134,93 @@ const ContentPanel = (props: any) => {
         sendRanksDetails([])
     };
 
-    const sendRanksDetails = (value:any) =>{
+    const sendRanksDetails = (value: any) => {
         // value = value.map((v:any) => v.split('_')[1])
         setTopRanks(value);
         console.log('top ranks details as ', value)
     }
-     
+
+
+    let previouslyInsertedItems: Set<string> = new Set(); // Global state to track inserted items
+
     const addTextToDocument = async () => {
         if (checkedItems.length > 0) {
             try {
                 await Word.run(async (context) => {
-                    // Get the current selection in the Word document
-                    const range = context.document.getSelection();
-                    
-                    // A set to track items that have already been inserted
-                    let previouslyInsertedItems: Set<any> = new Set();
-    
-                    // Add selected content (for each selected item, you can customize what to add)
-                    checkedItems.forEach((item: any) => {
-                        // Check if this item has already been inserted
+                    // Get the body of the Word document
+                    const body = context.document.body;
+
+                    for (let i = checkedItems.length - 1; i >= 0; i--) {
+                        const item = checkedItems[i];
+
                         if (!previouslyInsertedItems.has(item)) {
                             // Find the article corresponding to this item
-                            let article = articles.assertions.find((assertion: any) => assertion.id === item);
-    
-                            // If an article is found, insert its content
+                            const article = articles.assertions.find((assertion: any) => assertion.id === item);
+
                             if (article) {
-                                const textToInsert = article.articleName; // Customize this based on what you need (e.g., `article.articleName` or `article.excerpt`)
-                                range.insertText(textToInsert, Word.InsertLocation.end); // Insert at the end of the document
-                                previouslyInsertedItems.add(item); // Mark this item as inserted
+                                const textToInsert = article.articleName; // Customize as needed
+                                body.insertText(textToInsert + "\n", Word.InsertLocation.end); // Append text to the end of the document
+
+                                previouslyInsertedItems.add(item); // Track the inserted item
+                                checkedItems.splice(i, 1); // Remove the item from checkedItems
                             }
                         }
-                    });
-    
-                    // Sync to apply changes
+                    }
+
+                    setCheckedItems([...checkedItems]); // Update state
+
                     await context.sync();
                 });
             } catch (error) {
-                console.error('Error inserting content into Word:', error);
+                console.error("Error inserting content into Word:", error);
             }
         }
     };
 
-    const addTextToDocumentFooter = async () =>{
-        if(topRanks.length > 0){
+    const addTextToDocumentFooter = async () => {
+        if (topRanks.length > 0) {
             try {
                 await Word.run(async (context) => {
+                    // Get the footer of the document
                     const footer = context.document.sections.getFirst().getFooter("Primary");
-                    footer.load("text"); // Load the current footer content for potential debugging
-                
-                    // Prepare to add new content
-                    const previouslyInsertedItems = new Set<string>();
-                
-                    topRanks.forEach((item) => {
-                      if (!previouslyInsertedItems.has(item)) {
-                        const [index, artId] = item.split("_");
-                        const article = articles.assertions.find((a:any) => a.id === artId);
-                
-                        if (article) {
-                          const topRankArticle = article.topRanks[parseInt(index, 10)];
-                
-                          if (topRankArticle) {
-                            const textToInsert = topRankArticle.source; // Use the desired property for insertion
-                            footer.insertText(textToInsert + "\n", Word.InsertLocation.end); // Add content to the footer
-                            previouslyInsertedItems.add(item); // Mark as inserted
-                          }
+
+                    for (let i = topRanks.length - 1; i >= 0; i--) {
+                        const item = topRanks[i];
+
+                        if (!previouslyInsertedItems.has(item)) {
+                            const [index, artId] = item.split("_");
+                            const article = articles.assertions.find((a: any) => a.id === artId);
+
+                            if (article) {
+                                const topRankArticle = article.topRanks[parseInt(index, 10)];
+
+                                if (topRankArticle) {
+                                    const textToInsert = topRankArticle.source; // Use the desired property for insertion
+                                    footer.insertText(textToInsert + "\n", Word.InsertLocation.end); // Append text to the end of the footer
+
+                                    previouslyInsertedItems.add(item); // Track the inserted item
+                                    topRanks.splice(i, 1); // Remove the item from topRanks
+                                }
+                            }
                         }
-                      }
-                    });
-    
-                    // Sync to apply changes
+                    }
+
+                    setTopRanks([...topRanks]); // Update state
+
                     await context.sync();
                 });
-                                //     // A set to track items that have already been inserted
-  
             } catch (error) {
-                console.error('Error inserting content into Word:', error);
+                console.error("Error inserting content into Word footer:", error);
             }
         }
     };
-    
+
+
 
     return (
         <div>
-            <div className={styles.buttonWrapper} style={{ position:'relative', left:'5rem'}}>
-                <Button shape="circular" icon={<AddRegular/>} onClick={()=>{addTextToDocument();addTextToDocumentFooter();}}>Add Text To Document</Button>
+            <div className={styles.buttonWrapper} style={{ position: 'relative', left: '5rem' }}>
+                <Button disabled={checkedItems.length === 0 && topRanks.length === 0} shape="circular" icon={<AddRegular />} onClick={() => { addTextToDocument(); addTextToDocumentFooter(); }}>Add Text To Document</Button>
             </div>
             <div style={{ display: "flex", padding: "0.5rem" }}>
                 <div style={{ display: "flex", padding: "0.5rem" }}>
@@ -240,7 +248,7 @@ const ContentPanel = (props: any) => {
                                             padding: "5px",
                                             display: "flex",
                                             alignItems: "center",
-                                            fontSize:'small',
+                                            fontSize: 'small',
                                         }}
                                     >
                                         {art.articleName}
@@ -252,7 +260,6 @@ const ContentPanel = (props: any) => {
                                                 display: "inline-block",
                                                 padding: "0 9px",
                                                 left: "0.3rem",
-                                                bottom:'1rem'
                                             }}
                                         >
                                             {index + 1}
@@ -311,8 +318,8 @@ const TablePanel = (props: any) => {
     let tRanks = props.data[childTab]?.topRanks || [];
     tRanks = tRanks.map((_item, _index) => ({
         ..._item,
-        id: _index +'_'+ props.data[childTab]?.id
-      }));
+        id: _index + '_' + props.data[childTab]?.id
+    }));
 
     // Update childTab based on selectedChildTab prop
     useEffect(() => {
@@ -332,7 +339,7 @@ const TablePanel = (props: any) => {
             return updatedItems;
         });
     };
-    
+
     const columns = [
         { columnKey: "checkbox", label: "SELECT", width: "10%" },
         { columnKey: "link", label: "LINK", width: "40%" },
@@ -426,8 +433,8 @@ function AIPrompt(props: any) {
     const selectedPromptType = props.promptType;
     const [data, setData] = React.useState([]);
     console.log('data in AIPrompt component', data);
-    const [selectedValue, setSelectedValue] = useState<TabValue>(props.promptType === 'gpt3' ? 'chatGPT' : props.promptType === 'gpt4' ? 'chatGPT4': props.promptType);
-    const [selectedGPT, setSelectedGPT] =useState('')
+    const [selectedValue, setSelectedValue] = useState<TabValue>(props.promptType === 'gpt3' ? 'chatGPT' : props.promptType === 'gpt4' ? 'chatGPT4' : props.promptType);
+    const [selectedGPT, setSelectedGPT] = useState('')
 
     const tabConfig = [
         { value: "guardrail", promptType: "guardrail", label: "Guardrail", icon: icon32 },
@@ -442,14 +449,14 @@ function AIPrompt(props: any) {
         if (defaultTab) {
             setSelectedValue(defaultTab);
             //onTabSelect(defaultTab)
-            setSelectedGPT(defaultTab === 'chatGPT' ? 'gpt3' : defaultTab === 'chatGPT4' ? 'gpt4': defaultTab);
+            setSelectedGPT(defaultTab === 'chatGPT' ? 'gpt3' : defaultTab === 'chatGPT4' ? 'gpt4' : defaultTab);
             setData(props.data.result);
         }
     }, [props.state.sourceTypes, selectedPromptType]);
 
     const onTabSelect = (value: any) => {
-        let finalValue = value.currentTarget.value === 'chatGPT' ? 'gpt3' : value.currentTarget.value === 'chatGPT4' ? 'gpt4':value.currentTarget.value;
-        setSelectedGPT(finalValue === 'chatGPT' ? 'gpt3' : finalValue === 'chatGPT4' ? 'gpt4':finalValue);
+        let finalValue = value.currentTarget.value === 'chatGPT' ? 'gpt3' : value.currentTarget.value === 'chatGPT4' ? 'gpt4' : value.currentTarget.value;
+        setSelectedGPT(finalValue === 'chatGPT' ? 'gpt3' : finalValue === 'chatGPT4' ? 'gpt4' : finalValue);
         setSelectedValue(value.currentTarget.value);
     };
 
@@ -461,7 +468,7 @@ function AIPrompt(props: any) {
                         <Tab value="guardrail" id="guardrail">
                             <Image alt="Guardrail" src={icon32} height={32} width={32} />
                         </Tab>
-                    )}  
+                    )}
                     {props.state.sourceTypes.includes("gpt3") && (
                         <Tab value="chatGPT" id="chatGPT">
                             <Image alt="Chat GPT" src={chatGPT} height={30} width={30} />
@@ -488,19 +495,19 @@ function AIPrompt(props: any) {
 
                 <div className={styles.panels}>
                     {selectedValue === "guardrail" && props.state.sourceTypes.includes("guardrail") && (
-                        <ContentPanel title="Guardrail Content" data={ data && data.filter((d:any) => d.promptType === selectedGPT)} />
+                        <ContentPanel title="Guardrail Content" data={data && data.filter((d: any) => d.promptType === selectedGPT)} />
                     )}
                     {selectedValue === "chatGPT" && props.state.sourceTypes.includes("gpt3") && (
-                        <ContentPanel title="Chat GPT Content" data={ data && data.filter((d:any) => d.promptType === selectedGPT)} />
+                        <ContentPanel title="Chat GPT Content" data={data && data.filter((d: any) => d.promptType === selectedGPT)} />
                     )}
                     {selectedValue === "chatGPT4" && props.state.sourceTypes.includes("gpt4") && (
-                        <ContentPanel title="Chat GPT4 Content" data={ data && data.filter((d:any) => d.promptType === selectedGPT)} />
+                        <ContentPanel title="Chat GPT4 Content" data={data && data.filter((d: any) => d.promptType === selectedGPT)} />
                     )}
                     {selectedValue === "copilot" && props.state.sourceTypes.includes("copilot") && (
-                        <ContentPanel title="Copilot Content" data={ data && data.filter((d:any) => d.promptType === selectedGPT)} />
+                        <ContentPanel title="Copilot Content" data={data && data.filter((d: any) => d.promptType === selectedGPT)} />
                     )}
                     {selectedValue === "gemini" && props.state.sourceTypes.includes("gemini") && (
-                        <ContentPanel title="Gemini Content" data={ data && data.filter((d:any) => d.promptType === selectedGPT)} />
+                        <ContentPanel title="Gemini Content" data={data && data.filter((d: any) => d.promptType === selectedGPT)} />
                     )}
                 </div>
             </div>

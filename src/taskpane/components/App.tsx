@@ -1,15 +1,20 @@
 import * as React from "react";
 import HomePage from "./InitialPage/HomePage";
 import { createHashRouter, RouterProvider } from "react-router-dom";
+import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
+
+// Dynamically import all components with React.lazy
 const InformationPage = React.lazy(() => import("./InitialPage/Info"));
 const Header = React.lazy(() => import("./Header"));
 const OptimizedPromts = React.lazy(() => import("./Prompt-optimizer/OptimizedPrompt"));
 const ProtectedRoute = React.lazy(() => import("../../route/ProtectedRoute"));
-const SignIn = React.lazy(() => import("./login/signIn"));
-const LogIn = React.lazy(() => import("./login/logIn"));
+const SignIn = React.lazy(() => import("./logIn/signIn"));
+const LogIn = React.lazy(() => import("./logIn/logIn"));
 const PageNotFound = React.lazy(() => import("./notFound/PageNotFound"));
-const SignUp = React.lazy(() => import("./login/signUp"));
-import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
+const SignUp = React.lazy(() => import("./logIn/signUp"));
+const ChangePassword = React.lazy(() => import("./logIn/changePassword"));
+const CreatePassword = React.lazy(() => import("./logIn/createPassword"));
+
 
 interface AppProps {
   title: string;
@@ -49,6 +54,14 @@ const App = (props: AppProps) => {
           <SignUp />
         </React.Suspense>
       ),
+    },
+    {
+      path:'/changePassword',
+      element:<ChangePassword/>
+    },
+    {
+      path:'/createPwd',
+      element:<CreatePassword/>
     },
     {
       path: '/',
