@@ -27,7 +27,7 @@ function LogIn() {
     navigate('/signup')
   }
   return (
-    <>
+    <>    
           <div style={{marginTop :"10px", marginLeft:"10px", marginBottom:"5px"}}>
             <img style={{marginTop :"10px", width:"200px", height:"50px"}} src={componyLogo}/>            
           </div>

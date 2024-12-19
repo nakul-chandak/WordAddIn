@@ -1,16 +1,19 @@
 import * as React from "react";
 import HomePage from "./InitialPage/HomePage";
 import { createHashRouter, RouterProvider } from "react-router-dom";
-import InformationPage from "./InitialPage/Info";
-import Header from "./Header";
-import OptimizedPromts from "./Prompt-optimizer/OptimizedPrompt";
-import ProtectedRoute from "../../route/ProtectedRoute";
-import SignIn from "./logIn/signIn";
-import LogIn from "./logIn/logIn";
-import PageNotFound from "./notFound/PageNotFound";
-import SignUp from "./logIn/signUp";
-import ChangePassword from "./logIn/changePassword";
-import CreatePassword from "./logIn/createPassword";
+import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
+
+// Dynamically import all components with React.lazy
+const InformationPage = React.lazy(() => import("./InitialPage/Info"));
+const Header = React.lazy(() => import("./Header"));
+const OptimizedPromts = React.lazy(() => import("./Prompt-optimizer/OptimizedPrompt"));
+const ProtectedRoute = React.lazy(() => import("../../route/ProtectedRoute"));
+const SignIn = React.lazy(() => import("./logIn/signIn"));
+const LogIn = React.lazy(() => import("./logIn/logIn"));
+const PageNotFound = React.lazy(() => import("./notFound/PageNotFound"));
+const SignUp = React.lazy(() => import("./logIn/signUp"));
+const ChangePassword = React.lazy(() => import("./logIn/changePassword"));
+const CreatePassword = React.lazy(() => import("./logIn/createPassword"));
 
 
 interface AppProps {
@@ -18,23 +21,39 @@ interface AppProps {
 }
 
 const App = (props: AppProps) => {
-  
+
   const router = createHashRouter([
     {
       path: '/',
-      element: <LogIn />
+      element: (
+        <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
+          <LogIn />
+        </React.Suspense>
+      ),
     },
     {
       path: '/login',
-      element: <LogIn />
+      element: (
+        <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
+          <LogIn />
+        </React.Suspense>
+      ),
     },
     {
       path: "/signin",
-      element: <SignIn />
+      element: (
+        <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
+          <SignIn />
+        </React.Suspense>
+      ),
     },
     {
-      path:'/signup',
-      element:<SignUp />
+      path: '/signup',
+      element: (
+        <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
+          <SignUp />
+        </React.Suspense>
+      ),
     },
     {
       path:'/changePassword',
@@ -46,20 +65,31 @@ const App = (props: AppProps) => {
     },
     {
       path: '/',
-      element: <ProtectedRoute />,
+      element: (
+        <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
+          <ProtectedRoute />
+        </React.Suspense>),
       children: [
         {
           path: '/home',
-          element: <HomePage />,
+          element: (
+            <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
+              <HomePage />
+            </React.Suspense>
+          ),
         },
         {
           path: '/optimized-prompt',
-          element: <OptimizedPromts />
+          element: (
+            <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
+              <OptimizedPromts />
+            </React.Suspense>
+          ),
         },
         {
           path: "/information",
           element: (
-            <React.Suspense fallback={<div>Loading...</div>}>
+            <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
               <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" />
               <InformationPage />
             </React.Suspense>

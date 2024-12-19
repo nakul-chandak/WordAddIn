@@ -6,10 +6,10 @@ import chatgpt3Logo from "../../../../assets/AI_Logos/chatgpt3.png";
 import chatgpt4Logo from "../../../../assets/AI_Logos/chatgpt4.png";
 import geminiLogo from "../../../../assets/AI_Logos/gemini1.png";
 import copilotLogo from "../../../../assets/AI_Logos/copilot.png";
-import { InfoLabel, InfoLabelProps } from "@fluentui/react-components";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
-import { promptRequest } from "../../../common/services/llm/models/promptRequest";
+import { InfoLabel } from "@fluentui/react-components";
+import { useNavigate } from "react-router-dom";
 import { LlmService } from "../../../common/services/llm/llm.service";
+
 const useStyles = makeStyles({
     root: {
         alignItems: "flex-start",

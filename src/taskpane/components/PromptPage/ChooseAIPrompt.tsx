@@ -1,4 +1,4 @@
-import { makeStyles, Image, Checkbox, Button } from "@fluentui/react-components";
+import { makeStyles, Image } from "@fluentui/react-components";
 import React from "react";
 import log from "../../../../assets/logo.png";
 
