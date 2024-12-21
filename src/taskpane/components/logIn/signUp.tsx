@@ -114,7 +114,7 @@ function SignUp() {
                 <div style={{ minHeight: "85vh", display: "flex", textAlign: "center", justifyContent: "center", height: "auto" }}>
                     <div style={{ display: "flex", justifyContent: "center", textAlign: "left", alignItems: "center", marginBottom: "2.5rem", marginTop: "2.5rem" }}>
                         <div style={{ backgroundColor: "white", width: "400px", height: "auto", zIndex: "10", padding: '1rem' }}>
-                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", marginLeft:"-17px" }}>
                                 <img style={{ width: "180px", height: "50px", marginTop: "10px" }} src={componyLogo} />
                                 <h2 className={styles.h2Login}>Create an account</h2>
                                 <div className={styles.formDiv}>
@@ -126,7 +126,7 @@ function SignUp() {
                                         {({ handleSubmit, isValid, values }) => (
                                             <form noValidate id="aiSignInForm" onSubmit={handleSubmit}>
                                                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                    <div className={styles.root}>
+                                                    <div className={styles.root} style={{marginRight:"17px"}}>
                                                         <Field
                                                             type="text"
                                                             placeholder="First name"
