@@ -7,7 +7,7 @@ import gemini from "../../../../assets/AI_Logos/gemini1.png";
 import copilot from "../../../../assets/AI_Logos/copilot.png";
 
 
-import { CheckmarkRegular, Info16Regular, ThumbDislike16Filled, ThumbDislike16Regular, ThumbLike16Filled, ThumbLike16Regular, TriangleDown12Filled } from '@fluentui/react-icons';
+import { CheckmarkRegular, ThumbDislike16Filled, ThumbDislike16Regular, ThumbLike16Filled, ThumbLike16Regular } from '@fluentui/react-icons';
 import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles({
@@ -83,16 +83,6 @@ export const ReviewDetails = (props:any) => {
               <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm10 ms-xl12" style={{display:"inline-flex"}}> <Image height={30} src={getLogo(r.promptType)} /><span className={styles.subtitle2} style={{margin:"3px 0px 0px 10px"}}>{getAIName(r.promptType)}</span> </div>
 
-                {/* {index == 0 ?
-                  <div className="ms-Grid-col ms-sm2 ms-xl12" style={{ textAlign: "right", paddingLeft: "25px" }}>
-                    <div style={{ display: "inline-flex" }}>
-                      <Avatar icon={<Info16Regular />} size={20} />
-                      <p style={{ fontSize: "10px", color: "gray", marginTop: 0, marginLeft: "5px" }}>ALERTS</p>
-                    </div>
-                    <div style={{ marginLeft: "25px", marginTop: "-20px" }}><TriangleDown12Filled style={{ width: 10, height: 10 }} color='gray' /></div>
-                  </div> : null
-                } */}
-
               </div>
               <div className="ms-Grid-row" style={{marginTop:"10px"}}>
                 <div className="ms-Grid-col ms-sm12 ms-xl12" style={{ display: "inline-flex", marginTop: "-10px" }}><p>{r.description}</p>
@@ -115,11 +105,6 @@ export const ReviewDetails = (props:any) => {
                   <Button disabled={r.isDisable} style={{ backgroundColor: "#8647D6", color: "white" }} size='small' onClick={()=>handleClick(r.promptType)}>
                     <Badge style={{ backgroundColor: "#BE8BFF", color: "white", marginRight: "5px" }} size="small" icon={< CheckmarkRegular />} />{r.buttonCaption} </Button>
                 </div>
-
-                {/* <div className="ms-Grid-col ms-sm6" style={{ marginBottom: "10px", paddingRight: "25px" }}>
-                  {getDisLikeIcon(r.isDisLike)}
-                  {getLikeIcon(r.isLike)}
-                </div> */}
                 <div className="ms-Grid-col ms-sm2" />
               </div>
 
