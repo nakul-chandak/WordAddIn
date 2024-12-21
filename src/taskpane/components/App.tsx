@@ -10,12 +10,12 @@ import Header from "./Header";
 
 const OptimizedPromts = React.lazy(() => import("./Prompt-optimizer/OptimizedPrompt"));
 const ProtectedRoute = React.lazy(() => import("../../route/ProtectedRoute"));
-const SignIn = React.lazy(() => import("./login/signIn"));
-const LogIn = React.lazy(() => import("./login/logIn"));
+const SignIn = React.lazy(() => import("./logIn/signIn"));
+const LogIn = React.lazy(() => import("./logIn/logIn"));
 const PageNotFound = React.lazy(() => import("./notFound/PageNotFound"));
-const SignUp = React.lazy(() => import("./login/signUp"));
-const ChangePassword = React.lazy(() => import("./login/changePassword"));
-const CreatePassword = React.lazy(() => import("./login/createPassword"));
+const SignUp = React.lazy(() => import("./logIn/signUp"));
+const ChangePassword = React.lazy(() => import("./logIn/changePassword"));
+const CreatePassword = React.lazy(() => import("./logIn/createPassword"));
 
 
 interface AppProps {
