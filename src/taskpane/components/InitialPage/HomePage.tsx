@@ -9,6 +9,7 @@ import copilotLogo from "../../../../assets/AI_Logos/copilot.png";
 import { InfoLabel } from "@fluentui/react-components";
 import { useNavigate } from "react-router-dom";
 import { LlmService } from "../../../common/services/llm/llm.service";
+import { useToaster } from "../../../hooks/useToast";
 
 const useStyles = makeStyles({
     root: {
@@ -122,6 +123,7 @@ const logoArray = [
 function HomePage() {
     const styles = useStyles();
     const navigate = useNavigate();
+    const toaster = useToaster();
 
     const [selectedOptions, setSelectedOptions] = React.useState<string[] | null>([]);
     const [textInput, setTextInput] = React.useState("");
@@ -133,6 +135,9 @@ function HomePage() {
             data.selectedOptions = selectedOptions;
             navigate('/optimized-prompt', { state: data });
             console.log("API Response:", data);
+        },(error:any)=>{
+            toaster.error("The application has encountered an error. Please try again later.");
+            console.log(error);
         })
     };
     
