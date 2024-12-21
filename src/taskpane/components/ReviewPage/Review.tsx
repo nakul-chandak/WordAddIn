@@ -153,7 +153,7 @@ function Review(props: any) {
   return (
     <>
       <Toaster toasterId={toasterId} />
-      <div style={{ width: "100%" }}>
+      <div style={{ width: "100%", marginTop: "10px" }}>
         {/* Show Spinner while loading */}
         {(loading || lazyLoading) ? (
           <div className="spinner-container">
