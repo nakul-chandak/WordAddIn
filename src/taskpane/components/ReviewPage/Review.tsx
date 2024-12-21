@@ -2,18 +2,14 @@ import React, { useEffect, useState } from "react";
 import {
   Dropdown,
   makeStyles,
-  ToastBody,
   typographyStyles,
-  useId,
-  Spinner,
-  Toaster,
-  useToastController,
-  Toast,
+  Spinner
 } from "@fluentui/react-components";
 import { ReviewDetails } from "./ReviewDetails";
 import { LlmService } from "../../../common/services/llm/llm.service";
 import { IReview } from "../../../interfaces/review";
 import { useNavigate } from "react-router-dom";
+import { useToaster } from "../../../hooks/useToast";
 
 const useStyles = makeStyles({
   root: {},
@@ -26,8 +22,7 @@ function Review(props: any) {
   const [loading, setLoading] = useState(false); // Tracks overall loading state
   const [lazyLoading, setLazyLoading] = useState(false); // Tracks lazy loading state
   const navigate = useNavigate();
-  const toasterId = useId("toaster");
-  const { dispatchToast } = useToastController(toasterId);
+  const toaster = useToaster();
 
   const showErrorToast = (error: any) => {
     let msg = "An unexpected error occurred.";
@@ -47,12 +42,7 @@ function Review(props: any) {
       msg = error.message;
     }
 
-    dispatchToast(
-      <Toast>
-        <ToastBody>{msg}</ToastBody>
-      </Toast>,
-      { intent: "error" }
-    );
+    toaster.error(msg);
   };
 
   const loadPrompt = () => {
@@ -152,14 +142,8 @@ function Review(props: any) {
 
   return (
     <>
-      <Toaster toasterId={toasterId} />
       <div style={{ width: "100%", marginTop: "10px" }}>
         {/* Show Spinner while loading */}
-        {(loading || lazyLoading) ? (
-          <div className="spinner-container">
-            <Spinner size="medium" label="Loading..." />
-          </div>
-        ) : (
           <>
             <Dropdown
               style={{ marginLeft: "5px", minWidth: "100px" }}
@@ -190,7 +174,6 @@ function Review(props: any) {
               />
             )}
           </>
-        )}
       </div>
     </>
   );
