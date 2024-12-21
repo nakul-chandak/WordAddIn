@@ -41,11 +41,12 @@ const InformationPage = () => {
   const styles = useStyles();
   const [request, setRequest] = React.useState({});
   const [promptType, setPromptType] = React.useState();
-
+  const [promptState, setPromptState] = React.useState();
   React.useEffect(() => {
     // Check if location.state is available
     if (location.state && location.state.optimized_prompt) {
       setResponse(location.state.optimized_prompt);
+      setPromptState(location.state);
     }
   }, [location.state]);
   const onTabSelect = (_event: React.MouseEvent<HTMLElement>, data: { value: string }) => {
@@ -108,8 +109,8 @@ const InformationPage = () => {
       <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
         <div style={{ width: '100%', border: 'solid 1px' }}>
           {selectedValue === "prompt" && <HomePage />}
-          {selectedValue === "review" && <Review promptRequest={location.state} onFactCheckClick={redirectToFactCheck} />}
-          {selectedValue === "factCheck" && <FactCheck state={location.state} data={data} promptType={promptType} response={response} />}
+          {selectedValue === "review" && <Review promptRequest={promptState} onFactCheckClick={redirectToFactCheck} />}
+          {selectedValue === "factCheck" && <FactCheck state={promptState} data={data} promptType={promptType} response={response} />}
         </div>
       </React.Suspense>
 
