@@ -1,5 +1,6 @@
 import { HttpClient } from "../../http";
 import { HttpErrorResponse } from "../article/models/ArticleResponse";
+import { confirmUserDto } from "./models/confirmUser";
 import { registerUser } from "./models/register";
 import { userLogin } from "./models/userLogin";
 
@@ -47,6 +48,20 @@ class UserServiceImpl {
     }
     async validateOtp(request: any): Promise<any> {
         const url = 'platform/v1/account/password_reset/validate';
+        try {
+            const response = await HttpClient.post<any>(`${url}`, request, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            return response.data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async passwordRest(request: confirmUserDto): Promise<any> {
+        const url = 'platform/v1/account/password_reset/confirm';
         try {
             const response = await HttpClient.post<any>(`${url}`, request, {
                 headers: {

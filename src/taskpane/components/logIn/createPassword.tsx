@@ -2,7 +2,10 @@ import React from 'react';
 import { Button, makeStyles } from '@fluentui/react-components';
 import { Field, Formik, FormikHelpers, FormikValues } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { UserService } from '../../../common/services/user/user.service';
+import { confirmUserDto } from '../../../common/services/user/models/confirmUser';
+import { useToaster } from '../../../hooks/useToast';
 
 // Style classes
 const useStyles = makeStyles({
@@ -37,7 +40,8 @@ const useStyles = makeStyles({
 const CreatePassword = () => {
     const styles = useStyles();
     const navigate = useNavigate();
-
+    const location = useLocation();
+    const toaster = useToaster();
     // Handle form submission
     const handleSubmit = async (values: FormikValues, { setSubmitting }: FormikHelpers<FormikValues>) => {
         setSubmitting(true);
@@ -45,10 +49,18 @@ const CreatePassword = () => {
 
         // Simulate account activation with the new password
         try {
-            // Simulate account activation logic
-            // await UserService.activateAccount(values.password);
+            var confirmUser = new confirmUserDto();
+            confirmUser.token = location.state;
+            confirmUser.password = values.password;
+                await UserService.passwordRest(confirmUser).then(()=> {
+                  toaster.success("The account has been activated.");
+                   navigate('/signin'); // Navigate to home or login screen on success
+                    
+             },(error)=>{
+                toaster.error(error.message ? error.message : "Password reset has failed.");
+             });
             console.log("Account Activated with password: ", values.password);
-            navigate('/signin'); // Navigate to home or login screen on success
+           
         } catch (err) {
             console.error("Error during account activation", err);
         } finally {

@@ -6,6 +6,7 @@ import { ErrorMessage, Field, Formik, FormikHelpers, FormikValues } from 'formik
 import componyLogo from "../../../../assets/login-logo.png"
 import { useNavigate } from 'react-router-dom';
 import { UserService } from '../../../common/services/user/user.service';
+import { useToaster } from '../../../hooks/useToast';
 // Style classes
 const useStyles = makeStyles({
     root: {
@@ -39,6 +40,7 @@ const useStyles = makeStyles({
 function SignUp() {
     const styles = useStyles();
     const navigate = useNavigate();
+    const toaster = useToaster();
 
     function navigateToHome() {
         navigate('/home');
@@ -62,9 +64,15 @@ function SignUp() {
         };
         
         try {
-            await UserService.registerUser(user);
-            await UserService.requestOtp({email:values.email});
-            navigate('/changePassword', {state:values.email}); // Navigate to home page after successful registration
+            await UserService.registerUser(user).then(res=>{
+                if(res) {
+                    UserService.requestOtp({email:values.email});
+                    navigate('/changePassword', {state:values.email}); // Navigate to home page after successful registration
+                }
+            },(error)=>{
+                toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
+            });
+            
         } catch (err) {
             console.error("Error during registration", err);
         } finally {

@@ -55,8 +55,12 @@ const ChangePassword = () => {
                 email:location.state,
                 isGuestAccount:false
             }
-            await UserService.validateOtp(request);
-            navigate('/createPassword'); // Navigate to reset password page on success
+            await UserService.validateOtp(request).then((response) =>{
+                if(response) {
+                    navigate('/createPwd',{state:response.token}); // Navigate to reset password page on success
+                }
+            })
+          
         } catch (err) {
             console.error("Error during OTP validation", err);
         } finally {

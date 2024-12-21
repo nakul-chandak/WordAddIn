@@ -8,3 +8,5 @@ temp/
 # ignore package lock file
 /package-lock.json
 .env
+
+dist/
