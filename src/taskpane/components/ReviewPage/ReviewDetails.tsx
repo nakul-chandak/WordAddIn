@@ -118,7 +118,7 @@ export const ReviewDetails = (props: any) => {
                       size="small"
                     >
                       {/* Show the Spinner inside the button when disabled */}
-                      <Spinner size="small" style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} />
+                      <Spinner size="tiny" style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} />
                     </Button>
                   ) : (
                     <Button
