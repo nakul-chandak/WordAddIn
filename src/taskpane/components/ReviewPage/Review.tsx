@@ -46,11 +46,10 @@ function Review(props: any) {
   };
 
   const loadPrompt = () => {
-    if (
-      props?.promptRequest?.prompt &&
-      props.promptRequest.prompt.trim() !== ""
-    ) {
+    if (props?.promptRequest?.prompt?.trim() !== "") {
       setLoading(true); // Show loading spinner
+  
+      // Fetch the prompts and articles in parallel
       LlmService.getLlms(props.promptRequest)
         .then((res) => {
           const promptResults = Object.keys(res.output).map((key) => ({
@@ -61,26 +60,24 @@ function Review(props: any) {
             isLike: res.isFavorite,
             isDisable: true,
           }));
-          setResult(promptResults);
+  
+          setResult(promptResults); // Set results immediately
           console.log("Prompt loaded:", promptResults);
-          loadLazy(promptResults, promptResults); // Continue with lazy loading
+  
+          // Start loading articles concurrently with lazy loading
+          loadLazy(promptResults);
         })
         .catch((error) => {
           console.error("Error loading prompts:", error);
-          if (error.response) {
-            console.log("Error response status:", error.response.status);
-            console.log("Error response data:", error.response.data);
-          }
           showErrorToast(error);
         })
-        .finally(() => setLoading(false)); // Hide loading spinner
+        .finally(() => setLoading(false)); // Hide loading spinner once done
     } else {
-      navigate("/");
+      navigate("/"); // Navigate to home if no prompt is found
     }
   };
-
-  const loadLazy = (promptResults: IReview[], res: any) => {
-    setLazyLoading(true); // Show lazy loading spinner
+  
+  const loadLazy = (promptResults: IReview[]) => {
     const requests = promptResults.map((data) => {
       const request = {
         article: data.description,
@@ -92,39 +89,45 @@ function Review(props: any) {
       };
       return LlmService.getArticles(request);
     });
-
+  
+    // Use Promise.all to fire all the requests concurrently
     Promise.all(requests)
       .then((responses) => {
         const allArticles = responses.map((response, index) => ({
           promptType: promptResults[index].promptType,
           articles: response,
         }));
-
-        setArticles(allArticles);
-
-        const resultMap = new Map(res.map((r: any) => [r.promptType, r]));
-        let finalRes = [];
-        allArticles.forEach((article: any) => {
-          const r: any = resultMap.get(article.promptType);
-          if (r) {
-            r.isDisable = false;
-            finalRes.push(r);
+  
+        setArticles(allArticles); // Store articles in the state
+  
+        // Efficiently merge the promptResults with articles
+        const finalResults = promptResults.map((promptData, _index) => {
+          const relatedArticles = allArticles.find(
+            (article) => article.promptType === promptData.promptType
+          );
+          if (relatedArticles) {
+            // Update isDisable for each prompt once the article is loaded
+            return {
+              ...promptData,
+              articles: relatedArticles.articles,
+              isDisable: false,
+            };
           }
+          return promptData;
         });
-
-        setResult(finalRes);
+  
+        setResult(finalResults); // Update results with articles and isDisable status
         console.log("Articles loaded:", allArticles);
       })
       .catch((error) => {
         console.error("Error fetching articles:", error);
-        if (error.response) {
-          console.log("Error response status:", error.response.status);
-          console.log("Error response data:", error.response.data);
-        }
         showErrorToast(error);
       })
-      .finally(() => setLazyLoading(false)); // Hide lazy loading spinner
+      .finally(() => {
+        // No need to set lazyLoading here since it's already handled in `loadPrompt`
+      });
   };
+  
 
   const onFactCheckClick = (promptType: string) => {
     const finalResult = {
