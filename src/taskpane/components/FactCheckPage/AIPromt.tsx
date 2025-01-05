@@ -149,26 +149,35 @@ const ContentPanel = (props: any) => {
                 await Word.run(async (context) => {
                     // Get the body of the Word document
                     const body = context.document.body;
-
+    
                     for (let i = checkedItems.length - 1; i >= 0; i--) {
                         const item = checkedItems[i];
-
+    
                         if (!previouslyInsertedItems.has(item)) {
                             // Find the article corresponding to this item
                             const article = articles.assertions.find((assertion: any) => assertion.id === item);
-
+                            const index = articles.assertions.findIndex((assertion: any) => assertion.id === item);
+    
                             if (article) {
-                                const textToInsert = article.articleName; // Customize as needed
-                                body.insertText(textToInsert + "\n", Word.InsertLocation.end); // Append text to the end of the document
+                                const textToInsert = article.articleName; // Article name to insert
+                                const paragraph = body.insertHtml(textToInsert, Word.InsertLocation.end); // Insert the article name
 
+                                // Set font size for the paragraph to ensure consistency
+                                paragraph.font.size = 12; // Adjust the size as necessary
+    
+                                // Now, insert the superscript index as a separate range.
+                                const superscriptText = `<sup> ${index + 1}</sup><br>`; // The index text
+                                const range = paragraph.insertHtml(superscriptText, Word.InsertLocation.end);
+
+    
                                 previouslyInsertedItems.add(item); // Track the inserted item
                                 checkedItems.splice(i, 1); // Remove the item from checkedItems
                             }
                         }
                     }
-
+    
                     setCheckedItems([...checkedItems]); // Update state
-
+    
                     await context.sync();
                 });
             } catch (error) {
@@ -183,20 +192,27 @@ const ContentPanel = (props: any) => {
                 await Word.run(async (context) => {
                     // Get the footer of the document
                     const footer = context.document.sections.getFirst().getFooter("Primary");
-
+    
                     for (let i = topRanks.length - 1; i >= 0; i--) {
                         const item = topRanks[i];
-
+    
                         if (!previouslyInsertedItems.has(item)) {
                             const [index, artId] = item.split("_");
                             const article = articles.assertions.find((a: any) => a.id === artId);
-
+                            
                             if (article) {
                                 const topRankArticle = article.topRanks[parseInt(index, 10)];
-
+                                let topRankIndex = Number(index) + 1;
                                 if (topRankArticle) {
-                                    const textToInsert = topRankArticle.source; // Use the desired property for insertion
-                                    footer.insertText(textToInsert + "\n", Word.InsertLocation.end); // Append text to the end of the footer
+                                    const textToInsert = topRankArticle.source; // Insert the source property
+                                    const paragraph = footer.insertHtml(`<a href=${textToInsert}>${textToInsert}</a>`, Word.InsertLocation.end);
+    
+                                    // Set font size for the paragraph to ensure consistency
+                                    paragraph.font.size = 12; // Adjust the size as necessary
+    
+                                    // Now, insert the superscript index as a separate range.
+                                    const superscriptText = `<sup> ${topRankIndex}</sup><br>`; // The index text
+                                    const range = paragraph.insertHtml(superscriptText, Word.InsertLocation.end);
 
                                     previouslyInsertedItems.add(item); // Track the inserted item
                                     topRanks.splice(i, 1); // Remove the item from topRanks
@@ -204,9 +220,9 @@ const ContentPanel = (props: any) => {
                             }
                         }
                     }
-
+    
                     setTopRanks([...topRanks]); // Update state
-
+    
                     await context.sync();
                 });
             } catch (error) {
@@ -237,18 +253,19 @@ const ContentPanel = (props: any) => {
                                         checked={checkedItems.includes(art.id)}
                                         onChange={() => handleCheckboxChange(art.id)}
                                         style={{
-                                            marginRight: "0.5rem", // Ensure space between checkbox and article name
+                                            //marginRight: "0.5rem", // Ensure space between checkbox and article name
                                         }}
                                     />
                                     {/* Article name with corresponding style */}
                                     <span
                                         style={{
-                                            margin: "0 0.5rem",
                                             backgroundColor: color,
                                             padding: "5px",
                                             display: "flex",
                                             alignItems: "center",
                                             fontSize: 'small',
+                                            lineHeight:'1.1rem',
+                                            fontWeight:'normal'
                                         }}
                                     >
                                         {art.articleName}
@@ -403,6 +420,7 @@ const TablePanel = (props: any) => {
                                 overflow: 'hidden',
                                 whiteSpace: 'nowrap',
                                 textOverflow: 'ellipsis', // Apply ellipsis for overflowing content
+                                fontWeight:'normal'
                             }}
                             title={rank.excerpt} // Show full text on hover
                         >
@@ -414,6 +432,7 @@ const TablePanel = (props: any) => {
                                 overflow: 'hidden',
                                 whiteSpace: 'nowrap',
                                 textOverflow: 'ellipsis', // Apply ellipsis for overflowing content
+                                fontWeight:'normal'
                             }}
                             title={rank.score ? `${(rank.score * 100).toFixed(2)}%` : 'N/A'} // Show full text on hover
                         >
