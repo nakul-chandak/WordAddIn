@@ -131,6 +131,7 @@ function HomePage() {
     const [selectedOptions, setSelectedOptions] = React.useState<string[] | null>([]);
     const [textInput, setTextInput] = React.useState("");
     const [dialog,setDialog] = React.useState(false);
+    const [flag, setFlag] = React.useState(false)
 
     const handleApiCall = async () => {
         LlmService.getOptimizedPrompts({ initial_prompt: textInput }).then((res: any) => {
@@ -144,6 +145,21 @@ function HomePage() {
             console.log(error);
         })
     };
+
+    const callPromptProtectApi = async () => {
+        const request:any = {
+            check_for_profanity:true,
+            prompt: textInput
+        }
+        LlmService.getProtectedPrompt(request)
+        .then((res:any)=>{
+            console.log(res)
+        },(error:any)=>{
+            toaster.error(error.message);
+            console.log(error);
+        }
+    )
+    }
     
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -155,8 +171,9 @@ function HomePage() {
             handleApiCall();
         }
         else if(state.button === 2) {
+            callPromptProtectApi()
             setDialog(true);
-            // navigate('/prompt-protect', { state: textInput });
+            //navigate('/prompt-protect', { state: textInput });
         }
     };
 
@@ -170,6 +187,10 @@ function HomePage() {
     const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setTextInput(e.target.value);
     };
+
+    const handleUseEdited = (value:any) =>{
+        setTextInput(value)
+    }
 
     return (
         <div style={{ margin: "auto" }}>
@@ -232,7 +253,7 @@ function HomePage() {
                             >
                                 Prompt Protect
                             </Button>
-                            <PromptProtect openDialog ={dialog} setDialog={setDialog}/>
+                            <PromptProtect textInput={textInput} openDialog ={dialog} setDialog={setDialog} handleUseEdited={handleUseEdited} flag={flag}/>
                             <Button
                                 disabled={textInput.length === 0 || selectedOptions.length === 0}
                                 appearance="primary"

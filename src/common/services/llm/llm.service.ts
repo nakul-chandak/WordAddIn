@@ -50,6 +50,19 @@ class LlmServiceImpl {
             throw err;
         })
     }
+
+
+    getProtectedPrompt(request: promptRequest): Promise<any> {
+        const baseURL = 'guardrail/v1/prompt';
+        return HttpClient.post<any>(`${baseURL}`,request,{
+            headers: { 
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+            },
+        }).then(response => response.data).catch((err: any) => {
+            throw err;
+        });
+    }
 }
 const LlmService = new LlmServiceImpl();
 

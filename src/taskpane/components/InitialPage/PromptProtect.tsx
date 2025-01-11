@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, makeStyles, Textarea, tokens, typographyStyles } from '@fluentui/react-components'
 import { Dismiss24Regular } from '@fluentui/react-icons';
-import React  from 'react'
+import React, { useEffect }  from 'react'
 
 const useStyles = makeStyles({
   flex:{
@@ -38,7 +38,20 @@ function PromptProtect(props: any) {
   const styles = useStyles();
    const [textAreaInput, settextAreaInput] = React.useState("");
    const [totalCharacters, setTotalCharacters] = React.useState(0);
-   
+   const [apiFlagForPromptProtection, setApiProtectedPrompt]= React.useState(false);
+   React.useEffect(() => {
+    // Check if location.state is available
+    if (props.textInput) {
+      settextAreaInput(props.textInput);
+    }
+  }, [props.textInput]);
+
+  React.useEffect(() => {
+    // Check if location.state is available
+    if (props.flag) {
+      setApiProtectedPrompt(props.flag);
+    }
+  }, [props.flag]);
    
    const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       settextAreaInput(e.target.value);
@@ -47,8 +60,13 @@ function PromptProtect(props: any) {
 
     const handleCloseDialog = (isClose) => {
       props.setDialog(isClose);
-      settextAreaInput("");
-      setTotalCharacters(0);
+      //settextAreaInput("");
+      //setTotalCharacters(0);
+    }
+
+    const handleUseEdited = () =>{
+      props.handleUseEdited(textAreaInput)
+      props.setDialog(false);
     }
 
   return (
@@ -95,17 +113,52 @@ function PromptProtect(props: any) {
                       Run Prompt Protect
                     </Button>
                     <span style={{float:"right",fontWeight:600}}>{totalCharacters} characters</span>
+
                   </div>
                   
             </div>
             <div className="ms-Grid-col ms-sm12 ms-xl6">
                   <Field
                     label={{
-                      children: "Findings",
+                      children: "FINDINGS",
                       className: styles.subTitle,
                     }}>
-                    <div style={{backgroundColor:"#F9FAFB", minWidth:"250px",height:"150px"}}></div>
+                    <div style={{ 
+                      backgroundColor: "#F9FAFB", 
+                      minWidth: "250px", 
+                      height: "150px", 
+                      display: "flex", 
+                      justifyContent: "center", 
+                      alignItems: "center"
+                    }}>
+                      {apiFlagForPromptProtection ? 'Good prompt' : 'Please edit content'}
+                    </div>
+
                   </Field>  
+                  <div style={{display:"flex", marginTop:"10px"}}>
+                    <Button
+                      appearance="secondary"
+                      onClick={()=>{
+                        handleCloseDialog(false)
+                      }}
+                      name="cancel"
+                      style={{  marginRight:'10px' }}
+                      size="small"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      appearance="primary"
+                      name="Use Edited"
+                      style={{ right: "9rem" }}
+                      size="small"
+                      onClick={()=>{
+                        handleUseEdited()
+                      }}
+                    >
+                      Use Edited
+                    </Button>
+                    </div>
             </div>
             </div>
             </div>
