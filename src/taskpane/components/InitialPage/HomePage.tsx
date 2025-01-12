@@ -1,4 +1,4 @@
-import { makeStyles, Image, Checkbox, Button, CounterBadge, Textarea } from "@fluentui/react-components";
+import { makeStyles, Image, Checkbox, Button, CounterBadge, Textarea, useRestoreFocusTarget } from "@fluentui/react-components";
 import * as React from "react";
 import log from "../../../../assets/logo.png";
 import guardraiLogo from "../../../../assets/AI_Logos/guardrail.png";
@@ -10,6 +10,7 @@ import { InfoLabel } from "@fluentui/react-components";
 import { useNavigate } from "react-router-dom";
 import { LlmService } from "../../../common/services/llm/llm.service";
 import { useToaster } from "../../../hooks/useToast";
+import PromptProtect from "./PromptProtect";
 
 const useStyles = makeStyles({
     root: {
@@ -124,9 +125,13 @@ function HomePage() {
     const styles = useStyles();
     const navigate = useNavigate();
     const toaster = useToaster();
-
+    const state = {
+        button: 1
+      };
     const [selectedOptions, setSelectedOptions] = React.useState<string[] | null>([]);
     const [textInput, setTextInput] = React.useState("");
+    const [dialog,setDialog] = React.useState(false);
+    const [flag, setFlag] = React.useState(false)
 
     const handleApiCall = async () => {
         LlmService.getOptimizedPrompts({ initial_prompt: textInput }).then((res: any) => {
@@ -140,13 +145,36 @@ function HomePage() {
             console.log(error);
         })
     };
+
+    const callPromptProtectApi = async () => {
+        const request:any = {
+            check_for_profanity:true,
+            prompt: textInput
+        }
+        LlmService.getProtectedPrompt(request)
+        .then((res:any)=>{
+            console.log(res)
+        },(error:any)=>{
+            toaster.error(error.message);
+            console.log(error);
+        }
+    )
+    }
     
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         console.log("Form submitted");
         console.log("Selected Options:", selectedOptions);
         console.log("Textarea Input:", textInput);
-        handleApiCall();
+        if(state.button === 1)
+        {
+            handleApiCall();
+        }
+        else if(state.button === 2) {
+            callPromptProtectApi()
+            setDialog(true);
+            //navigate('/prompt-protect', { state: textInput });
+        }
     };
 
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -159,6 +187,10 @@ function HomePage() {
     const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setTextInput(e.target.value);
     };
+
+    const handleUseEdited = (value:any) =>{
+        setTextInput(value)
+    }
 
     return (
         <div style={{ margin: "auto" }}>
@@ -209,15 +241,30 @@ function HomePage() {
                             value={textInput}
                             onChange={handleTextareaChange}
                         />
-                        <Button
-                        disabled={textInput.length === 0 || selectedOptions.length === 0}
-                            appearance="primary"
-                            type="submit"
-                            name="checkBoxButton"
-                            className={styles.button}
-                        >
-                            Submit
-                        </Button>
+                        <div>
+                            <Button
+                                disabled={textInput.length === 0}
+                                appearance="primary"
+                                type="submit"
+                                name="promtProtectButton"
+                                onClick={() => state.button = 2}
+                                className={styles.button}
+                                style={{right:"9rem"}}
+                            >
+                                Prompt Protect
+                            </Button>
+                            <PromptProtect textInput={textInput} openDialog ={dialog} setDialog={setDialog} handleUseEdited={handleUseEdited} flag={flag}/>
+                            <Button
+                                disabled={textInput.length === 0 || selectedOptions.length === 0}
+                                appearance="primary"
+                                type="submit"
+                                name="checkBoxButton"
+                                onClick={() => state.button = 1}
+                                className={styles.button}
+                            >
+                                Submit
+                            </Button>
+                        </div>
                     </div>
                     <div style={{width: "119px"}}>
                         <div className={styles.infoLabel}>

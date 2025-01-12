@@ -4,6 +4,7 @@ import { createHashRouter, RouterProvider } from "react-router-dom";
 import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import InformationPage from "./InitialPage/Info";
 import Header from "./Header";
+import PromptProtect from "./InitialPage/PromptProtect";
 
 // Dynamically import all components with React.lazy
 
@@ -97,6 +98,14 @@ const App = (props: AppProps) => {
               <InformationPage />
              {/* </React.Suspense> */}
             </>
+          ),
+        },
+        {
+          path: '/prompt-protect',
+          element: (
+            <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
+              <PromptProtect />
+            </React.Suspense>
           ),
         }
       ]
