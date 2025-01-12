@@ -1,7 +1,9 @@
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, makeStyles, Textarea, tokens, typographyStyles } from '@fluentui/react-components'
+import { Button,Image, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, makeStyles, Textarea, tokens, typographyStyles } from '@fluentui/react-components'
 import { Dismiss24Regular } from '@fluentui/react-icons';
 import React, { useEffect }  from 'react'
-
+import { LlmService } from '../../../common/services/llm/llm.service';
+import { useToaster } from '../../../hooks/useToast';
+import  thumbsUp from '../../../../assets/thumbsup.png';
 const useStyles = makeStyles({
   flex:{
     display:"flex"
@@ -38,7 +40,8 @@ function PromptProtect(props: any) {
   const styles = useStyles();
    const [textAreaInput, settextAreaInput] = React.useState("");
    const [totalCharacters, setTotalCharacters] = React.useState(0);
-   const [apiFlagForPromptProtection, setApiProtectedPrompt]= React.useState(false);
+   const [apiFlagForPromptProtection, setApiProtectedPrompt]= React.useState(props.flag);
+   const toaster = useToaster();
    React.useEffect(() => {
     // Check if location.state is available
     if (props.textInput) {
@@ -48,9 +51,10 @@ function PromptProtect(props: any) {
 
   React.useEffect(() => {
     // Check if location.state is available
-    if (props.flag) {
-      setApiProtectedPrompt(props.flag);
-    }
+    // if (props.flag) {
+    //   setApiProtectedPrompt(props.flag);
+    // }
+    setApiProtectedPrompt(props.flag)
   }, [props.flag]);
    
    const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -67,6 +71,33 @@ function PromptProtect(props: any) {
     const handleUseEdited = () =>{
       props.handleUseEdited(textAreaInput)
       props.setDialog(false);
+    }
+
+    const rerunProtectedPrompt = () =>{
+      const request:any = {
+        check_for_profanity:true,
+        prompt: textAreaInput
+    }
+      LlmService.getProtectedPrompt(request)
+      .then((res:any)=>{
+          console.log(res)
+          res.promptsInfoResponseDto.forEach((promptResponse:any)=>{
+              if(promptResponse.profanityCheckResponseDto.length == 0){
+                  toaster.info('No warnings found');
+                  setApiProtectedPrompt(true)
+                  setTimeout(()=>{
+                    props.handleApiCall()
+                  }, 3000)
+              }else{
+                setApiProtectedPrompt(false)
+              }
+          })
+
+      },(error:any)=>{
+          toaster.error(error.message);
+          console.log(error);
+          //props.handleApiCall()
+      })
     }
 
   return (
@@ -105,7 +136,7 @@ function PromptProtect(props: any) {
                     <Button
                       disabled={textAreaInput.length === 0}
                       appearance="primary"
-                      type="submit"
+                      onClick={rerunProtectedPrompt}
                       name="promtProtectButton1"
                       style={{ right: "9rem" }}
                       size="small"
@@ -131,7 +162,7 @@ function PromptProtect(props: any) {
                       justifyContent: "center", 
                       alignItems: "center"
                     }}>
-                      {apiFlagForPromptProtection ? 'Good prompt' : 'Please edit content'}
+                      {apiFlagForPromptProtection ? <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', gap:'1rem'}}><div><Image alt="thumbsup" src={thumbsUp} height={32} width={32} /></div><div>Prompt is good to go</div></div> : <span>Please edit content</span>}
                     </div>
 
                   </Field>  
