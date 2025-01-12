@@ -403,7 +403,7 @@ const TablePanel = (props: any) => {
                             style={{
                                 padding: '8px',
                                 overflow: 'hidden',
-                                whiteSpace: 'nowrap',
+                                textAlign: 'justify',
                                 textOverflow: 'ellipsis', // Apply ellipsis for overflowing content
                             }}
                             title={rank.source} // Show full text on hover
@@ -418,7 +418,7 @@ const TablePanel = (props: any) => {
                             style={{
                                 padding: '8px',
                                 overflow: 'hidden',
-                                whiteSpace: 'nowrap',
+                                textAlign: 'justify',
                                 textOverflow: 'ellipsis', // Apply ellipsis for overflowing content
                                 fontWeight:'normal'
                             }}
