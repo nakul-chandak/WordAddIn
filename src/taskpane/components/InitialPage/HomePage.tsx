@@ -131,6 +131,7 @@ function HomePage() {
     const [selectedOptions, setSelectedOptions] = React.useState<string[] | null>([]);
     const [textInput, setTextInput] = React.useState("");
     const [dialog,setDialog] = React.useState(false);
+    //this flag is for setting up the content on FINDINGS on protected prompt screen
     const [flag, setFlag] = React.useState(false)
 
     const handleApiCall = async () => {
@@ -154,8 +155,23 @@ function HomePage() {
         LlmService.getProtectedPrompt(request)
         .then((res:any)=>{
             console.log(res)
+            res.promptsInfoResponseDto.forEach((promptResponse:any)=>{
+                if(promptResponse.profanityCheckResponseDto.length == 0){
+                    toaster.info('No warnings found');
+                    //setDialog(false);
+                    setFlag(true);
+                    setDialog(false)
+                    handleApiCall()
+                }else{  
+                    //setDialog(true);
+                    setFlag(false)
+                    setDialog(true)
+                }
+            })
+
         },(error:any)=>{
             toaster.error(error.message);
+            //handleApiCall();
             console.log(error);
         }
     )
@@ -172,7 +188,7 @@ function HomePage() {
         }
         else if(state.button === 2) {
             callPromptProtectApi()
-            setDialog(true);
+            //setDialog(true);
             //navigate('/prompt-protect', { state: textInput });
         }
     };
@@ -243,18 +259,21 @@ function HomePage() {
                         />
                         <div>
                             <Button
-                                disabled={textInput.length === 0}
+                                disabled={textInput.length === 0 || selectedOptions.length === 0}
                                 appearance="primary"
                                 type="submit"
                                 name="promtProtectButton"
                                 onClick={() => state.button = 2}
                                 className={styles.button}
-                                style={{right:"9rem"}}
+                                style={{right:"2rem"}}
                             >
                                 Prompt Protect
                             </Button>
-                            <PromptProtect textInput={textInput} openDialog ={dialog} setDialog={setDialog} handleUseEdited={handleUseEdited} flag={flag}/>
-                            <Button
+                            <PromptProtect 
+                                textInput={textInput} openDialog ={dialog} 
+                                setDialog={setDialog} handleUseEdited={handleUseEdited} 
+                                flag={flag} handleApiCall={handleApiCall}/>
+                            {/* <Button
                                 disabled={textInput.length === 0 || selectedOptions.length === 0}
                                 appearance="primary"
                                 type="submit"
@@ -263,7 +282,7 @@ function HomePage() {
                                 className={styles.button}
                             >
                                 Submit
-                            </Button>
+                            </Button> */}
                         </div>
                     </div>
                     <div style={{width: "119px"}}>
