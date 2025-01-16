@@ -114,9 +114,9 @@ export const ReviewDetails = (props: any) => {
                   {r.isDisable ? (
                     <Button
                       disabled={true}
-                      style={{ backgroundColor: "#8647D6", color: "white", position: "relative", height:'30px' }}
+                      style={{ backgroundColor: "#8647D6", color: "grey", position: "relative", height:'30px' }}
                       size="small"
-                    >
+                    >Factcheck
                       {/* Show the Spinner inside the button when disabled */}
                       <Spinner size="tiny" style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} />
                     </Button>
