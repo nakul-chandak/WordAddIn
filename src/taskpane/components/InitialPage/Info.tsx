@@ -1,10 +1,6 @@
 import { CounterBadge, makeStyles, Tab, TabList, TabValue } from "@fluentui/react-components";
 import * as React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-// const HomePage = import("./HomePage");
-// const Review = import("../ReviewPage/Review");
-// const FactCheck = import("../FactCheckPage/FactCheck");
-import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import HomePage from "./HomePage";
 import Review from "../ReviewPage/Review";
 import FactCheck from "../FactCheckPage/FactCheck";
@@ -32,33 +28,25 @@ const useStyles = makeStyles({
 });
 
 const InformationPage = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const [selectedValue, setSelectedValue] = React.useState<TabValue>("review");
-  const [textInput, setTextInput] = React.useState<string>(""); // For storing input value
-  const [loading, setLoading] = React.useState<boolean>(false); // Loading state
-  const [error, setError] = React.useState<string | null>(null); // Error state
-  const [apiCalled, setApiCalled] = React.useState<boolean>(false); // To track if API has been called
+  const [loading] = React.useState<boolean>(false); // Loading state
+  const [error] = React.useState<string | null>(null); // Error state
   const [response, setResponse] = React.useState<String>('');
-  const [data, setData] = React.useState();
+  const [data] = React.useState();
   const styles = useStyles();
-  const [request, setRequest] = React.useState({});
   const [promptType, setPromptType] = React.useState();
+
   React.useEffect(() => {
     // Check if location.state is available
     if (location.state && location.state.prompt) {
       setResponse(location.state.prompt);
     }
   }, [location.state]);
+  
   const onTabSelect = (_event: React.MouseEvent<HTMLElement>, data: { value: string }) => {
     setSelectedValue(data);
   };
-
-  const redirectToHomeScreen = () => {
-    navigate('/');
-  };
-
-
 
   const redirectToFactCheck = (data: any) => {
     console.log('factcheck data' + data);

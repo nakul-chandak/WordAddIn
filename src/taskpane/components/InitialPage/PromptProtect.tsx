@@ -1,6 +1,6 @@
 import { Button,Image, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, makeStyles, Textarea, tokens, typographyStyles } from '@fluentui/react-components'
 import { Dismiss24Regular } from '@fluentui/react-icons';
-import React, { useEffect }  from 'react'
+import React, { useEffect, useState }  from 'react'
 import { LlmService } from '../../../common/services/llm/llm.service';
 import { useToaster } from '../../../hooks/useToast';
 import  thumbsUp from '../../../../assets/thumbsup.png';
@@ -32,6 +32,7 @@ inputActionItem:{
 subTitle: {
   ...typographyStyles.title3,
   fontWeight: tokens.fontWeightBold,
+  fontSize:"14px"
 }
 })
 
@@ -41,21 +42,20 @@ function PromptProtect(props: any) {
    const [textAreaInput, settextAreaInput] = React.useState("");
    const [totalCharacters, setTotalCharacters] = React.useState(0);
    const [apiFlagForPromptProtection, setApiProtectedPrompt]= React.useState(props.flag);
+   const [warningPrompt, setWarningPrompt] = useState([]);
    const toaster = useToaster();
    React.useEffect(() => {
     // Check if location.state is available
     if (props.textInput) {
       settextAreaInput(props.textInput);
+      setTotalCharacters(props.textInput?.length);
     }
   }, [props.textInput]);
 
   React.useEffect(() => {
-    // Check if location.state is available
-    // if (props.flag) {
-    //   setApiProtectedPrompt(props.flag);
-    // }
+    setWarningPrompt(props.warmPromptList);
     setApiProtectedPrompt(props.flag)
-  }, [props.flag]);
+  }, [props.flag, props.warmPromptList]);
    
    const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       settextAreaInput(e.target.value);
@@ -79,25 +79,32 @@ function PromptProtect(props: any) {
         prompt: textAreaInput
     }
       LlmService.getProtectedPrompt(request)
+     
       .then((res:any)=>{
+        setWarningPrompt([]);
           console.log(res)
-          res.promptsInfoResponseDto.forEach((promptResponse:any)=>{
-              if(promptResponse.profanityCheckResponseDto.length == 0){
-                  toaster.info('No warnings found');
-                  setApiProtectedPrompt(true)
-                  setTimeout(()=>{
-                    props.handleApiCall()
-                  }, 3000)
-              }else{
-                setApiProtectedPrompt(false)
-              }
-          })
-
+          if(!res.promptsInfoResponseDto.map (y=>y.profanityCheckResponseDto.length > 0)[0]) {
+            toaster.info('No warnings found');
+            setApiProtectedPrompt(true)
+            setTimeout(()=>{
+              props.handleApiCall()
+            }, 3000);
+          }
+          else {
+                findWarningPropmtWords(res);
+                 setApiProtectedPrompt(false);
+          }
       },(error:any)=>{
+          setWarningPrompt([]);
           toaster.error(error.message);
           console.log(error);
           //props.handleApiCall()
       })
+    }
+
+    const findWarningPropmtWords = (promptResponse:any) => {
+     const result = promptResponse.promptsInfoResponseDto.map(x=>Array.from(new Set(x.profanityCheckResponseDto.map(y=>y.profanity))));
+     setWarningPrompt(result.filter((item,idx)=>result.findIndex(x=>x[0] == item[0]) == idx));
     }
 
   return (
@@ -162,6 +169,7 @@ function PromptProtect(props: any) {
                       justifyContent: "center", 
                       alignItems: "center"
                     }}>
+                      {!apiFlagForPromptProtection && warningPrompt.length > 0 ? <div> <span>Sensitive Text Found:</span>{warningPrompt.map((res,index) =>(<div key={index}>{res}</div>))} </div> : null}
                       {apiFlagForPromptProtection ? <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', gap:'1rem'}}><div><Image alt="thumbsup" src={thumbsUp} height={32} width={32} /></div><div>Prompt is good to go</div></div> : <span>Please edit content</span>}
                     </div>
 

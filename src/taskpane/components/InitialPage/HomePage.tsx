@@ -131,6 +131,8 @@ function HomePage() {
     const [selectedOptions, setSelectedOptions] = React.useState<string[] | null>([]);
     const [textInput, setTextInput] = React.useState("");
     const [dialog,setDialog] = React.useState(false);
+    const [warmPromptList,setWarmPromptList] =React.useState([]);
+
     //this flag is for setting up the content on FINDINGS on protected prompt screen
     const [flag, setFlag] = React.useState(false)
 
@@ -148,27 +150,24 @@ function HomePage() {
     };
 
     const callPromptProtectApi = async () => {
+        setWarmPromptList([]);
         const request:any = {
             check_for_profanity:true,
             prompt: textInput
         }
         LlmService.getProtectedPrompt(request)
         .then((res:any)=>{
-            console.log(res)
-            res.promptsInfoResponseDto.forEach((promptResponse:any)=>{
-                if(promptResponse.profanityCheckResponseDto.length == 0){
-                    toaster.info('No warnings found');
-                    //setDialog(false);
-                    setFlag(true);
-                    setDialog(false)
-                    handleApiCall()
-                }else{  
-                    //setDialog(true);
-                    setFlag(false)
-                    setDialog(true)
-                }
-            })
-
+            if(!res.promptsInfoResponseDto.map (y=>y.profanityCheckResponseDto.length > 0)[0]) { 
+                toaster.info('No warnings found');
+                setFlag(true);
+                setDialog(false)
+                handleApiCall()
+            }
+            else {
+                setFlag(false);
+                setDialog(true);
+                findWarningPropmtWords(res);
+            }
         },(error:any)=>{
             toaster.error(error.message);
             //handleApiCall();
@@ -176,6 +175,12 @@ function HomePage() {
         }
     )
     }
+
+    const findWarningPropmtWords = (promptResponse:any) => {
+        const result = promptResponse.promptsInfoResponseDto.map(x=>Array.from(new Set(x.profanityCheckResponseDto.map(y=>y.profanity))));
+        setWarmPromptList(result.filter((item,idx)=>result.findIndex(x=>x[0] == item[0]) == idx));
+       }
+   
     
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -270,7 +275,7 @@ function HomePage() {
                                 Prompt Protect
                             </Button>
                             <PromptProtect 
-                                textInput={textInput} openDialog ={dialog} 
+                                textInput={textInput} warmPromptList={warmPromptList} openDialog ={dialog} 
                                 setDialog={setDialog} handleUseEdited={handleUseEdited} 
                                 flag={flag} handleApiCall={handleApiCall}/>
                             {/* <Button
