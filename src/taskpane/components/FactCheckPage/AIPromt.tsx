@@ -142,209 +142,114 @@ const ContentPanel = (props: any) => {
 
 
     let previouslyInsertedItems: Set<string> = new Set(); // Global state to track inserted items
-
-    // const addTextToDocument = async () => {
-    //     if (checkedItems.length > 0) {
-    //         try {
-    //             await Word.run(async (context) => {
-    //                 // Get the body of the Word document
-    //                 const body = context.document.body;
-    
-    //                 for (let i = checkedItems.length - 1; i >= 0; i--) {
-    //                     const item = checkedItems[i];
-    
-    //                     if (!previouslyInsertedItems.has(item)) {
-    //                         // Find the article corresponding to this item
-    //                         const article = articles.assertions.find((assertion: any) => assertion.id === item);
-    //                         const index = articles.assertions.findIndex((assertion: any) => assertion.id === item);
-    
-    //                         if (article) {
-    //                             const textToInsert = article.articleName; // Article name to insert
-    //                             const paragraph = body.insertHtml(textToInsert, Word.InsertLocation.end); // Insert the article name
-
-    //                             // Set font size for the paragraph to ensure consistency
-    //                             paragraph.font.size = 12; // Adjust the size as necessary
-    
-    //                             // Now, insert the superscript index as a separate range.
-    //                             const superscriptText = `<sup> ${index + 1}</sup><br>`; // The index text
-    //                             const range = paragraph.insertHtml(superscriptText, Word.InsertLocation.end);
-
-    
-    //                             previouslyInsertedItems.add(item); // Track the inserted item
-    //                             checkedItems.splice(i, 1); // Remove the item from checkedItems
-    //                         }
-    //                     }
-    //                 }
-    
-    //                 setCheckedItems([...checkedItems]); // Update state
-    
-    //                 await context.sync();
-    //             });
-    //         } catch (error) {
-    //             console.error("Error inserting content into Word:", error);
-    //         }
-    //     }
-    // };
-    // const addTextToDocumentFooter = async () => {
-    //     if (topRanks.length > 0) {
-    //         try {
-    //             await Word.run(async (context) => {
-    //                 // Get the footer of the document
-    //                 const footer = context.document.sections.getFirst().getFooter("Primary");
-    //                 // Get the body of the Word document
-    //                 const body = context.document.body;
-                    
-    //                 // Collect all inserted indices for the document and footer
-    //                 let indicesToInsertBody = [];
-    //                 let indicesToInsertFooter = [];
-    //                 let articleIds = [];
-    //                 let paragraph:any;
-    //                 for (let i = topRanks.length - 1; i >= 0; i--) {
-    //                     const item = topRanks[i];
-                        
-    //                     // Ensure item has not been previously inserted
-    //                     if (!previouslyInsertedItems.has(item)) {
-    //                         const [index, artId] = item.split("_");
-    //                         const article = articles.assertions.find((a: any) => a.id === artId);
-    
-    //                         if (article) {
-    //                             // Collect article text to insert in the body
-    //                             const textToInsert = article.articleName;
-    //                             //collect article id to avoid repeatation
-    //                             const textId = article.id;
-                             
-    //                             if(!articleIds.includes(textId)){
-    //                             // Collect the superscript indices for the article
-    //                             indicesToInsertBody.push(`[${parseInt(index, 10) + 1}]`);
-                                
-    //                             // Add the article text to the document body
-    //                             paragraph = body.insertHtml('<br>' + textToInsert, Word.InsertLocation.end);
-    //                             articleIds.push(textId);
-    //                             // Insert all indices as superscripts after the article text
-    //                             const superscriptText = indicesToInsertBody.map(index => `first<sup>${index}</sup>`).join('');
-    //                             paragraph.insertHtml(superscriptText , Word.InsertLocation.end);
-    //                             }else{
-    //                                 let newIndex = parseInt(index) + 1;
-    //                                 paragraph.insertHtml(`<sup>[${newIndex}]</sup> last`, Word.InsertLocation.end)
-    //                             }
-
-    //                             // Now handle footer insertion
-    //                             const topRankArticle = article.topRanks[parseInt(index, 10)];
-    //                             if (topRankArticle) {
-    //                                 const sourceLink = topRankArticle.source;
-                                    
-    //                                 // Collect the superscript index for the footer
-    //                                 indicesToInsertFooter.push(parseInt(index, 10) + 1);
-    
-    //                                 // Insert the source link in the footer
-    //                                 const footerParagraph = footer.insertHtml(`${indicesToInsertFooter[indicesToInsertFooter.length - 1]} . <a href="${sourceLink}">${sourceLink}</a><br>`, Word.InsertLocation.start);
-                                    
-    //                                 // Set font size for consistency in the footer
-    //                                 footerParagraph.font.size = 12;
-    
-    //                                 // Track this item as inserted and remove it from the topRanks list
-    //                                 previouslyInsertedItems.add(item);
-    //                                 topRanks.splice(i, 1); // Remove item from topRanks
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    
-    //                 // Update state for topRanks after insertion
-    //                 setTopRanks([...topRanks]);
-    
-    //                 // Sync the changes
-    //                 await context.sync();
-    //             });
-    //         } catch (error) {
-    //             console.error("Error inserting content into Word footer:", error);
-    //         }
-    //     }
-    // };
-
-
+    let footerCount = 0;
+    let docuementCount =0;
     const addTextToDocumentFooter = async () => {
         if (topRanks.length > 0) {
             try {
                 await Word.run(async (context) => {
-                    // Get the footer of the document
+                    // Get the footer and the body of the document
                     const footer = context.document.sections.getFirst().getFooter("Primary");
-                    // Get the body of the Word document
                     const body = context.document.body;
-                    
-                    // Collect all inserted indices for the document and footer
-                    let indicesToInsertBody = [];
-                    let indicesToInsertFooter = [];
-                    let articleIds = [];
-                    let paragraph: any;
-                    
+    
+                    // Load all paragraphs in the document body and footer
+                    const bodyParagraphs = body.paragraphs;
+                    const footerParagraphs = footer.paragraphs;
+                    bodyParagraphs.load("text");
+                    footerParagraphs.load("text");
+    
+                    await context.sync(); // Sync to load text
+    
+                    // Extract existing superscripts from body and footer
+                    const extractSuperscripts = (textArray) => {
+                        const superscriptRegex = /\[(\d+)]/g;
+                        const indices = [];
+                        textArray.forEach((paragraph) => {
+                            let match;
+                            while ((match = superscriptRegex.exec(paragraph.text)) !== null) {
+                                indices.push(parseInt(match[1], 10));
+                            }
+                        });
+                        return indices;
+                    };
+    
+                    const existingBodyIndices = extractSuperscripts(bodyParagraphs.items);
+                    const existingFooterIndices = extractSuperscripts(footerParagraphs.items);
+    
+                    // Find the maximum superscript index in the document
+                    let currentIndex = Math.max(
+                        existingBodyIndices.length ? Math.max(...existingBodyIndices) : 0,
+                        existingFooterIndices.length ? Math.max(...existingFooterIndices) : 0
+                    );
+    
+                    let articleIds = []; // To track inserted article IDs
+    
                     for (let i = 0; i < topRanks.length; i++) {
                         const item = topRanks[i];
-                        
+    
                         // Ensure item has not been previously inserted
                         if (!previouslyInsertedItems.has(item)) {
                             const [index, artId] = item.split("_");
-                            const article = articles.assertions.find((a: any) => a.id === artId);
-            
+                            const article = articles.assertions.find((a) => a.id === artId);
+    
                             if (article) {
-                                // Collect article text to insert in the body
                                 const textToInsert = article.articleName;
-                                // Collect article id to avoid repetition
                                 const textId = article.id;
-                                
+    
+                                // Insert into body
                                 if (!articleIds.includes(textId)) {
-                                    // Collect the superscript indices for the article
-                                    indicesToInsertBody.push(`[${parseInt(index, 10) + 1}]`);
-                                    
-                                    // Add the article text to the document body
-                                    paragraph = body.insertHtml('<br>' + textToInsert, Word.InsertLocation.end);
                                     articleIds.push(textId);
-                                    
-                                    // Insert all indices as superscripts after the article text
-                                    const superscriptText = indicesToInsertBody.map(index => `<sup>${index}</sup>`).join('');
-                                    paragraph.insertHtml(superscriptText, Word.InsertLocation.end);
+    
+                                    // Increment the superscript index
+                                    currentIndex += 1;
+    
+                                    // Insert article text and superscript in the body
+                                    const bodyParagraph = body.insertHtml('<br>' + textToInsert, Word.InsertLocation.end);
+                                    bodyParagraph.insertHtml(`<sup>[${currentIndex}]</sup>`, Word.InsertLocation.end);
                                 } else {
-                                    let newIndex = parseInt(index) + 1;
-                                    paragraph.insertHtml(`<sup>[${newIndex}]</sup>`, Word.InsertLocation.end);
+                                    currentIndex += 1;
+                                    body.insertHtml(`<sup>[${currentIndex}]</sup>`, Word.InsertLocation.end);
                                 }
-            
-                                // Now handle footer insertion
+    
+                                // Insert into footer
                                 const topRankArticle = article.topRanks[parseInt(index, 10)];
                                 if (topRankArticle) {
                                     const sourceLink = topRankArticle.source;
-                                    
-                                    // Collect the superscript index for the footer
-                                    indicesToInsertFooter.push(parseInt(index, 10) + 1);
-            
+    
+                                    // Increment the superscript index
+                                    //currentIndex += 1;
+    
                                     // Insert the source link in the footer
                                     const footerParagraph = footer.insertHtml(
-                                        `${indicesToInsertFooter[indicesToInsertFooter.length - 1]} . <a href="${sourceLink}">${sourceLink}</a><br>`, 
+                                        `${currentIndex}. <a href="${sourceLink}">${sourceLink}</a><br>`,
                                         Word.InsertLocation.end
                                     );
-                                    
-                                    // Set font size for consistency in the footer
+    
+                                    // Set footer font size for consistency
                                     footerParagraph.font.size = 12;
-            
-                                    // Track this item as inserted and remove it from the topRanks list
+    
+                                    // Mark the item as inserted
                                     previouslyInsertedItems.add(item);
-                                    topRanks.splice(i, 1); // Remove item from topRanks
-                                    i--; // Adjust loop counter since the item is removed
+                                    topRanks.splice(i, 1); // Remove the inserted item from topRanks
+                                    i--; // Adjust loop index
                                 }
                             }
                         }
                     }
-            
-                    // Update state for topRanks after insertion
+    
+                    // Update state for topRanks after processing
                     setTopRanks([...topRanks]);
-            
-                    // Sync the changes
+    
+                    // Sync changes to Word
                     await context.sync();
                 });
             } catch (error) {
-                console.error("Error inserting content into Word footer:", error);
+                console.error("Error inserting content into Word document and footer:", error);
             }
         }
     };
+    
+    
     
     
     
