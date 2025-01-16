@@ -117,9 +117,9 @@ const App = (props: AppProps) => {
   ]);
 
   return (
-    <React.StrictMode>
+    <>
       <RouterProvider router={router} />
-    </React.StrictMode>
+    </>
   );
 };
 
