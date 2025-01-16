@@ -148,81 +148,103 @@ const ContentPanel = (props: any) => {
         if (topRanks.length > 0) {
             try {
                 await Word.run(async (context) => {
-                    // Get the footer of the document
+                    // Get the footer and the body of the document
                     const footer = context.document.sections.getFirst().getFooter("Primary");
-                    // Get the body of the Word document
                     const body = context.document.body;
-                    
-                    // Collect all inserted indices for the document and footer
-                    let articleIds = [];
-                    let paragraph: any;
-                    
-                    // Get all paragraphs in the document body
-                    const paragraphs = body.paragraphs;
-                    const paragraphCount = paragraphs.items.length; // Get the total number of paragraphs
-                    let footerCount = footer.paragraphs.items.length; // Start footerCount based on current footer paragraphs
+    
+                    // Load all paragraphs in the document body and footer
+                    const bodyParagraphs = body.paragraphs;
+                    const footerParagraphs = footer.paragraphs;
+                    bodyParagraphs.load("text");
+                    footerParagraphs.load("text");
+    
+                    await context.sync(); // Sync to load text
+    
+                    // Extract existing superscripts from body and footer
+                    const extractSuperscripts = (textArray) => {
+                        const superscriptRegex = /\[(\d+)]/g;
+                        const indices = [];
+                        textArray.forEach((paragraph) => {
+                            let match;
+                            while ((match = superscriptRegex.exec(paragraph.text)) !== null) {
+                                indices.push(parseInt(match[1], 10));
+                            }
+                        });
+                        return indices;
+                    };
+    
+                    const existingBodyIndices = extractSuperscripts(bodyParagraphs.items);
+                    const existingFooterIndices = extractSuperscripts(footerParagraphs.items);
+    
+                    // Find the maximum superscript index in the document
+                    let currentIndex = Math.max(
+                        existingBodyIndices.length ? Math.max(...existingBodyIndices) : 0,
+                        existingFooterIndices.length ? Math.max(...existingFooterIndices) : 0
+                    );
+    
+                    let articleIds = []; // To track inserted article IDs
     
                     for (let i = 0; i < topRanks.length; i++) {
                         const item = topRanks[i];
-                        
+    
                         // Ensure item has not been previously inserted
                         if (!previouslyInsertedItems.has(item)) {
                             const [index, artId] = item.split("_");
-                            const article = articles.assertions.find((a: any) => a.id === artId);
+                            const article = articles.assertions.find((a) => a.id === artId);
     
                             if (article) {
-                                // Collect article text to insert in the body
                                 const textToInsert = article.articleName;
-                                // Collect article id to avoid repetition
                                 const textId = article.id;
     
+                                // Insert into body
                                 if (!articleIds.includes(textId)) {
-                                    // Add the article text to the document body
-                                    paragraph = body.insertHtml('<br>' + textToInsert, Word.InsertLocation.end);
                                     articleIds.push(textId);
-                                    
-                                    // Insert superscript indices after the article text
-                                    const superscriptText = `[${paragraphCount + i + 1}]`; // Use document paragraph count + index for superscript
-                                    paragraph.insertHtml(`<sup>${superscriptText}</sup>`, Word.InsertLocation.end);
+    
+                                    // Increment the superscript index
+                                    currentIndex += 1;
+    
+                                    // Insert article text and superscript in the body
+                                    const bodyParagraph = body.insertHtml('<br>' + textToInsert, Word.InsertLocation.end);
+                                    bodyParagraph.insertHtml(`<sup>[${currentIndex}]</sup>`, Word.InsertLocation.end);
                                 } else {
-                                    // Update superscript if article already exists
-                                    const superscriptText = `[${paragraphCount + i + 1}]`;
-                                    paragraph.insertHtml(`<sup>${superscriptText}</sup>`, Word.InsertLocation.end);
+                                    currentIndex += 1;
+                                    body.insertHtml(`<sup>[${currentIndex}]</sup>`, Word.InsertLocation.end);
                                 }
     
-                                // Now handle footer insertion
+                                // Insert into footer
                                 const topRankArticle = article.topRanks[parseInt(index, 10)];
                                 if (topRankArticle) {
                                     const sourceLink = topRankArticle.source;
     
-                                    // Increment footerCount to maintain sequential index
-                                    footerCount += 1;
+                                    // Increment the superscript index
+                                    //currentIndex += 1;
     
                                     // Insert the source link in the footer
                                     const footerParagraph = footer.insertHtml(
-                                        `${footerCount}. <a href="${sourceLink}">${sourceLink}</a><br>`, 
+                                        `${currentIndex}. <a href="${sourceLink}">${sourceLink}</a><br>`,
                                         Word.InsertLocation.end
                                     );
-                                    // Set font size for consistency in the footer
+    
+                                    // Set footer font size for consistency
                                     footerParagraph.font.size = 12;
     
-                                    // Track this item as inserted and remove it from topRanks
+                                    // Mark the item as inserted
                                     previouslyInsertedItems.add(item);
-                                    topRanks.splice(i, 1); // Remove item from topRanks
-                                    i--; // Adjust loop counter since the item is removed
+                                    topRanks.splice(i, 1); // Remove the inserted item from topRanks
+                                    i--; // Adjust loop index
                                 }
                             }
                         }
                     }
     
-                    // Update state for topRanks after insertion
+                    // Update state for topRanks after processing
                     setTopRanks([...topRanks]);
     
-                    // Sync the changes
+                    // Sync changes to Word
                     await context.sync();
                 });
             } catch (error) {
-                console.error("Error inserting content into Word footer:", error);
+                console.error("Error inserting content into Word document and footer:", error);
             }
         }
     };
