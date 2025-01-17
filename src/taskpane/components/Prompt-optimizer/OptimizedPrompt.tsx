@@ -1,5 +1,5 @@
 import { CounterBadge, Field, InfoLabel, Radio, RadioGroup } from "@fluentui/react-components";
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles, Image, Checkbox, Button } from "@fluentui/react-components";
 import log from "../../../../assets/logo.png";
 import guardraiLogo from "../../../../assets/AI_Logos/guardrail.png";
@@ -139,9 +139,6 @@ const logoArray = [
     { label: "Guardrail LLM", id: "guardrail" }
 ];
 
-
-
-
 const OptimizedPromts = () => {
     const styles = useStyles();
     const navigate = useNavigate();
@@ -150,8 +147,6 @@ const OptimizedPromts = () => {
     const [originalPrompt, setOriginalPrompt] = React.useState<string>('');
     const [optimizedPrompt, setOptimizedPrompt] = React.useState<string>('');
 
-    //test
-    const [value, setValue] = React.useState("banana");
     const handleSubmit = (event: any) => {
         //throw new Error("Function not implemented.");
         console.log(event);
@@ -172,6 +167,11 @@ const OptimizedPromts = () => {
         };
         navigate('/information', { state: data })
     };
+
+    useEffect(() => {
+        setOriginalPrompt(location.state.originalInput);
+    },[location.state.originalInput]);
+
     const setPrompt1 = (_e: any, data: { value: string }) => {
         setOriginalPrompt(data.value);
         setOptimizedPrompt(''); // Reset the other radio group
@@ -181,6 +181,7 @@ const OptimizedPromts = () => {
         setOptimizedPrompt(data.value);
         setOriginalPrompt(''); // Reset the other radio group
     };
+
     return (
         <div style={{ margin: "auto" }}>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'relative', top: '1rem' }}>
