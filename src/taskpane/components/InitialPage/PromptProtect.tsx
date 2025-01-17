@@ -170,7 +170,7 @@ function PromptProtect(props: any) {
                       <Divider style={{marginTop:"10px"}} />
                       </div>
                            : null}
-                      {apiFlagForPromptProtection? <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', gap:'1rem'}}><div><Image alt="thumbsup" src={thumbsUp} height={32} width={32} /></div><div>Prompt is good to go</div></div> : null}
+                      {apiFlagForPromptProtection? <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', gap:'1rem', marginTop:"8%"}}><div><Image alt="thumbsup" src={thumbsUp} height={32} width={32} /></div><div style={{marginTop:"-10px"}}>Prompt is good to go</div></div> : null}
                     </div>
 
                   </Field>
@@ -203,12 +203,6 @@ function PromptProtect(props: any) {
             </div>
             </div>
       </DialogContent>
-      {/* <DialogActions>
-            <DialogTrigger disableButtonEnhancement>
-              <Button appearance="secondary">Close</Button>
-            </DialogTrigger>
-            <Button appearance="primary">Do Something</Button>
-          </DialogActions> */}
     </DialogBody>
   </DialogSurface>
 </Dialog>
