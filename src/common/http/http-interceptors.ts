@@ -34,9 +34,15 @@ export const responseInterceptor: ResponseInterceptor = {
     if (error.response?.status === 401 && !hasRetryFlag(error?.config)) {
       // StoreProviderService.dispatch(profileActions.logout());
       // return HttpClient.fromConfig(setRetryFlag(error.config));
+      window.location.href = "/taskpane.html#login";
+      localStorage.removeItem("LoggedIn");
+      localStorage.removeItem("userId");
     }
-    if (error.response?.status === 403) {
+    else if (error.response?.status === 403) {
       // StoreProviderService.dispatch(profileActions.logout());
+      window.location.href = "/taskpane.html#login";
+      localStorage.removeItem("LoggedIn");
+      localStorage.removeItem("userId");
     }
     const data: ErrorResponse | undefined = error.response?.data;
     return Promise.reject({ name: data?.error, message: data?.message, statusCode: data?.statusCode });
