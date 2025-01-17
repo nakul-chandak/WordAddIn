@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 
 export const ReviewDetails = (props: any) => {
   const styles = useStyles();
-  const navigate = useNavigate();
+
   // need to call API and map data here....
   const reviews = props.data;
   console.log("Reviews in review details page.") 
@@ -114,11 +114,10 @@ export const ReviewDetails = (props: any) => {
                   {r.isDisable ? (
                     <Button
                       disabled={true}
-                      style={{ backgroundColor: "#8647D6", color: "grey", position: "relative", height:'30px' }}
+                      style={{ backgroundColor: "#8647D6", color: "white", position: "relative", height:'30px' }}
                       size="small"
-                    >Factcheck
-                      {/* Show the Spinner inside the button when disabled */}
-                      <Spinner size="tiny" style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} />
+                      icon={<Spinner size="extra-tiny" />}
+                    >{r.buttonCaption}
                     </Button>
                   ) : (
                     <Button
@@ -126,7 +125,7 @@ export const ReviewDetails = (props: any) => {
                       size="small"
                       onClick={() => handleClick(r.promptType)}
                     >
-                      <Badge style={{ backgroundColor: "#BE8BFF", color: "white", marginRight: "5px" }} size="small" icon={<CheckmarkRegular />} />
+                      <Badge style={{ backgroundColor: "#BE8BFF", color: "white", marginRight: "10px" }} size="small" icon={<CheckmarkRegular />} />
                       {r.buttonCaption}
                     </Button>
                   )}

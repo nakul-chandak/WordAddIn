@@ -136,10 +136,15 @@ function HomePage() {
     //this flag is for setting up the content on FINDINGS on protected prompt screen
     const [flag, setFlag] = React.useState(false)
 
-    const handleApiCall = async () => {
-        LlmService.getOptimizedPrompts({ initial_prompt: textInput }).then((res: any) => {
+    const handleChange = (newValue)  => {
+        setTextInput(newValue);
+        handleApiCall(newValue);
+     };
+
+    const handleApiCall = async (newValue:string) => {
+        LlmService.getOptimizedPrompts({ initial_prompt: newValue }).then((res: any) => {
             const data = res;
-            data.originalInput = textInput;
+            data.originalInput = newValue;
             data.selectedOptions = selectedOptions;
             navigate('/optimized-prompt', { state: data });
             console.log("API Response:", data);
@@ -161,7 +166,7 @@ function HomePage() {
                 toaster.info('No warnings found');
                 setFlag(true);
                 setDialog(false)
-                handleApiCall()
+                handleApiCall(textInput)
             }
             else {
                 setFlag(false);
@@ -189,7 +194,7 @@ function HomePage() {
         console.log("Textarea Input:", textInput);
         if(state.button === 1)
         {
-            handleApiCall();
+            handleApiCall(textInput);
         }
         else if(state.button === 2) {
             callPromptProtectApi()
@@ -277,7 +282,7 @@ function HomePage() {
                             <PromptProtect 
                                 textInput={textInput} warmPromptList={warmPromptList} openDialog ={dialog} 
                                 setDialog={setDialog} handleUseEdited={handleUseEdited} 
-                                flag={flag} handleApiCall={handleApiCall}/>
+                                flag={flag} handleChange={handleChange}/>
                             {/* <Button
                                 disabled={textInput.length === 0 || selectedOptions.length === 0}
                                 appearance="primary"

@@ -80,9 +80,9 @@ function PromptProtect(props: any) {
           console.log(res)
           if(!res.promptsInfoResponseDto.map (y=>y.profanityCheckResponseDto.length > 0)[0]) {
             toaster.info('No warnings found');
-            setApiProtectedPrompt(true)
+            setApiProtectedPrompt(true);
             setTimeout(()=>{
-              props.handleApiCall()
+              props.handleChange(textAreaInput);
             }, 3000);
           }
           else {
@@ -93,7 +93,6 @@ function PromptProtect(props: any) {
           setWarningPrompt([]);
           toaster.error(error.message);
           console.log(error);
-          //props.handleApiCall()
       })
     }
 
@@ -170,7 +169,7 @@ function PromptProtect(props: any) {
                       <Divider style={{marginTop:"10px"}} />
                       </div>
                            : null}
-                      {apiFlagForPromptProtection? <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', gap:'1rem'}}><div><Image alt="thumbsup" src={thumbsUp} height={32} width={32} /></div><div>Prompt is good to go</div></div> : null}
+                      {apiFlagForPromptProtection? <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', gap:'1rem', marginTop:"8%"}}><div><Image alt="thumbsup" src={thumbsUp} height={32} width={32} /></div><div style={{marginTop:"-10px"}}>Prompt is good to go</div></div> : null}
                     </div>
 
                   </Field>
@@ -203,12 +202,6 @@ function PromptProtect(props: any) {
             </div>
             </div>
       </DialogContent>
-      {/* <DialogActions>
-            <DialogTrigger disableButtonEnhancement>
-              <Button appearance="secondary">Close</Button>
-            </DialogTrigger>
-            <Button appearance="primary">Do Something</Button>
-          </DialogActions> */}
     </DialogBody>
   </DialogSurface>
 </Dialog>
