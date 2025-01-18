@@ -103,14 +103,14 @@ function EditPattern() {
     const styles = useStyles();
     const navigate = useNavigate();
     const toaster = useToaster();
-    const [customPatternData, setCustomPatternData] = React.useState(new CustomLibrary("", "", "", "", []));
+    const [customPatternData, setCustomPatternData] = React.useState(new CustomLibrary("", "", "","Custom",[]));
     const textareaRef = React.useRef(null);
     const [name, setName] = React.useState('');
     const [nameBeforeUpdate, setNameBeforeUpdate] = React.useState('');
     const [comment, setComment] = React.useState('');
     const [isUpdated, setIsUpdated] = React.useState(false);
     const [showForm, setShowForm] = React.useState(false);
-    const [patternData, setPatternData] = React.useState(new Pattern("", "", "", "", ""))
+    const [patternData, setPatternData] = React.useState(new Pattern("","","","fuzzy-match",""))
     const timerRef = React.useRef(null);
     const [showError, setShowError] = React.useState(true);
     const [isUpdate, setIsUpdate] = React.useState(true);
@@ -223,7 +223,7 @@ function EditPattern() {
     }
 
     const handleAddClick = () => {
-        setPatternData(new Pattern("", "", "", "", ""));
+        setPatternData(new Pattern("", "", "", "fuzzy-match", ""));
         setShowForm(true);
         setTimeout(() => {
             if (textareaRef.current) {
@@ -248,23 +248,42 @@ function EditPattern() {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setPatternData({ ...patternData, [name]: value });
-
     };
 
     const resetPatternData = () => {
-        setPatternData(new Pattern("", "", "", "", ""));
+        setPatternData(new Pattern("", "", "", "fuzzy-match", ""));
         setShowForm(false);
     }
 
     const submitFormData = () => {
-        if(isUpdate){
+        if (isUpdate) {
             updateCustomLibraryDetails();
-        }else{
-            
+        } else {
+            addCustomLibraryDetails();
         }
     }
 
-    const updateCustomLibraryDetails = ()=>{
+    const addCustomLibraryDetails = () => {
+        customPatternData.patterns.push(patternData);
+        customPatternData.libraryGroup = name;
+        customPatternData.libraryComment = comment;
+        customPatternData.id = null;
+        customPatternData.libraryType = "Custom";
+        PatternMgmtService.AddLibraryNPattern(customPatternData).then(async (res: CustomLibrary) => {
+            if (res != null) {
+                navigate('/patterns-management/edit-pattern/' + res.id);
+                getCustomPatternById(res.id);
+                setIsUpdate(true);
+                setShowForm(false);
+                setIsUpdated(false);        
+            }
+        }, (error: any) => {
+            toaster.error(error.message);
+            console.log(error);
+        });
+    }
+
+    const updateCustomLibraryDetails = () => {
         if (patternData.id === "") {
             customPatternData.patterns.push(patternData);
         } else {
@@ -325,20 +344,20 @@ function EditPattern() {
                     <h2 className={styles.h2PatternName}>Pattern Library Name</h2>
                 </div>
                 <div className={styles.ptbContainer}>
-                    <div className={styles.libNameContainer}>
-                        <div>
+                    <div className={styles.libNameContainer} style={{display:"flex", flexWrap:'wrap'}}>
+                        <div style={{display:"flex", flexWrap:'wrap', width: '190px'}}>
                             <Input placeholder="Enter library name" id="pattern-library-name" value={name} onChange={handleNameInputChange} />
                         </div>
-                        <div>
+                        <div style={{display:"flex", flexWrap:'wrap', width: '190px'}}>
                             <Input placeholder="Enter library description" id="pattern-library-name" value={comment}
                                 onChange={handleCommentInputChange} />
                         </div>
                         {isUpdated && isUpdate &&
-                            <div>
-                                <Button appearance="primary" onClick={updateCustomLibrary} style={{ fontSize: 'small' }}>Update Library Details</Button>
+                            <div style={{display:"flex", flexWrap:'wrap', width: '190px'}}>
+                                <Button appearance="primary" onClick={updateCustomLibrary} style={{ fontSize: 'small', minWidth:'190px' }}>Update Library Details</Button>
                             </div>}
                     </div>
-                    {isUpdate && <div className={styles.delBtnContainer} onClick={handleLibraryDeleteClick} style={{ fontSize: '.7rem', paddingTop: '.5rem' }}>
+                    {isUpdate && <div className={styles.delBtnContainer} onClick={handleLibraryDeleteClick} style={{ fontSize: '.7rem', paddingTop: '.5rem', display:"flex", flexWrap:'wrap', width: '190px' }}>
                         <DeleteRegular style={{ fontSize: '.9rem', paddingTop: '.9rem' }}>
                         </DeleteRegular>
                         <p>Delete Pattern</p>

@@ -213,7 +213,7 @@ function PatternMgmt() {
         navigate('edit-pattern/' + id);
     }
 
-    const onCreateNewClick = ()=>{
+    const onCreateNewClick = () => {
         navigate('add-pattern');
     }
 
@@ -230,10 +230,11 @@ function PatternMgmt() {
             </div>
             <div style={{ padding: '1rem' }}>
                 <h2 style={{ fontWeight: 600, fontSize: '0.9375rem', marginBottom: '1rem' }}>System Pattern Libraries</h2>
-                <p style={{ color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem', fontFamily: 'Open Sans' }}>Patterns are libraries of terms that allow prompts to accurately detect labels and similar expressions related to specific compliance or information disclosure matters. <Link href="">Learn more</Link></p>
+                <p style={{ color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem' }}>Patterns are libraries of terms that allow prompts to accurately detect labels and similar expressions related to specific compliance or information disclosure matters. <Link href="">Learn more</Link></p>
                 <div className={styles.testboxStyle} >
-                    <SearchBox placeholder="Search By Name" style={{ color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem', fontFamily: 'Open Sans' }}
-                        value={searchQuery}
+                    <SearchBox placeholder="Search By Name" style={{
+                        color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem', WebkitAppearance: 'none'
+                    }} value={searchQuery}
                         onChange={handleSearch}
                     />
                 </div>
@@ -259,14 +260,13 @@ function PatternMgmt() {
                 <div >
                     <hr className={styles.line}></hr>
                 </div>
-
             </div>
             <div style={{ padding: '1rem' }}>
                 <h2 style={{ fontWeight: 600, fontSize: '0.9375rem', marginBottom: '1rem' }}>Custom Pattern Libraries</h2>
-                <p style={{ color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem', fontFamily: 'Open Sans' }}>Create your own pattern libraries. <Link href="">Learn more</Link></p>
-                <div style={{display:'flex', justifyContent:'space-between'}}>
+                <p style={{ color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem' }}>Create your own pattern libraries. <Link href="">Learn more</Link></p>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <div className={styles.testboxStyle}  >
-                        <SearchBox placeholder="Search By Name" style={{ color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem', fontFamily: 'Open Sans' }}
+                        <SearchBox placeholder="Search By Name" style={{ color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem', WebkitAppearance: 'none' }}
                             value={searchCustQuery}
                             onChange={handleCustSearch}
                         />
