@@ -216,15 +216,12 @@ const ContentPanel = (props: any) => {
                                 if (topRankArticle) {
                                     const sourceLink = topRankArticle.source;
     
-                                    // Increment the superscript index
-                                    //currentIndex += 1;
-    
                                     // Insert the source link in the footer
+                                    //existing solution --> working 
                                     const footerParagraph = footer.insertHtml(
-                                        `${currentIndex}. <a href="${sourceLink}">${sourceLink}</a><br>`,
-                                        Word.InsertLocation.end
+                                        '<br>' + currentIndex + '.' + `<a href="${sourceLink}">${sourceLink}</a>`, Word.InsertLocation.end
                                     );
-    
+
                                     // Set footer font size for consistency
                                     footerParagraph.font.size = 8;
     
