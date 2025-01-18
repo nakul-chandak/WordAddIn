@@ -226,7 +226,7 @@ const ContentPanel = (props: any) => {
                                     );
     
                                     // Set footer font size for consistency
-                                    footerParagraph.font.size = 12;
+                                    footerParagraph.font.size = 8;
     
                                     // Mark the item as inserted
                                     previouslyInsertedItems.add(item);
