@@ -1,0 +1,299 @@
+import { makeStyles, Image, Checkbox, Button, SearchBox, Label, Link } from "@fluentui/react-components";
+
+import * as React from "react";
+import { InfoLabel } from "@fluentui/react-components";
+import log from "../../../../assets/logo.png";
+import { useNavigate } from "react-router-dom";
+import { useToaster } from "../../../hooks/useToast";
+import { PatternMgmtService } from "../../../common/services/pattern-mgmt/pattern-mgmt.service";
+import { SystemPattern } from "../../../common/services/pattern-mgmt/models/SystemPattern";
+import {
+    Edit12Regular
+} from "@fluentui/react-icons";
+
+const useStyles = makeStyles({
+    root: {
+        alignItems: "flex-start",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        padding: "0px 20px 50px 10px",
+        rowGap: "20px",
+    },
+    checkboxContainer: {
+        display: "flex",
+        justifyContent: "flex-start",
+        flexGrow: '1',
+        height: "100px",
+        padding: "10px",
+        position: 'relative',
+        bottom: '2rem',
+    },
+
+    flexWrap: {
+        flexWrap: "wrap"
+    },
+    flex: {
+        display: 'flex'
+    },
+    w300px: {
+        width: '300px'
+    },
+
+    checkboxWrapper: {
+        display: "flex",
+        alignItems: "center",
+    },
+
+    linecontainer: {
+        paddingLeft: '1rem',
+        paddingRight: '1rem'
+    },
+    line: {
+        width: '100%',
+        marginBottom: '1rem',
+        marginTop: '1rem'
+    },
+    testboxStyle: {
+        flexWrap: "wrap", display: 'flex', paddingBottom: '.5rem'
+    },
+    infoLabel: {
+        position: 'relative',
+        bottom: '4rem',
+        left: '0.5rem'
+    }
+});
+
+function PatternMgmt() {
+    const styles = useStyles();
+    const navigate = useNavigate();
+    const toaster = useToaster();
+    const [textInput, setTextInput] = React.useState("");
+    const [flag, setFlag] = React.useState(false)
+    const [sysPatternData, setSysPatternData] = React.useState([]);
+    const [custPatternData, setCustPatternData] = React.useState([]);
+    const [activePatternData, setActivePatternData] = React.useState([]);
+    const [selectedOptions, setSelectedOptions] = React.useState<string[] | null>([]);
+    const [selectedCustOptions, setSelectedCustOptions] = React.useState<string[] | null>([]);
+    const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x);
+    const [sysData, setSysData] = React.useState([])
+    const [custData, setCustData] = React.useState([])
+    const [searchQuery, setSearchQuery] = React.useState('');
+    const [searchCustQuery, setSearchCustQuery] = React.useState('');
+    const [isHovered, setIsHovered] = React.useState(null);
+
+
+
+    const getCustomPatterns = async () => {
+        PatternMgmtService.getCustomPatterns().then((res: any) => {
+            setCustPatternData(res);
+            setCustData(res)
+            console.log(res);
+        }, (error: any) => {
+            toaster.error(error.message);
+            console.log(error);
+            //props.handleApiCall()
+        });
+    };
+
+    const handleSearch = (event) => {
+        const query = event.target.value.toLowerCase();
+        setSearchQuery(query);
+        const filtered = sysData.filter(person =>
+            person.libraryGroup.toLowerCase().includes(query)
+        );
+        const result = pipe(
+            (data) => data.filter(pattern => pattern.libraryGroup.toLowerCase().includes(query)),
+            (data) => data // Add any additional transformations if needed
+        )(sysData);
+
+        setSysPatternData(result);
+    };
+
+    const handleCustSearch = (event) => {
+        const query = event.target.value.toLowerCase();
+        setSearchCustQuery(query);
+        const filtered = custData.filter(custPattern =>
+            custPattern.libraryGroup.toLowerCase().includes(query)
+        );
+        const result = pipe(
+            (data) => data.filter(pattern => pattern.libraryGroup.toLowerCase().includes(query)),
+            (data) => data // Add any additional transformations if needed
+        )(custData);
+
+        setCustPatternData(result);
+    };
+
+    const getActivePatterns = async () => {
+        PatternMgmtService.getActivePatterns().then((custRes: any) => {
+            setActivePatternData(custRes);
+            const selected = custRes.filter(item => item.isEnabled).map(item => item.libraryId);
+            setSelectedOptions(selected);
+            setSelectedCustOptions(selected);
+            console.log(custRes);
+        }, (error: any) => {
+            toaster.error(error.message);
+            console.log(error);
+            //props.handleApiCall()
+        });
+    };
+
+    const getSysPatterns = async () => {
+        PatternMgmtService.getSystemPatterns().then(async (res: any) => {
+            setSysPatternData(res.data);
+            setSysData(res.data)
+            console.log(res);
+        }, (error: any) => {
+            toaster.error(error.message);
+            console.log(error);
+            //props.handleApiCall()
+        });
+    };
+
+    React.useEffect(() => {
+        getSysPatterns();
+        getCustomPatterns();
+        getActivePatterns();
+    }, []);
+
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, checked } = e.target;
+
+        let sysPattern = sysData.find(person => person.id === id);
+
+        let patternObj: SystemPattern = {
+            isEnabled: checked,
+            libraryId: sysPattern.id,
+            libraryName: sysPattern.libraryGroup,
+            patternType: 'System'
+        };
+
+        PatternMgmtService.updateStatus(patternObj).then(async (res: any) => {
+            const a = res.data;
+            console.log(res);
+            setSelectedOptions((prev) =>
+                checked ? [...prev, id] : prev.filter((option) => option !== id)
+            );
+
+        }, (error: any) => {
+            toaster.error(error.message);
+            console.log(error);
+            //props.handleApiCall()
+        });
+
+    };
+
+    const handleCustCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, checked } = e.target;
+
+        let custPattern = custData.find(person => person.id === id);
+
+        let patternObj: SystemPattern = {
+            isEnabled: checked,
+            libraryId: custPattern.id,
+            libraryName: custPattern.libraryGroup,
+            patternType: 'Custom'
+        };
+
+        PatternMgmtService.updateStatus(patternObj).then(async (res: any) => {
+            const a = res.data;
+            console.log(res);
+            setSelectedCustOptions((prev) =>
+                checked ? [...prev, id] : prev.filter((option) => option !== id)
+            );
+
+        }, (error: any) => {
+            toaster.error(error.message);
+            console.log(error);
+            //props.handleApiCall()
+        });
+    };
+
+    const editPattern = (id) => {
+        navigate('edit-pattern/' + id);
+    }
+
+    const onCreateNewClick = ()=>{
+        navigate('add-pattern');
+    }
+
+    return (
+        <div style={{ margin: "auto" }}>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'relative', top: '1rem' }}>
+                <Image
+                    alt="Guardrail"
+                    src={log}
+                    height={70}
+                    width={'200px'}
+                    style={{ padding: '10px' }}
+                />
+            </div>
+            <div style={{ padding: '1rem' }}>
+                <h2 style={{ fontWeight: 600, fontSize: '0.9375rem', marginBottom: '1rem' }}>System Pattern Libraries</h2>
+                <p style={{ color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem', fontFamily: 'Open Sans' }}>Patterns are libraries of terms that allow prompts to accurately detect labels and similar expressions related to specific compliance or information disclosure matters. <Link href="">Learn more</Link></p>
+                <div className={styles.testboxStyle} >
+                    <SearchBox placeholder="Search By Name" style={{ color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem', fontFamily: 'Open Sans' }}
+                        value={searchQuery}
+                        onChange={handleSearch}
+                    />
+                </div>
+                <div style={{ flexWrap: "wrap", display: 'flex' }} >
+                    {sysPatternData.map(item => (
+                        <div style={{ flexWrap: "wrap", display: 'flex', width: '300px' }}>
+                            <div key={item.id} style={{ display: 'flex', alignItems: 'flex-start' }} className={styles.checkboxWrapper}>
+                                <Checkbox id={item.id} value={item.libraryGroup} onChange={handleCheckboxChange} checked={selectedOptions.includes(item.id)}></Checkbox>
+                                <Label size="small" style={{ padding: '.5rem' }}>{item.libraryGroup}</Label>
+                                <InfoLabel
+                                    info={
+                                        <>
+                                            This is example information for prompting.
+                                        </>
+                                    } style={{ marginTop: '0.3rem' }}>
+                                </InfoLabel>
+                                <span style={{ marginTop: "0px", float: "right" }}></span>
+                            </div>
+
+                        </div>
+                    ))}
+                </div>
+                <div >
+                    <hr className={styles.line}></hr>
+                </div>
+
+            </div>
+            <div style={{ padding: '1rem' }}>
+                <h2 style={{ fontWeight: 600, fontSize: '0.9375rem', marginBottom: '1rem' }}>Custom Pattern Libraries</h2>
+                <p style={{ color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem', fontFamily: 'Open Sans' }}>Create your own pattern libraries. <Link href="">Learn more</Link></p>
+                <div style={{display:'flex', justifyContent:'space-between'}}>
+                    <div className={styles.testboxStyle}  >
+                        <SearchBox placeholder="Search By Name" style={{ color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem', fontFamily: 'Open Sans' }}
+                            value={searchCustQuery}
+                            onChange={handleCustSearch}
+                        />
+                    </div>
+                    <div>
+                        <Button appearance="primary" style={{ fontSize: 'small' }} onClick={onCreateNewClick}>+ Create New</Button>
+                    </div>
+                </div>
+                <div style={{ flexWrap: "wrap", display: 'flex' }} >
+                    {custPatternData.map(item => (
+                        <div style={{ flexWrap: "wrap", display: 'flex', width: '300px' }} onMouseEnter={() => setIsHovered(item.id)}
+                            onMouseLeave={() => setIsHovered(null)}>
+                            <div key={item.id} style={{ display: 'flex', alignItems: 'flex-start' }} className={styles.checkboxWrapper}
+                            >
+                                <Checkbox id={item.id} value={item.libraryGroup} onChange={handleCustCheckboxChange} checked={selectedCustOptions.includes(item.id)}></Checkbox>
+                                <Label size="small" style={{ padding: '.5rem' }}>{item.libraryGroup}</Label>
+                                {isHovered === item.id && (<div >
+                                    <Edit12Regular
+                                        style={{ margin: '0.6rem', marginLeft: '3rem' }} onClick={() => editPattern(item.id)}>
+                                    </Edit12Regular>
+                                </div>)}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    )
+}
+export default PatternMgmt
