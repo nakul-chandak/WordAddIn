@@ -257,6 +257,7 @@ function HomePage() {
                                     disabled={id === 'guardrail' ? true : false}
                                 />
                                 <img style={{ marginTop: "-1px", float: "left", marginLeft:id === 'guardrail' ? '-0.7x' : '0px' }} height={id === 'guardrail' ? '22' : '20'} src={getLogo(id)} alt={`${label} logo`} />
+                                <span style={{paddingLeft: "5px", paddingRight: "5px"}}>{label}</span>
                             </div>
                         ))}
                     </div>
