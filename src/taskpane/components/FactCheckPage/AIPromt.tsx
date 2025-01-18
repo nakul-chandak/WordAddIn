@@ -401,6 +401,7 @@ const TablePanel = (props: any) => {
                                 overflow: 'hidden',
                                 whiteSpace: 'nowrap',
                                 textOverflow: 'ellipsis', // Apply ellipsis for overflowing content
+                                lineHeight: 'normal'
                             }}
                         >
                             {column.label}
@@ -426,6 +427,8 @@ const TablePanel = (props: any) => {
                                 overflow: 'hidden',
                                 textAlign: 'justify',
                                 textOverflow: 'ellipsis', // Apply ellipsis for overflowing content
+                                lineHeight: 'normal',
+                                whiteSpace: 'nowrap',
                             }}
                             title={rank.source} // Show full text on hover
                         >
@@ -441,7 +444,8 @@ const TablePanel = (props: any) => {
                                 overflow: 'hidden',
                                 textAlign: 'justify',
                                 textOverflow: 'ellipsis', // Apply ellipsis for overflowing content
-                                fontWeight:'normal'
+                                fontWeight:'normal',
+                                lineHeight: 'normal',
                             }}
                             title={rank.excerpt} // Show full text on hover
                         >
@@ -453,7 +457,8 @@ const TablePanel = (props: any) => {
                                 overflow: 'hidden',
                                 whiteSpace: 'nowrap',
                                 textOverflow: 'ellipsis', // Apply ellipsis for overflowing content
-                                fontWeight:'normal'
+                                fontWeight:'normal',
+                                lineHeight: 'normal'
                             }}
                             title={rank.score ? `${(rank.score * 100).toFixed(2)}%` : 'N/A'} // Show full text on hover
                         >
