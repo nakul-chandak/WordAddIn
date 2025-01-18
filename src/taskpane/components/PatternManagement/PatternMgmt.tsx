@@ -61,7 +61,7 @@ const useStyles = makeStyles({
         position: 'relative',
         bottom: '4rem',
         left: '0.5rem'
-    }
+    },
 });
 
 function PatternMgmt() {
@@ -97,6 +97,10 @@ function PatternMgmt() {
     };
 
     const handleSearch = (event) => {
+        if(event.target.value == undefined){
+            event.target.value = "";
+        }
+
         const query = event.target.value.toLowerCase();
         setSearchQuery(query);
         const filtered = sysData.filter(person =>
@@ -111,6 +115,10 @@ function PatternMgmt() {
     };
 
     const handleCustSearch = (event) => {
+        if(event.target.value == undefined){
+            event.target.value = "";
+        }
+        
         const query = event.target.value.toLowerCase();
         setSearchCustQuery(query);
         const filtered = custData.filter(custPattern =>
@@ -235,7 +243,7 @@ function PatternMgmt() {
                     <SearchBox placeholder="Search By Name" style={{
                         color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem', WebkitAppearance: 'none'
                     }} value={searchQuery}
-                        onChange={handleSearch}
+                        onChange={handleSearch} 
                     />
                 </div>
                 <div style={{ flexWrap: "wrap", display: 'flex' }} >
