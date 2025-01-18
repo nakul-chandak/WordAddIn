@@ -511,7 +511,7 @@ function AIPrompt(props: any) {
                 <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
                     {props.state.sourceTypes.includes("guardrail") && (
                         <Tab value="guardrail" id="guardrail">
-                            <Image alt="Guardrail" src={icon32} height={32} width={32} />
+                            <Image alt="Guardrail" src={icon32} height={30} width={30} />
                         </Tab>
                     )}
                     {props.state.sourceTypes.includes("gpt3") && (
@@ -521,17 +521,17 @@ function AIPrompt(props: any) {
                     )}
                     {props.state.sourceTypes.includes("copilot") && (
                         <Tab value="copilot" id="copilot">
-                            <Image alt="Copilot" src={copilot} height={32} width={32} />
+                            <Image alt="Copilot" src={copilot} height={30} width={30} />
                         </Tab>
                     )}
                     {props.state.sourceTypes.includes("gemini") && (
                         <Tab value="gemini" id="gemini">
-                            <Image alt="Gemini" src={gemini} height={32} width={32} />
+                            <Image alt="Gemini" src={gemini} height={30} width={30} />
                         </Tab>
                     )}
                     {props.state.sourceTypes.includes("gpt4") && (
                         <Tab value="chatGPT4" id="chatGPT4">
-                            <Image alt="chatGPT4" src={chatGPT4} height={32} width={32} />
+                            <Image alt="chatGPT4" src={chatGPT4} height={30} width={30} />
                         </Tab>
                     )}
                 </TabList>
