@@ -45,7 +45,6 @@ const CreatePassword = () => {
     // Handle form submission
     const handleSubmit = async (values: FormikValues, { setSubmitting }: FormikHelpers<FormikValues>) => {
         setSubmitting(true);
-        console.log("New Password Submitted", values);
 
         // Simulate account activation with the new password
         try {
@@ -59,10 +58,9 @@ const CreatePassword = () => {
              },(error)=>{
                 toaster.error(error.message ? error.message : "Password reset has failed.");
              });
-            console.log("Account Activated with password: ", values.password);
            
         } catch (err) {
-            console.error("Error during account activation", err);
+            toaster.error(err.message ? err.message : "Error during account activation.");
         } finally {
             setSubmitting(false);
         }

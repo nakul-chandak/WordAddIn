@@ -146,10 +146,8 @@ function HomePage() {
             data.originalInput = newValue;
             data.selectedOptions = selectedOptions;
             navigate('/optimized-prompt', { state: data });
-            console.log("API Response:", data);
-        },(error:any)=>{
+        },(_error:any)=>{
             toaster.error("The application has encountered an error. Please try again later.");
-            console.log(error);
         })
     };
 
@@ -174,7 +172,6 @@ function HomePage() {
             }
         },(error:any)=>{
             toaster.error(error.message);
-            console.log(error);
         }
     )
     }
@@ -187,9 +184,7 @@ function HomePage() {
     
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Form submitted");
-        console.log("Selected Options:", selectedOptions);
-        console.log("Textarea Input:", textInput);
+
         if(state.button === 1)
         {
             handleApiCall(textInput);

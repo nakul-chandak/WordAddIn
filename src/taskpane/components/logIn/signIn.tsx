@@ -64,18 +64,14 @@ function SignIn() {
     // Handle submit button
     const handleSubmit = (values:FormikValues, {setSubmitting}:FormikHelpers<FormikValues>) => {
         setSubmitting(false);
-        console.log("Form submitted");
-        console.log(values);
+
         // call API here to get token and store in session.
         const login = new userLogin();
         login.username =values.userName;
         login.password = values.password;
         UserService.logIn(login).then(res=>{
           if(res.accessToken) {
-           
-         //window.sessionStorage.setItem("token",res.accessToken);
          window.sessionStorage.setItem("userId",res.userId);
-         window.sessionStorage.setItem("LoggedIn","true");
          userContext.setAuthenticated(res.accessToken);
          userContext.setSubscriptionPlan();
          toaster.success("logged in successfully.")

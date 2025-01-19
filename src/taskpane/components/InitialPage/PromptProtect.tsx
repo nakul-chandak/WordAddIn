@@ -75,7 +75,6 @@ function PromptProtect(props: any) {
      
       .then((res:any)=>{
         setWarningPrompt([]);
-          console.log(res)
           if(!res.promptsInfoResponseDto.map (y=>y.profanityCheckResponseDto.length > 0)[0]) {
             toaster.info('No warnings found');
             setApiProtectedPrompt(true);
@@ -90,7 +89,6 @@ function PromptProtect(props: any) {
       },(error:any)=>{
           setWarningPrompt([]);
           toaster.error(error.message);
-          console.log(error);
       })
     }
 

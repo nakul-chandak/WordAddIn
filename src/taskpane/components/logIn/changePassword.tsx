@@ -45,8 +45,6 @@ const ChangePassword = () => {
     // Handle OTP submission
     const handleSubmit = async (values: FormikValues, { setSubmitting }: FormikHelpers<FormikValues>) => {
         setSubmitting(true);
-        console.log("OTP Submitted");
-        console.log(values);
 
         // Simulate OTP validation
         try {
@@ -74,7 +72,6 @@ const ChangePassword = () => {
     // Handle Resend OTP
     const handleResendOtp = async () => {
         setOtpSent(true);
-        console.log("Resent OTP to the email");
         // Call your API to resend the OTP
         await UserService.requestOtp(location.state);
     };

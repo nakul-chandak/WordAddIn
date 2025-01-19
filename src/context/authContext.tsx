@@ -19,7 +19,6 @@ const AuthProvider = ({ children }) => {
 
   const getSubscriptionPlan = () => {
     UserService.me().then(res =>{
-      debugger;
        setSubPlan(res.subscription.planName.toLowerCase());
     },(error)=>{
       toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");

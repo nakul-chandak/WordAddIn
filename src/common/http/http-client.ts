@@ -24,7 +24,6 @@ class HttpClientImpl {
         } else if (envPortNumber > 0) {
             this.hostname = `${this.hostname}:${envPortNumber}`;
         }
-        console.log("hostname", this.hostname);
         config = config || {};
         return {
             ...config,
