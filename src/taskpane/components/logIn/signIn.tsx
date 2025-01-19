@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import backgroundIng from "../../../../assets/login-background.png"; 
 import { Button, makeStyles, useId } from '@fluentui/react-components';
 import * as Yup from 'yup';
@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { userLogin } from '../../../common/services/user/models/userLogin';
 import { UserService } from '../../../common/services/user/user.service';
 import { useToaster } from '../../../hooks/useToast';
+import { AuthContext } from '../../../context/authContext';
 
 // Style classes
 const useStyles = makeStyles({
@@ -46,16 +47,17 @@ function SignIn() {
       navigate('/home');
     };
 
+     const userContext = useContext(AuthContext);
+
     useEffect(() => {
       // Simulate a load event
-      const isAuthenticated = window.sessionStorage.getItem("LoggedIn");
-      if(isAuthenticated != undefined 
-        && isAuthenticated != '' 
-        && isAuthenticated != null 
-        && isAuthenticated === 'true')
+      const isUserAuthenticated = window.sessionStorage.getItem("LoggedIn");
+      if(isUserAuthenticated != undefined 
+        && isUserAuthenticated != '' 
+        && isUserAuthenticated != null 
+        && isUserAuthenticated === 'true')
       {
         navigate('/home');
-        console.log("isAuthenticated :: " + isAuthenticated);
       }
     }, []);
 
@@ -70,9 +72,12 @@ function SignIn() {
         login.password = values.password;
         UserService.logIn(login).then(res=>{
           if(res.accessToken) {
-         window.sessionStorage.setItem("token",res.accessToken);
+           
+         //window.sessionStorage.setItem("token",res.accessToken);
          window.sessionStorage.setItem("userId",res.userId);
          window.sessionStorage.setItem("LoggedIn","true");
+         userContext.setAuthenticated(res.accessToken);
+         userContext.setSubscriptionPlan();
          toaster.success("logged in successfully.")
          navigateToHome();
        }
