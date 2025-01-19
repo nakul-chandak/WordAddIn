@@ -73,6 +73,21 @@ class UserServiceImpl {
             throw err;
         }
     }
+
+    async me(): Promise<any> {
+        const url = 'platform/v1/user/me';
+        try {
+            const response = await HttpClient.get<any>(`${url}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                },
+            });
+            return response.data;
+        } catch (err) {
+            throw err;
+        }
+    }
 }
 
 const UserService = new UserServiceImpl();
