@@ -15,24 +15,22 @@ const AuthContext = createContext<UserContextType> ({
 const AuthProvider = ({ children }) => {
    const toaster = useToaster();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [subscriptionPlan, setSubPlan] = useState("Free");
+  const [subscriptionPlan, setSubPlan] = useState("free");
 
   const getSubscriptionPlan = () => {
     UserService.me().then(res =>{
-       console.log(res);
-       setSubPlan(res.subscription.planName);
+      debugger;
+       setSubPlan(res.subscription.planName.toLowerCase());
     },(error)=>{
       toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
     })
   }
 
   const setSubscriptionPlan = () => {
-    debugger;
     getSubscriptionPlan();
   }
 
   const setAuthenticated = (token) => {
-    debugger;
     if(token) {
       sessionStorage.setItem("token",token);
       sessionStorage.setItem("LoggedIn","true");

@@ -1,6 +1,6 @@
-import { Button,Image, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, makeStyles, Textarea, tokens, typographyStyles, Divider } from '@fluentui/react-components'
+import { Button,Image, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, makeStyles, Textarea, tokens, typographyStyles, Divider } from '@fluentui/react-components'
 import { Dismiss24Regular } from '@fluentui/react-icons';
-import React, { useEffect, useState }  from 'react'
+import React, { useState }  from 'react'
 import { LlmService } from '../../../common/services/llm/llm.service';
 import { useToaster } from '../../../hooks/useToast';
 import  thumbsUp from '../../../../assets/thumbsup.png';
@@ -59,8 +59,6 @@ function PromptProtect(props: any) {
 
     const handleCloseDialog = (isClose) => {
       props.setDialog(isClose);
-      //settextAreaInput("");
-      //setTotalCharacters(0);
     }
 
     const handleUseEdited = () =>{
