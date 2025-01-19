@@ -1,4 +1,4 @@
-import { makeStyles, Image, Checkbox, Button, CounterBadge, Textarea, useRestoreFocusTarget } from "@fluentui/react-components";
+import { makeStyles, Image, Checkbox, Button, CounterBadge, Textarea } from "@fluentui/react-components";
 import * as React from "react";
 import log from "../../../../assets/logo.png";
 import guardraiLogo from "../../../../assets/AI_Logos/guardrail.png";
@@ -51,10 +51,11 @@ const useStyles = makeStyles({
         display: "flex",
         justifyContent: "flex-start",
         flexGrow: '1',
-        height: "100px",
-        padding: "10px",
+        padding: "0px 10px 10px 10px",
         position: 'relative',
         bottom: '2rem',
+        marginTop:"2rem",
+        marginBottom:"2rem"
     },
     checkboxWrapper: {
         display: "flex",
@@ -68,8 +69,6 @@ const useStyles = makeStyles({
         marginTop: "10px",
     },
     container: {
-        //position: "relative",
-        //width: "300px", // Adjust based on your layout
         display: "flex",
         alignItems: "center",
         position: 'relative',
@@ -115,10 +114,10 @@ const getLogo = (id: string) => {
 };
 const logoArray = [
     
-    { label: "GPT 3", id: "gpt3" },
-    { label: "GPT 4", id: "gpt4" },
-    { label: "Gemini", id: "gemini" },
-    { label: "Guardrail LLM", id: "guardrail" }
+    { label: "GPT 3", id: "gpt3", disable:false },
+    { label: "GPT 4", id: "gpt4",  disable:false },
+    { label: "Gemini", id: "gemini",  disable:false },
+    { label: "Guardrail LLM", id: "guardrail",  disable:true }
 ];
 
 function HomePage() {
@@ -175,7 +174,6 @@ function HomePage() {
             }
         },(error:any)=>{
             toaster.error(error.message);
-            //handleApiCall();
             console.log(error);
         }
     )
@@ -198,8 +196,6 @@ function HomePage() {
         }
         else if(state.button === 2) {
             callPromptProtectApi()
-            //setDialog(true);
-            //navigate('/prompt-protect', { state: textInput });
         }
     };
 
@@ -216,6 +212,17 @@ function HomePage() {
 
     const handleUseEdited = (value:any) =>{
         setTextInput(value)
+    }
+
+    const handleSelectAll =(e: React.ChangeEvent<HTMLInputElement>) => {
+        const { checked } = e.target;
+        if(checked) {
+            const result = logoArray.filter(aiType=> !aiType.disable).map (aiType=> aiType.id);
+            setSelectedOptions(result);
+        }
+        else {
+            setSelectedOptions([]);
+        }
     }
 
     return (
@@ -245,16 +252,22 @@ function HomePage() {
                 Choose AI's To Prompt
             </div>
             <form id="aiPromptForm" onSubmit={handleSubmit}>
+
                 <div className={styles.bottomPortion}>
+                <div style={{ display: "inline-flex", marginLeft: "10px", fontWeight: 600 }}>
+                    <Checkbox key="selectAll" id="selectAll" name="selectAllCheckBox" value="SelectAll" onChange={handleSelectAll} />
+                    <span style={{ marginTop: "5px" }}>Select All</span>
+                </div>
                     <div className={styles.checkboxContainer}>
-                        {logoArray.map(({ label, id }) => (
+                        {logoArray.map(({ label, id, disable }) => (
                             <div key={id} className={styles.checkboxWrapper}>
                                 <Checkbox
                                     id={id}
                                     name="checkboxOptions"
                                     value={label}
                                     onChange={handleCheckboxChange}
-                                    disabled={id === 'guardrail' ? true : false}
+                                    disabled={disable}
+                                    checked= {selectedOptions.includes(id)}
                                 />
                                 <img style={{ marginTop: "-1px", float: "left", marginLeft:id === 'guardrail' ? '-0.7x' : '0px' }} height={id === 'guardrail' ? '22' : '20'} src={getLogo(id)} alt={`${label} logo`} />
                                 <span style={{paddingLeft: "5px", paddingRight: "5px"}}>{label}</span>
@@ -262,7 +275,7 @@ function HomePage() {
                         ))}
                     </div>
                     <div className={styles.container}>
-                        <Textarea
+                        <Textarea style={{minHeight:"10rem", maxHeight:"12rem"}}
                             placeholder="Type your text here..."
                             className={styles.textarea}
                             value={textInput}
@@ -276,7 +289,7 @@ function HomePage() {
                                 name="promtProtectButton"
                                 onClick={() => state.button = 2}
                                 className={styles.button}
-                                style={{right:"2rem"}}
+                                style={{right:"2rem", top:"8rem"}}
                             >
                                 Prompt Protect
                             </Button>
@@ -284,16 +297,6 @@ function HomePage() {
                                 textInput={textInput} warmPromptList={warmPromptList} openDialog ={dialog} 
                                 setDialog={setDialog} handleUseEdited={handleUseEdited} 
                                 flag={flag} handleChange={handleChange}/>
-                            {/* <Button
-                                disabled={textInput.length === 0 || selectedOptions.length === 0}
-                                appearance="primary"
-                                type="submit"
-                                name="checkBoxButton"
-                                onClick={() => state.button = 1}
-                                className={styles.button}
-                            >
-                                Submit
-                            </Button> */}
                         </div>
                     </div>
                     <div style={{width: "119px"}}>
