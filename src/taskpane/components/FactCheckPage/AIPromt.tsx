@@ -216,17 +216,14 @@ const ContentPanel = (props: any) => {
                                 if (topRankArticle) {
                                     const sourceLink = topRankArticle.source;
     
-                                    // Increment the superscript index
-                                    //currentIndex += 1;
-    
                                     // Insert the source link in the footer
+                                    //existing solution --> working 
                                     const footerParagraph = footer.insertHtml(
-                                        `${currentIndex}. <a href="${sourceLink}">${sourceLink}</a><br>`,
-                                        Word.InsertLocation.end
+                                        '<br>' + currentIndex + '.' + `<a href="${sourceLink}">${sourceLink}</a>`, Word.InsertLocation.end
                                     );
-    
+
                                     // Set footer font size for consistency
-                                    footerParagraph.font.size = 12;
+                                    footerParagraph.font.size = 8;
     
                                     // Mark the item as inserted
                                     previouslyInsertedItems.add(item);
@@ -401,6 +398,7 @@ const TablePanel = (props: any) => {
                                 overflow: 'hidden',
                                 whiteSpace: 'nowrap',
                                 textOverflow: 'ellipsis', // Apply ellipsis for overflowing content
+                                lineHeight: 'normal'
                             }}
                         >
                             {column.label}
@@ -426,6 +424,8 @@ const TablePanel = (props: any) => {
                                 overflow: 'hidden',
                                 textAlign: 'justify',
                                 textOverflow: 'ellipsis', // Apply ellipsis for overflowing content
+                                lineHeight: 'normal',
+                                whiteSpace: 'nowrap',
                             }}
                             title={rank.source} // Show full text on hover
                         >
@@ -441,7 +441,8 @@ const TablePanel = (props: any) => {
                                 overflow: 'hidden',
                                 textAlign: 'justify',
                                 textOverflow: 'ellipsis', // Apply ellipsis for overflowing content
-                                fontWeight:'normal'
+                                fontWeight:'normal',
+                                lineHeight: 'normal',
                             }}
                             title={rank.excerpt} // Show full text on hover
                         >
@@ -453,7 +454,8 @@ const TablePanel = (props: any) => {
                                 overflow: 'hidden',
                                 whiteSpace: 'nowrap',
                                 textOverflow: 'ellipsis', // Apply ellipsis for overflowing content
-                                fontWeight:'normal'
+                                fontWeight:'normal',
+                                lineHeight: 'normal'
                             }}
                             title={rank.score ? `${(rank.score * 100).toFixed(2)}%` : 'N/A'} // Show full text on hover
                         >
@@ -506,7 +508,7 @@ function AIPrompt(props: any) {
                 <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
                     {props.state.sourceTypes.includes("guardrail") && (
                         <Tab value="guardrail" id="guardrail">
-                            <Image alt="Guardrail" src={icon32} height={32} width={32} />
+                            <Image alt="Guardrail" src={icon32} height={30} width={30} />
                         </Tab>
                     )}
                     {props.state.sourceTypes.includes("gpt3") && (
@@ -516,17 +518,17 @@ function AIPrompt(props: any) {
                     )}
                     {props.state.sourceTypes.includes("copilot") && (
                         <Tab value="copilot" id="copilot">
-                            <Image alt="Copilot" src={copilot} height={32} width={32} />
+                            <Image alt="Copilot" src={copilot} height={30} width={30} />
                         </Tab>
                     )}
                     {props.state.sourceTypes.includes("gemini") && (
                         <Tab value="gemini" id="gemini">
-                            <Image alt="Gemini" src={gemini} height={32} width={32} />
+                            <Image alt="Gemini" src={gemini} height={30} width={30} />
                         </Tab>
                     )}
                     {props.state.sourceTypes.includes("gpt4") && (
                         <Tab value="chatGPT4" id="chatGPT4">
-                            <Image alt="chatGPT4" src={chatGPT4} height={32} width={32} />
+                            <Image alt="chatGPT4" src={chatGPT4} height={30} width={30} />
                         </Tab>
                     )}
                 </TabList>
