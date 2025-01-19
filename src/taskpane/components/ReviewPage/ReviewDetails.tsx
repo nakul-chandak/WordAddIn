@@ -18,8 +18,6 @@ export const ReviewDetails = (props: any) => {
 
   // need to call API and map data here....
   const reviews = props.data;
-  console.log("Reviews in review details page.") 
-  console.log(reviews);
   
   function getLikeIcon(isLike: boolean) {
     if (isLike) {

@@ -49,10 +49,8 @@ const InformationPage = () => {
   };
 
   const redirectToFactCheck = (data: any) => {
-    console.log('factcheck data' + data);
     setPromptType(data.promptType)
     // setRequest(request);
-    console.log(data);
     setResponse(data);
     setSelectedValue('factCheck');
   }

@@ -48,8 +48,7 @@ function SignUp() {
 
     const handleSubmit = async (values: FormikValues, { setSubmitting }: FormikHelpers<FormikValues>) => {
         setSubmitting(false);
-        console.log("Form submitted");
-        console.log(values);
+
         // Call API here to handle submission
 
         const user:any = {
