@@ -137,7 +137,6 @@ const ContentPanel = (props: any) => {
     const sendRanksDetails = (value: any) => {
         // value = value.map((v:any) => v.split('_')[1])
         setTopRanks(value);
-        console.log('top ranks details as ', value)
     }
 
 
@@ -369,7 +368,6 @@ const TablePanel = (props: any) => {
                 ? prev.filter((i) => i !== item)
                 : [...prev, item];
             props.sendRanksDetails(updatedItems);
-            console.log(updatedItems);
 
             return updatedItems;
         });
@@ -429,7 +427,7 @@ const TablePanel = (props: any) => {
                             }}
                             title={rank.source} // Show full text on hover
                         >
-                            <TableCellLayout>
+                            <TableCellLayout style={{whiteSpace: "normal"}}>
                                 <a href={rank.source} target="_blank" rel="noopener noreferrer">
                                     {rank.source || 'Link'}
                                 </a>
@@ -474,7 +472,6 @@ function AIPrompt(props: any) {
     const styles = useStyles();
     const selectedPromptType = props.promptType;
     const [data, setData] = React.useState([]);
-    console.log('data in AIPrompt component', data);
     const [selectedValue, setSelectedValue] = useState<TabValue>(props.promptType === 'gpt3' ? 'chatGPT' : props.promptType === 'gpt4' ? 'chatGPT4' : props.promptType);
     const [selectedGPT, setSelectedGPT] = useState('')
 

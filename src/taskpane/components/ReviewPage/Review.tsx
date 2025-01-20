@@ -62,7 +62,6 @@ function Review(props: any) {
           }));
   
           setResult(promptResults); // Set results immediately
-          console.log("Prompt loaded:", promptResults);
   
           // Start loading articles concurrently with lazy loading
           loadLazy(promptResults);
@@ -117,7 +116,6 @@ function Review(props: any) {
         });
   
         setResult(finalResults); // Update results with articles and isDisable status
-        console.log("Articles loaded:", allArticles);
       })
       .catch((error) => {
         console.error("Error fetching articles:", error);

@@ -147,9 +147,8 @@ const OptimizedPromts = () => {
     const [originalPrompt, setOriginalPrompt] = React.useState<string>('');
     const [optimizedPrompt, setOptimizedPrompt] = React.useState<string>('');
 
-    const handleSubmit = (event: any) => {
+    const handleSubmit = (_event: any) => {
         //throw new Error("Function not implemented.");
-        console.log(event);
     };
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value, checked } = e.target;

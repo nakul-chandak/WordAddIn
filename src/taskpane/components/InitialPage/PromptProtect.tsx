@@ -1,6 +1,6 @@
-import { Button,Image, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, makeStyles, Textarea, tokens, typographyStyles, Divider } from '@fluentui/react-components'
+import { Button,Image, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, makeStyles, Textarea, tokens, typographyStyles, Divider } from '@fluentui/react-components'
 import { Dismiss24Regular } from '@fluentui/react-icons';
-import React, { useEffect, useState }  from 'react'
+import React, { useState }  from 'react'
 import { LlmService } from '../../../common/services/llm/llm.service';
 import { useToaster } from '../../../hooks/useToast';
 import  thumbsUp from '../../../../assets/thumbsup.png';
@@ -59,8 +59,6 @@ function PromptProtect(props: any) {
 
     const handleCloseDialog = (isClose) => {
       props.setDialog(isClose);
-      //settextAreaInput("");
-      //setTotalCharacters(0);
     }
 
     const handleUseEdited = () =>{
@@ -77,7 +75,6 @@ function PromptProtect(props: any) {
      
       .then((res:any)=>{
         setWarningPrompt([]);
-          console.log(res)
           if(!res.promptsInfoResponseDto.map (y=>y.profanityCheckResponseDto.length > 0)[0]) {
             toaster.info('No warnings found');
             setApiProtectedPrompt(true);
@@ -92,7 +89,6 @@ function PromptProtect(props: any) {
       },(error:any)=>{
           setWarningPrompt([]);
           toaster.error(error.message);
-          console.log(error);
       })
     }
 

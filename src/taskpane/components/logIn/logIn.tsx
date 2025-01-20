@@ -20,7 +20,6 @@ function LogIn() {
       && isAuthenticated === 'true')
     {
       navigate('/home');
-      console.log("isAuthenticated :: " + isAuthenticated);
     }
   }, []);
   const navigateSignUpPage = () =>{

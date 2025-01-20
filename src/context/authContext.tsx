@@ -19,7 +19,6 @@ const AuthProvider = ({ children }) => {
 
   const getSubscriptionPlan = () => {
     UserService.me().then(res =>{
-       console.log(res);
        setSubPlan(res.subscription.planName.toLowerCase());
     },(error)=>{
       toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
@@ -27,12 +26,10 @@ const AuthProvider = ({ children }) => {
   }
 
   const setSubscriptionPlan = () => {
-    debugger;
     getSubscriptionPlan();
   }
 
   const setAuthenticated = (token) => {
-    debugger;
     if(token) {
       sessionStorage.setItem("token",token);
       sessionStorage.setItem("LoggedIn","true");
