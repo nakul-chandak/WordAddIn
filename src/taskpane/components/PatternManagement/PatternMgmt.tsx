@@ -10,6 +10,8 @@ import { SystemPattern } from "../../../common/services/pattern-mgmt/models/Syst
 import {
     Edit12Regular
 } from "@fluentui/react-icons";
+import UploadNDownload from "./UploadNDownload";
+import { AuthContext } from "../../../context/authContext";
 
 const useStyles = makeStyles({
     root: {
@@ -62,6 +64,15 @@ const useStyles = makeStyles({
         bottom: '4rem',
         left: '0.5rem'
     },
+    delBtnContainer: {
+        gap: '.5rem',
+        justifyContent: 'center',
+        alignContent: 'center',
+        cursor: 'pointer',
+        display: 'flex',
+        color: 'rgb(192 152 206)',
+        lineHeight: '1.25rem'
+    }
 });
 
 function PatternMgmt() {
@@ -81,23 +92,13 @@ function PatternMgmt() {
     const [searchQuery, setSearchQuery] = React.useState('');
     const [searchCustQuery, setSearchCustQuery] = React.useState('');
     const [isHovered, setIsHovered] = React.useState(null);
+    const [dialog, setDialog] = React.useState(false);
+    const userContext = React.useContext(AuthContext);
+    const [isProUser,setIsProUser] = React.useState(false);
 
-
-
-    const getCustomPatterns = async () => {
-        PatternMgmtService.getCustomPatterns().then((res: any) => {
-            setCustPatternData(res);
-            setCustData(res)
-            console.log(res);
-        }, (error: any) => {
-            toaster.error(error.message);
-            console.log(error);
-            //props.handleApiCall()
-        });
-    };
-
+    /// Search the system libraries
     const handleSearch = (event) => {
-        if(event.target.value == undefined){
+        if (event.target.value == undefined) {
             event.target.value = "";
         }
 
@@ -114,11 +115,12 @@ function PatternMgmt() {
         setSysPatternData(result);
     };
 
+    /// Search the custom libraries
     const handleCustSearch = (event) => {
-        if(event.target.value == undefined){
+        if (event.target.value == undefined) {
             event.target.value = "";
         }
-        
+
         const query = event.target.value.toLowerCase();
         setSearchCustQuery(query);
         const filtered = custData.filter(custPattern =>
@@ -132,6 +134,20 @@ function PatternMgmt() {
         setCustPatternData(result);
     };
 
+    /// Fetch the Custom pattern libraries using API call
+    const getCustomPatterns = async () => {
+        PatternMgmtService.getCustomPatterns().then((res: any) => {
+            setCustPatternData(res);
+            setCustData(res);
+            console.log(res);
+        }, (error: any) => {
+            toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
+            console.log(error);
+            //props.handleApiCall()
+        });
+    };
+
+    /// Fetch the all active pattern libraries using API call
     const getActivePatterns = async () => {
         PatternMgmtService.getActivePatterns().then((custRes: any) => {
             setActivePatternData(custRes);
@@ -140,30 +156,26 @@ function PatternMgmt() {
             setSelectedCustOptions(selected);
             console.log(custRes);
         }, (error: any) => {
-            toaster.error(error.message);
+            toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
             console.log(error);
             //props.handleApiCall()
         });
     };
 
+    /// Fetch the all System pattern libraries using API call
     const getSysPatterns = async () => {
         PatternMgmtService.getSystemPatterns().then(async (res: any) => {
             setSysPatternData(res.data);
             setSysData(res.data)
             console.log(res);
         }, (error: any) => {
-            toaster.error(error.message);
+            toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
             console.log(error);
             //props.handleApiCall()
         });
     };
 
-    React.useEffect(() => {
-        getSysPatterns();
-        getCustomPatterns();
-        getActivePatterns();
-    }, []);
-
+    /// On checked/uncheck of system pattern's library enabled/disabled library
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, checked } = e.target;
 
@@ -177,20 +189,23 @@ function PatternMgmt() {
         };
 
         PatternMgmtService.updateStatus(patternObj).then(async (res: any) => {
-            const a = res.data;
-            console.log(res);
             setSelectedOptions((prev) =>
                 checked ? [...prev, id] : prev.filter((option) => option !== id)
             );
 
+            let message = !res.isEnabled ? "Pattern enabled successfully" : "Pattern disabled successfully";
+
+            toaster.success(message)
+
         }, (error: any) => {
-            toaster.error(error.message);
+
+            toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
             console.log(error);
             //props.handleApiCall()
         });
-
     };
 
+    /// On checked/uncheck of custom pattern's library enabled/disabled library
     const handleCustCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, checked } = e.target;
 
@@ -204,26 +219,48 @@ function PatternMgmt() {
         };
 
         PatternMgmtService.updateStatus(patternObj).then(async (res: any) => {
-            const a = res.data;
-            console.log(res);
+            let message = !res.isEnabled ? "Pattern enabled successfully" : "Pattern disabled successfully";
+
+            toaster.success(message);
             setSelectedCustOptions((prev) =>
                 checked ? [...prev, id] : prev.filter((option) => option !== id)
             );
 
         }, (error: any) => {
-            toaster.error(error.message);
+            toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
             console.log(error);
             //props.handleApiCall()
         });
     };
 
+    /// On click on edit button of custom pattern library
     const editPattern = (id) => {
         navigate('edit-pattern/' + id);
     }
 
+    /// On click on + Create New custom library pattern 
     const onCreateNewClick = () => {
         navigate('add-pattern');
     }
+
+    const handleCloseDialog = (isClose) => {
+        setDialog(isClose);
+    }
+    
+    const handleOpenDialog = (value) =>{
+        setDialog(value);
+    }
+    /// Onloading of page need to call API
+    React.useEffect(() => {
+        if (userContext.subscriptionPlan === "pro") {
+            setIsProUser(true);
+            getSysPatterns();
+        }else{
+            setIsProUser(false);
+        }
+        getCustomPatterns();
+        getActivePatterns();
+    }, []);
 
     return (
         <div style={{ margin: "auto" }}>
@@ -236,19 +273,19 @@ function PatternMgmt() {
                     style={{ padding: '10px' }}
                 />
             </div>
-            <div style={{ padding: '1rem' }}>
+            {isProUser && <div style={{ padding: '1rem' }}>
                 <h2 style={{ fontWeight: 600, fontSize: '0.9375rem', marginBottom: '1rem' }}>System Pattern Libraries</h2>
                 <p style={{ color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem' }}>Patterns are libraries of terms that allow prompts to accurately detect labels and similar expressions related to specific compliance or information disclosure matters. <Link href="">Learn more</Link></p>
                 <div className={styles.testboxStyle} >
                     <SearchBox placeholder="Search By Name" style={{
                         color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem', WebkitAppearance: 'none'
                     }} value={searchQuery}
-                        onChange={handleSearch} 
+                        onChange={handleSearch}
                     />
                 </div>
                 <div style={{ flexWrap: "wrap", display: 'flex' }} >
-                    {sysPatternData.map(item => (
-                        <div style={{ flexWrap: "wrap", display: 'flex', width: '300px' }}>
+                    {sysPatternData.map((item,index) => (
+                        <div key={index} style={{ flexWrap: "wrap", display: 'flex', width: '300px' }}>
                             <div key={item.id} style={{ display: 'flex', alignItems: 'flex-start' }} className={styles.checkboxWrapper}>
                                 <Checkbox id={item.id} value={item.libraryGroup} onChange={handleCheckboxChange} checked={selectedOptions.includes(item.id)}></Checkbox>
                                 <Label size="small" style={{ padding: '.5rem' }}>{item.libraryGroup}</Label>
@@ -261,14 +298,13 @@ function PatternMgmt() {
                                 </InfoLabel>
                                 <span style={{ marginTop: "0px", float: "right" }}></span>
                             </div>
-
                         </div>
                     ))}
                 </div>
                 <div >
                     <hr className={styles.line}></hr>
                 </div>
-            </div>
+            </div>}
             <div style={{ padding: '1rem' }}>
                 <h2 style={{ fontWeight: 600, fontSize: '0.9375rem', marginBottom: '1rem' }}>Custom Pattern Libraries</h2>
                 <p style={{ color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem' }}>Create your own pattern libraries. <Link href="">Learn more</Link></p>
@@ -280,12 +316,21 @@ function PatternMgmt() {
                         />
                     </div>
                     <div>
+                        <div className={styles.delBtnContainer} style={{ fontSize: '.7rem', paddingTop: '.5rem', display: "flex", flexWrap: 'wrap', position: 'absolute', right: '130px', }} onClick={()=>handleOpenDialog(true) }>
+                            Import Terms With JSON
+                           
+                        </div>
+                    </div>
+                    <UploadNDownload
+                                openDialog ={dialog} 
+                                setDialog={setDialog} />
+                    <div>
                         <Button appearance="primary" style={{ fontSize: 'small' }} onClick={onCreateNewClick}>+ Create New</Button>
                     </div>
                 </div>
                 <div style={{ flexWrap: "wrap", display: 'flex' }} >
-                    {custPatternData.map(item => (
-                        <div style={{ flexWrap: "wrap", display: 'flex', width: '300px' }} onMouseEnter={() => setIsHovered(item.id)}
+                    {custPatternData.map((item,index) => (
+                        <div key={index} style={{ flexWrap: "wrap", display: 'flex', width: '300px' }} onMouseEnter={() => setIsHovered(item.id)}
                             onMouseLeave={() => setIsHovered(null)}>
                             <div key={item.id} style={{ display: 'flex', alignItems: 'flex-start' }} className={styles.checkboxWrapper}
                             >

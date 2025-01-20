@@ -103,14 +103,14 @@ function EditPattern() {
     const styles = useStyles();
     const navigate = useNavigate();
     const toaster = useToaster();
-    const [customPatternData, setCustomPatternData] = React.useState(new CustomLibrary("", "", "","Custom",[]));
+    const [customPatternData, setCustomPatternData] = React.useState(new CustomLibrary("", "", "", "Custom", []));
     const textareaRef = React.useRef(null);
     const [name, setName] = React.useState('');
     const [nameBeforeUpdate, setNameBeforeUpdate] = React.useState('');
     const [comment, setComment] = React.useState('');
     const [isUpdated, setIsUpdated] = React.useState(false);
     const [showForm, setShowForm] = React.useState(false);
-    const [patternData, setPatternData] = React.useState(new Pattern("","","","fuzzy-match",""))
+    const [patternData, setPatternData] = React.useState(new Pattern("", "", "", "fuzzy-match", ""))
     const timerRef = React.useRef(null);
     const [showError, setShowError] = React.useState(true);
     const [isUpdate, setIsUpdate] = React.useState(true);
@@ -123,7 +123,7 @@ function EditPattern() {
             setComment(res.libraryComment);
             console.log(res);
         }, (error: any) => {
-            toaster.error(error.message);
+            toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
             console.log(error);
             //props.handleApiCall()
         });
@@ -133,7 +133,7 @@ function EditPattern() {
         return PatternMgmtService.checkIsLibraryNameAvailble(pattern).then(async (res: any) => {
             return res;
         }, (error: any) => {
-            toaster.error(error.message);
+            toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
             console.log(error);
         });
     }
@@ -187,10 +187,11 @@ function EditPattern() {
             if (res) {
                 getCustomPatternById(id);
                 setIsUpdated(false);
+                toaster.success("Pattern library updated successfully");
             }
         },
             (error: any) => {
-                toaster.error(error.message);
+                toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
                 console.log(error);
             });
     };
@@ -202,10 +203,11 @@ function EditPattern() {
         PatternMgmtService.deletePattern(id, item.id).then(async (res: any) => {
             if (res) {
                 getCustomPatternById(id);
+                toaster.success("Term deleted successfully");
             }
         },
             (error: any) => {
-                toaster.error(error.message);
+                toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
                 console.log(error);
             });
     }
@@ -213,11 +215,12 @@ function EditPattern() {
     const handleLibraryDeleteClick = () => {
         PatternMgmtService.deleteLibrary(id).then(async (res: any) => {
             if (res) {
-                navigate('/patterns-management')
+                navigate('/patterns-management');
+                toaster.success("Pattern library deleted successfully");
             }
         },
             (error: any) => {
-                toaster.error(error.message);
+                toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
                 console.log(error);
             });
     }
@@ -275,10 +278,11 @@ function EditPattern() {
                 getCustomPatternById(res.id);
                 setIsUpdate(true);
                 setShowForm(false);
-                setIsUpdated(false);        
+                setIsUpdated(false);
+                toaster.success("Pattern library added successfully");
             }
         }, (error: any) => {
-            toaster.error(error.message);
+            toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
             console.log(error);
         });
     }
@@ -306,9 +310,14 @@ function EditPattern() {
                 setIsUpdated(false);
                 setCustomPatternData(customPatternData);
                 setShowForm(false);
+                if (patternData.id != null) {
+                    toaster.success("Pattern term updated successfully");
+                } else { 
+                    toaster.success("Pattern term added successfully");
+                }
             }
         }, (error: any) => {
-            toaster.error(error.message);
+            toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
             console.log(error);
         });
     }
@@ -344,20 +353,20 @@ function EditPattern() {
                     <h2 className={styles.h2PatternName}>Pattern Library Name</h2>
                 </div>
                 <div className={styles.ptbContainer}>
-                    <div className={styles.libNameContainer} style={{display:"flex", flexWrap:'wrap'}}>
-                        <div style={{display:"flex", flexWrap:'wrap', width: '190px'}}>
+                    <div className={styles.libNameContainer} style={{ display: "flex", flexWrap: 'wrap' }}>
+                        <div style={{ display: "flex", flexWrap: 'wrap', width: '190px' }}>
                             <Input placeholder="Enter library name" id="pattern-library-name" value={name} onChange={handleNameInputChange} />
                         </div>
-                        <div style={{display:"flex", flexWrap:'wrap', width: '190px'}}>
+                        <div style={{ display: "flex", flexWrap: 'wrap', width: '190px' }}>
                             <Input placeholder="Enter library description" id="pattern-library-name" value={comment}
                                 onChange={handleCommentInputChange} />
                         </div>
                         {isUpdated && isUpdate &&
-                            <div style={{display:"flex", flexWrap:'wrap', width: '190px'}}>
-                                <Button appearance="primary" onClick={updateCustomLibrary} style={{ fontSize: 'small', minWidth:'190px' }}>Update Library Details</Button>
+                            <div style={{ display: "flex", flexWrap: 'wrap', width: '190px' }}>
+                                <Button appearance="primary" onClick={updateCustomLibrary} style={{ fontSize: 'small', minWidth: '190px' }}>Update Library Details</Button>
                             </div>}
                     </div>
-                    {isUpdate && <div className={styles.delBtnContainer} onClick={handleLibraryDeleteClick} style={{ fontSize: '.7rem', paddingTop: '.5rem', display:"flex", flexWrap:'wrap', width: '190px' }}>
+                    {isUpdate && <div className={styles.delBtnContainer} onClick={handleLibraryDeleteClick} style={{ fontSize: '.7rem', paddingTop: '.5rem', display: "flex", flexWrap: 'wrap', width: '190px' }}>
                         <DeleteRegular style={{ fontSize: '.9rem', paddingTop: '.9rem' }}>
                         </DeleteRegular>
                         <p>Delete Pattern</p>

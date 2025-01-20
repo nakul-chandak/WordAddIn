@@ -1,5 +1,5 @@
 // AuthContext.js
-import React, { createContext, useCallback, useEffect, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { UserService } from '../common/services/user/user.service';
 import { useToaster } from '../hooks/useToast';
 import { UserContextType } from '../interfaces/UserContextType';
@@ -15,12 +15,12 @@ const AuthContext = createContext<UserContextType> ({
 const AuthProvider = ({ children }) => {
    const toaster = useToaster();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [subscriptionPlan, setSubPlan] = useState("Free");
+  const [subscriptionPlan, setSubPlan] = useState("free");
 
   const getSubscriptionPlan = () => {
     UserService.me().then(res =>{
        console.log(res);
-       setSubPlan(res.subscription.planName);
+       setSubPlan(res.subscription.planName.toLowerCase());
     },(error)=>{
       toaster.error(error.message ? error.message : "The application has encountered an error. Please try again later.");
     })
