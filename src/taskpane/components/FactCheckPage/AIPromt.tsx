@@ -427,7 +427,7 @@ const TablePanel = (props: any) => {
                             }}
                             title={rank.source} // Show full text on hover
                         >
-                            <TableCellLayout>
+                            <TableCellLayout style={{whiteSpace: "normal"}}>
                                 <a href={rank.source} target="_blank" rel="noopener noreferrer">
                                     {rank.source || 'Link'}
                                 </a>
