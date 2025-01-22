@@ -1,5 +1,5 @@
 // AuthContext.js
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { UserService } from '../common/services/user/user.service';
 import { useToaster } from '../hooks/useToast';
 import { UserContextType } from '../interfaces/UserContextType';
