@@ -15,7 +15,7 @@ const AuthContext = createContext<UserContextType> ({
 const AuthProvider = ({ children }) => {
    const toaster = useToaster();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [subscriptionPlan, setSubPlan] = useState("free");
+  const [subscriptionPlan, setSubPlan] = useState(null);
 
   const getSubscriptionPlan = () => {
     UserService.me().then(res =>{
@@ -41,6 +41,13 @@ const AuthProvider = ({ children }) => {
       setIsAuthenticated(false);
     }
   }
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if(token && !subscriptionPlan){
+      getSubscriptionPlan();
+    }
+    }, [subscriptionPlan]);
 
   return <AuthContext.Provider value={{isAuthenticated:isAuthenticated, subscriptionPlan:subscriptionPlan, setAuthenticated,setSubscriptionPlan}}>{children}</AuthContext.Provider>;
 };
