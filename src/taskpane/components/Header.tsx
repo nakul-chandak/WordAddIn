@@ -11,6 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 export interface HeaderProps {
+  ShowMenu:string[]
   title: string;
   logo: string;
   message: string;
@@ -55,6 +56,10 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     navigate('/');
   }
 
+  function handlePatternMgmtClick() {
+    navigate('/pattern-management');
+  }
+
   function handleRegenerateClick() {
     window.location.reload(); 
   }
@@ -70,20 +75,27 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
 
         <div style={{ marginTop: "10px", float: 'right', marginRight: "15px" }}>
           <ul style={{ color: 'black', listStyleType: 'none', display: "inline-flex" }}>
-
-            <li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handleClick}>
+          
+          <li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handlePatternMgmtClick}>
+              <Stack>
+                <ArrowCircleRight24Regular style={{ marginLeft: "15px" }} />
+                <span style={{ fontSize: "10px" }}>Pattern Management</span>
+              </Stack>
+            </li>
+            <Divider vertical />
+            { props.ShowMenu.indexOf("NewPrompt") > -1 ? (<><li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handleClick}>
               <Stack>
                 <ArrowCircleRight24Regular style={{ marginLeft: "15px" }} />
                 <span style={{ fontSize: "10px" }}>New Prompt</span>
               </Stack>
-            </li>
-            <Divider vertical />
-            <li className={styles.icon} onClick={handleRegenerateClick} style={{ cursor: 'pointer' }}>
+            </li>  <Divider vertical /> </> ) : null }
+           
+            { props.ShowMenu.indexOf("ReGenerate") > -1 ? (<li className={styles.icon} onClick={handleRegenerateClick} style={{ cursor: 'pointer' }}>
               <Stack>
                 <ArrowSync24Regular style={{ marginLeft: "15px" }} />
                 <span style={{ fontSize: "10px" }}>Regenerate</span>
               </Stack>
-            </li>
+            </li>) : null }
             {/* <Divider vertical/>
           <li className={styles.icon}>
             <Stack>

@@ -53,8 +53,8 @@ const useStyles = makeStyles({
         flexGrow: '1',
         padding: "0px 10px 10px 10px",
         position: 'relative',
-        bottom: '2rem',
-        marginTop:"2rem",
+        bottom: '1rem',
+        marginTop:"1rem",
         marginBottom:"2rem"
     },
     checkboxWrapper: {
@@ -221,17 +221,7 @@ function HomePage() {
     }
 
     return (
-        <div style={{ margin: "auto" }}>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'relative', top: '1rem' }}>
-                <Image
-                    alt="Guardrail"
-                    src={log}
-                    height={70}
-                    width={'200px'}
-                    style={{ padding: '10px' }}
-                />
-            </div>
-
+        <div style={{ marginTop: "3.5rem" }}>
             <div style={{ marginTop: "25px", backgroundColor: "#3977D1", padding: "15px", color: "white", textAlign: "center" }}>
                 {/* Generate Better AI result with <br /> */}
                 Prompt Protect and Fact <br />
@@ -249,7 +239,7 @@ function HomePage() {
             <form id="aiPromptForm" onSubmit={handleSubmit}>
 
                 <div className={styles.bottomPortion}>
-                <div style={{ display: "inline-flex", marginLeft: "10px", fontWeight: 600 }}>
+                <div style={{ display: "inline-flex", marginLeft: "10px", fontWeight: 600,marginTop:"5px" }}>
                     <Checkbox key="selectAll" id="selectAll" name="selectAllCheckBox" value="SelectAll" onChange={handleSelectAll} />
                     <span style={{ marginTop: "5px" }}>Select All</span>
                 </div>
@@ -270,7 +260,7 @@ function HomePage() {
                         ))}
                     </div>
                     <div className={styles.container}>
-                        <Textarea style={{minHeight:"10rem", maxHeight:"12rem"}}
+                        <Textarea style={{maxHeight:"12rem"}}
                             placeholder="Type your text here..."
                             className={styles.textarea}
                             value={textInput}
@@ -284,7 +274,7 @@ function HomePage() {
                                 name="promtProtectButton"
                                 onClick={() => state.button = 2}
                                 className={styles.button}
-                                style={{right:"2rem", top:"8rem"}}
+                                style={{right:"1.2rem", top:"4.2rem"}}
                             >
                                 Prompt Protect
                             </Button>
