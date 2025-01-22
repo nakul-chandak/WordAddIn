@@ -39,6 +39,8 @@ const useStyles = makeStyles({
         marginRight: "10px",
     },
     bottomPortion: {
+        marginTop: "-1rem",
+        paddingTop: "2rem",
         height: 'auto',
         background: 'rgb(247,247,247)'
     },
@@ -47,7 +49,7 @@ const useStyles = makeStyles({
         justifyContent: "flex-start",
         flexGrow: '1',
         height: "100px",
-        padding: "10px",
+        padding: "0 10px 10px 10px",
         position: 'relative',
         bottom: '2rem',
     },
@@ -183,15 +185,6 @@ const OptimizedPromts = () => {
 
     return (
         <div style={{ margin: "auto" }}>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'relative', top: '1rem' }}>
-                <Image
-                    alt="Guardrail"
-                    src={log}
-                    height={70}
-                    width={'200px'}
-                    style={{ padding: '10px' }}
-                />
-            </div>
 
             <div className={styles.headerBar}>
                 <CounterBadge
@@ -222,7 +215,7 @@ const OptimizedPromts = () => {
                         <span style={{ fontWeight: 'bolder' }}>Optimize Prompt - get better AI results</span>
                         <div className={styles.innerDiv}>
                             <div style={{ flex: '1', borderRadius: '10px' }}>
-                                <div style={{ padding: '10px' }}>
+                                <div style={{ padding: '0px 10px 10px 10px' }}>
                                     <p style={{ fontWeight: 'bold' }}>ORIGINAL PROMPT</p>
                                     <Field label="">
                                         <RadioGroup value={originalPrompt} onChange={setPrompt1}>
