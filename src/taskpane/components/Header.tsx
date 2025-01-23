@@ -57,7 +57,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
   }
 
   function handlePatternMgmtClick() {
-    navigate('/pattern-management');
+    navigate('/patterns-management');
   }
 
   function handleRegenerateClick() {
