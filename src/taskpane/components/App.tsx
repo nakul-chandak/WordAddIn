@@ -102,17 +102,23 @@ const App = (props: AppProps) => {
         {
           path: '/home',
           element: (
+            <>
+            <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["PattenMgmt"]} />
             <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
               <HomePage />
             </React.Suspense>
+            </>
           ),
         },
         {
           path: '/optimized-prompt',
           element: (
+            <>
+            <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["PattenMgmt"]} />
             <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
               <OptimizedPromts />
             </React.Suspense>
+            </>
           ),
         },
         {
@@ -120,7 +126,7 @@ const App = (props: AppProps) => {
           element: (
             <>
              {/* <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}> */}
-              <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" />
+              <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["PattenMgmt", , "NewPrompt","ReGenerate"]} />
               <InformationPage />
              {/* </React.Suspense> */}
             </>
@@ -133,7 +139,18 @@ const App = (props: AppProps) => {
               <PromptProtect />
             </React.Suspense>
           ),
-        }
+        },
+        {
+          path: "/pattern-management",
+          element: (
+            <>
+             {/* <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}> */}
+              <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["NewPrompt"]} />
+              <InformationPage />
+             {/* </React.Suspense> */}
+            </>
+          ),
+        },
       ]
     },
     {
