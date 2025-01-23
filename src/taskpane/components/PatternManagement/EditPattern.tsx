@@ -92,6 +92,7 @@ const useStyles = makeStyles({
     },
     errormgsContainer: {
         padding: '1rem',
+        paddingTop:'0',
         marginTop: '-2rem',
         fontSize: '0.65rem',
         color: 'red'
@@ -332,25 +333,17 @@ function EditPattern() {
     }, []);
 
     return (
-        <div style={{ margin: "auto" }}>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'relative', top: '1rem' }}>
-                <Image
-                    alt="Guardrail"
-                    src={log}
-                    height={70}
-                    width={'200px'}
-                    style={{ padding: '10px' }} />
-            </div>
+        <div style={{ margin: "auto", paddingTop: '2.47rem' }}>
             <div className={styles.bigGray}>
                 <div className={styles.headerContainer}>
                     <Link to="/patterns-management" className={styles.nounderline}>
                         <p > Existing patterns </p>
                     </Link>
                     <span className={styles.textSpan}> &gt;</span>
-                    <span style={{ paddingLeft: '1rem' }}><p> {isUpdate ? 'Update' : 'Add'}  Custom Pattern Library</p></span>
+                    <span style={{ paddingLeft: '0.5rem' }}><p> {isUpdate ? 'Edit' : 'New'}  Custom Pattern Library</p></span>
                 </div>
                 <div className={styles.patternLBName}>
-                    <h2 className={styles.h2PatternName}>Pattern Library Name</h2>
+                    <h2 className={styles.h2PatternName} style={{marginBottom:'0rem'}}>Pattern Library Name</h2>
                 </div>
                 <div className={styles.ptbContainer}>
                     <div className={styles.libNameContainer} style={{ display: "flex", flexWrap: 'wrap' }}>
@@ -363,10 +356,10 @@ function EditPattern() {
                         </div>
                         {isUpdated && isUpdate &&
                             <div style={{ display: "flex", flexWrap: 'wrap', width: '190px' }}>
-                                <Button appearance="primary" onClick={updateCustomLibrary} style={{ fontSize: 'small', minWidth: '190px' }}>Update Library Details</Button>
+                                <Button appearance="primary" onClick={updateCustomLibrary} style={{ fontSize: 'small', minWidth: '190px' }} disabled={!showError}>Update Library Details</Button>
                             </div>}
                     </div>
-                    {isUpdate && <div className={styles.delBtnContainer} onClick={handleLibraryDeleteClick} style={{ fontSize: '.7rem', paddingTop: '.5rem', display: "flex", flexWrap: 'wrap', width: '190px' }}>
+                    {isUpdate && <div className={styles.delBtnContainer} onClick={handleLibraryDeleteClick} style={{ fontSize: '.7rem', paddingTop: '.5rem', display: "flex", flexWrap: 'wrap', justifyContent:'right', paddingRight:'1.5rem', height:'17px', marginTop:'17px',width:'110px' }}>
                         <DeleteRegular style={{ fontSize: '.9rem', paddingTop: '.9rem' }}>
                         </DeleteRegular>
                         <p>Delete Pattern</p>
@@ -392,14 +385,14 @@ function EditPattern() {
                 </div>
             </div>
             <div>
-                <Table arial-label="Default table" style={{ minWidth: "510px", borderCollapse: 'separate', fontSize: '0.55rem', paddingLeft: '.5rem' }}>
+                <Table arial-label="Default table" style={{  borderCollapse: 'separate', fontSize: '0.55rem', paddingLeft: '.5rem' }}>
                     <TableHeader className={styles.tblheader}>
                         <TableRow>
-                            <TableHeaderCell >PATTERN LABEL </TableHeaderCell>
-                            <TableHeaderCell >EXPRESSION TYPE</TableHeaderCell>
-                            <TableHeaderCell >EXPRESSION VALUE</TableHeaderCell>
-                            <TableHeaderCell >DESCRIPTION</TableHeaderCell>
-                            <TableHeaderCell style={{ width: '65px' }}>ACTIONS</TableHeaderCell>
+                            <TableHeaderCell style={{fontWeight: 500}} >PATTERN LABEL </TableHeaderCell>
+                            <TableHeaderCell style={{fontWeight: 500}}>EXPRESSION TYPE</TableHeaderCell>
+                            <TableHeaderCell style={{fontWeight: 500}}>EXPRESSION VALUE</TableHeaderCell>
+                            <TableHeaderCell style={{fontWeight: 500}}>DESCRIPTION</TableHeaderCell>
+                            <TableHeaderCell style={{ width: '65px',fontWeight: 500 }}>ACTIONS</TableHeaderCell>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -440,14 +433,14 @@ function EditPattern() {
                         }
                         {customPatternData.patterns.map((item, index) =>
                             <TableRow key={item.id}>
-                                <TableCell tabIndex={index} role="gridcell">{item.label}</TableCell>
-                                <TableCell tabIndex={index} role="gridcell">{item.expressionType}</TableCell>
+                                <TableCell style={{fontWeight: 600}} tabIndex={index} role="gridcell">{item.label}</TableCell>
+                                <TableCell style={{fontWeight: 500, color: 'gray'}} tabIndex={index} role="gridcell">{item.expressionType}</TableCell>
                                 <TableCell tabIndex={index} role="gridcell"><div ><span className={styles.patternBackground}>{item.pattern}</span></div></TableCell>
-                                <TableCell tabIndex={index} role="gridcell">{item.description}</TableCell>
+                                <TableCell style={{fontWeight: 500, color: 'gray'}} tabIndex={index} role="gridcell">{item.description}</TableCell>
                                 <TableCell tabIndex={index} role="gridcell">
                                     <TableCellLayout>
-                                        <EditRegular style={{ fontSize: '1.2rem', paddingRight: '1rem' }} onClick={() => handleEditClick(item)} >  </EditRegular>
-                                        <DeleteRegular style={{ fontSize: '1.2rem' }} onClick={() => !showForm ? handleDeleteClick(item) : null}>  </DeleteRegular>
+                                        <EditRegular style={{ fontSize: '1.2rem', paddingRight: '5px',cursor:'pointer' }} onClick={() => handleEditClick(item)} >  </EditRegular>
+                                        <DeleteRegular style={{ fontSize: '1.2rem',cursor:'pointer' }} onClick={() => !showForm ? handleDeleteClick(item) : null}>  </DeleteRegular>
                                     </TableCellLayout>
                                 </TableCell>
                             </TableRow>

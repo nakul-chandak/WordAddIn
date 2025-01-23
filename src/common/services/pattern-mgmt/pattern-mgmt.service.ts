@@ -15,6 +15,18 @@ export class PatternMgmtServiceImpl {
         })
     }
 
+    getSystemLibrary(id): Promise<any> {
+        const baseURL = 'common/v1/library/' + id;
+        return HttpClient.get(baseURL, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+            },
+        }).then(response => response.data).catch((err: any) => {
+            throw err;
+        })
+    }
+
     getCustomPatterns(): Promise<any> {
         const baseURL = 'guardrail/v1/patterns/custom-patterns';
         return HttpClient.get(baseURL, {
@@ -111,7 +123,7 @@ export class PatternMgmtServiceImpl {
     }
     checkIsLibraryNameAvailble(pattern: any): Promise<any> {
         const baseURL = 'guardrail/v1/patterns/is-library-name-available';
-        return HttpClient.post(baseURL,pattern, {
+        return HttpClient.post(baseURL, pattern, {
             headers: {
                 'Content-Type': 'application/json',
                 'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
@@ -123,7 +135,7 @@ export class PatternMgmtServiceImpl {
 
     AddLibraryNPattern(pattern: any): Promise<any> {
         const baseURL = 'guardrail/v1/patterns/create-custom-library';
-        return HttpClient.post(baseURL,pattern, {
+        return HttpClient.post(baseURL, pattern, {
             headers: {
                 'Content-Type': 'application/json',
                 'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
