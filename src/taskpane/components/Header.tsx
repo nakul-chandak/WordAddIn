@@ -5,6 +5,7 @@ import GuardrailLogo from "../../../assets/logo.png";
 import {
   ArrowCircleRight24Regular,
   ArrowSync24Regular,
+  CodeText20Regular,
   DocumentOnePageSparkle24Regular,
   DocumentSave24Regular,
 } from "@fluentui/react-icons";
@@ -77,22 +78,22 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
           <ul style={{ color: 'black', listStyleType: 'none', display: "inline-flex" }}>
           
           <li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handlePatternMgmtClick}>
-              <Stack>
-                <ArrowCircleRight24Regular style={{ marginLeft: "15px" }} />
+              <Stack style={{alignItems:"center"}}>
+                <CodeText20Regular width={24} height={24} style={{ marginLeft: "15px",width:24,height:24 }} />
                 <span style={{ fontSize: "10px" }}>Pattern Management</span>
               </Stack>
             </li>
             <Divider vertical />
             { props.ShowMenu.indexOf("NewPrompt") > -1 ? (<><li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handleClick}>
-              <Stack>
-                <ArrowCircleRight24Regular style={{ marginLeft: "15px" }} />
+              <Stack style={{alignItems:"center"}}>
+                <ArrowCircleRight24Regular />
                 <span style={{ fontSize: "10px" }}>New Prompt</span>
               </Stack>
             </li>  <Divider vertical /> </> ) : null }
            
             { props.ShowMenu.indexOf("ReGenerate") > -1 ? (<li className={styles.icon} onClick={handleRegenerateClick} style={{ cursor: 'pointer' }}>
-              <Stack>
-                <ArrowSync24Regular style={{ marginLeft: "15px" }} />
+              <Stack style={{alignItems:"center"}}>
+                <ArrowSync24Regular />
                 <span style={{ fontSize: "10px" }}>Regenerate</span>
               </Stack>
             </li>) : null }
