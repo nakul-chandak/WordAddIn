@@ -300,17 +300,20 @@ function PatternMgmt() {
                                 <Checkbox id={item.id} value={item.libraryGroup} onChange={handleCheckboxChange} checked={selectedOptions.includes(item.id)}></Checkbox>
                                 <Label size="small" style={{ padding: '.5rem' }}>{item.libraryGroup}</Label>
                                 <Info12Regular
-                                    style={{ marginTop: '0.7rem', width: '12px', height: '12px' }} onClick={() => handleOpenDialog(item)}>
+                                    style={{
+                                        marginTop: '0.7rem', width: '13px', height: '13px',
+                                        cursor: 'pointer'
+                                    }} onClick={() => handleOpenDialog(item)}>
                                 </Info12Regular>
                                 <span style={{ marginTop: "0px", float: "right" }}></span>
-                                
+
                             </div>
                         </div>
                     ))}
                 </div>
                 <SystemPatternDetails
-                                    openDialog={dialog}
-                                    setDialog={setDialog} pattern={sysPattern} patterns={library} />
+                    openDialog={dialog}
+                    setDialog={setDialog} pattern={sysPattern} patterns={library} />
                 <div >
                     <hr className={styles.line}></hr>
                 </div>
@@ -339,7 +342,13 @@ function PatternMgmt() {
                                 <Label size="small" style={{ padding: '.5rem' }}>{item.libraryGroup}</Label>
                                 {isHovered === item.id && (<div >
                                     <Edit12Regular
-                                        style={{ margin: '0.6rem', marginLeft: '3rem', cursor: 'pointer' }} onClick={() => editPattern(item.id)}>
+                                        style={{
+                                            height: '15px',
+                                            width: '15px',
+                                            marginTop: '0.6rem',
+                                            marginLeft: '3rem',
+                                            cursor: 'pointer'
+                                        }} onClick={() => editPattern(item.id)}>
                                     </Edit12Regular>
                                 </div>)}
                             </div>
