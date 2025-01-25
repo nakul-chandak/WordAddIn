@@ -301,7 +301,7 @@ function PatternMgmt() {
                                 <Label size="small" style={{ padding: '.5rem' }}>{item.libraryGroup}</Label>
                                 <Info12Regular
                                     style={{
-                                        marginTop: '0.7rem', width: '13px', height: '13px',
+                                        marginTop: '0.6rem', width: '15px', height: '15px',
                                         cursor: 'pointer'
                                     }} onClick={() => handleOpenDialog(item)}>
                                 </Info12Regular>
