@@ -55,7 +55,7 @@ function Review(props: any) {
           const promptResults = Object.keys(res.output).map((key) => ({
             promptType: key,
             description: res.output[key],
-            buttonCaption: "Fact Checker",
+            buttonCaption: "Fact Check",
             isDisLike: !res.isFavorite,
             isLike: res.isFavorite,
             isDisable: true,
@@ -146,26 +146,7 @@ function Review(props: any) {
       <div style={{ width: "100%", marginTop: "10px" }}>
         {/* Show Spinner while loading */}
           <>
-            <Dropdown
-              style={{ marginLeft: "5px", minWidth: "100px" }}
-              placeholder="Select"
-              size="small"
-              id="drop1"
-              disabled
-              defaultValue="Change Tone"
-            >
-              <option>Change Tone</option>
-            </Dropdown>
-            <Dropdown
-              style={{ marginLeft: "5px", minWidth: "100px" }}
-              placeholder="Select"
-              size="small"
-              id="drop2"
-              disabled
-              defaultValue="Make it concise"
-            >
-              <option>Make it concise</option>
-            </Dropdown>
+            
             {/* Render ReviewDetails */}
             {result.length > 0 && (
               <ReviewDetails

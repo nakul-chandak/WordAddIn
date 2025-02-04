@@ -8,7 +8,7 @@ export class PatternMgmtServiceImpl {
         return HttpClient.get(baseURL, {
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;
@@ -20,7 +20,7 @@ export class PatternMgmtServiceImpl {
         return HttpClient.get(baseURL, {
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;
@@ -32,7 +32,7 @@ export class PatternMgmtServiceImpl {
         return HttpClient.get(baseURL, {
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;
@@ -44,7 +44,7 @@ export class PatternMgmtServiceImpl {
         return HttpClient.post<any>(`${baseURL}`, request, {
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;
@@ -56,7 +56,7 @@ export class PatternMgmtServiceImpl {
         return HttpClient.get(baseURL, {
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;
@@ -68,7 +68,7 @@ export class PatternMgmtServiceImpl {
         return HttpClient.get(baseURL, {
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;
@@ -80,7 +80,7 @@ export class PatternMgmtServiceImpl {
         return HttpClient.patch(baseURL, request, {
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;
@@ -92,7 +92,7 @@ export class PatternMgmtServiceImpl {
         return HttpClient.patch(baseURL, request, {
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;
@@ -104,7 +104,7 @@ export class PatternMgmtServiceImpl {
         return HttpClient.delete(baseURL, {
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;
@@ -115,7 +115,7 @@ export class PatternMgmtServiceImpl {
         return HttpClient.delete(baseURL, {
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;
@@ -126,7 +126,7 @@ export class PatternMgmtServiceImpl {
         return HttpClient.post(baseURL, pattern, {
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;
@@ -138,7 +138,7 @@ export class PatternMgmtServiceImpl {
         return HttpClient.post(baseURL, pattern, {
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;

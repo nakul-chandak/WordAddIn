@@ -21,7 +21,7 @@ class LlmServiceImpl {
         return HttpClient.post<any>(`${baseURL}`,request,{
             headers: { 
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;
@@ -33,7 +33,7 @@ class LlmServiceImpl {
         return HttpClient.post<any>(`${baseURL}`,request,{
             headers: { 
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: HttpErrorResponse) => {
             throw err;
@@ -44,7 +44,7 @@ class LlmServiceImpl {
         return HttpClient.post<LlmResponse>(baseURL, request, {
             headers: { 
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;
@@ -57,7 +57,7 @@ class LlmServiceImpl {
         return HttpClient.post<any>(`${baseURL}`,request,{
             headers: { 
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                'authorization': `Bearer ${window.localStorage.getItem("token")}`,
             },
         }).then(response => response.data).catch((err: any) => {
             throw err;

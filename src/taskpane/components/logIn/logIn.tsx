@@ -12,8 +12,8 @@ function LogIn() {
   };
 
   useEffect(() => {
-    // Simulate a load event
-    const isAuthenticated = window.sessionStorage.getItem("LoggedIn");
+    // Simulate a load event    
+    const isAuthenticated = window.localStorage.getItem("LoggedIn");
     if(isAuthenticated != undefined 
       && isAuthenticated != '' 
       && isAuthenticated != null 

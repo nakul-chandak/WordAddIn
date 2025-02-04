@@ -80,7 +80,7 @@ class UserServiceImpl {
             const response = await HttpClient.get<any>(`${url}`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'authorization': `Bearer ${window.sessionStorage.getItem("token")}`,
+                    'authorization': `Bearer ${window.localStorage.getItem("token")}`,
                 },
             });
             return response.data;

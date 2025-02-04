@@ -91,12 +91,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
               </Stack>
             </li>  <Divider vertical /> </> ) : null }
            
-            { props.ShowMenu.indexOf("ReGenerate") > -1 ? (<li className={styles.icon} onClick={handleRegenerateClick} style={{ cursor: 'pointer' }}>
-              <Stack style={{alignItems:"center"}}>
-                <ArrowSync24Regular />
-                <span style={{ fontSize: "10px" }}>Regenerate</span>
-              </Stack>
-            </li>) : null }
+            
             {/* <Divider vertical/>
           <li className={styles.icon}>
             <Stack>

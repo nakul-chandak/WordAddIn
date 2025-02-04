@@ -51,7 +51,7 @@ function SignIn() {
 
     useEffect(() => {
       // Simulate a load event
-      const isUserAuthenticated = window.sessionStorage.getItem("LoggedIn");
+      const isUserAuthenticated = window.localStorage.getItem("LoggedIn");
       if(isUserAuthenticated != undefined 
         && isUserAuthenticated != '' 
         && isUserAuthenticated != null 
@@ -71,7 +71,7 @@ function SignIn() {
         login.password = values.password;
         UserService.logIn(login).then(res=>{
           if(res.accessToken) {
-         window.sessionStorage.setItem("userId",res.userId);
+         window.localStorage.setItem("userId",res.userId);
          userContext.setAuthenticated(res.accessToken);
          userContext.setSubscriptionPlan();
          toaster.success("logged in successfully.")

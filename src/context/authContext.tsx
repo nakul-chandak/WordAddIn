@@ -31,19 +31,25 @@ const AuthProvider = ({ children }) => {
 
   const setAuthenticated = (token) => {
     if(token) {
-      sessionStorage.setItem("token",token);
-      sessionStorage.setItem("LoggedIn","true");
+      // sessionStorage.setItem("token",token);
+      // sessionStorage.setItem("LoggedIn","true");
+
+      localStorage.setItem("token",token);
+      localStorage.setItem("LoggedIn","true");
       setIsAuthenticated(true);
     }
     else {
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("LoggedIn");
+      // sessionStorage.removeItem("token");
+      // sessionStorage.removeItem("LoggedIn");
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("LoggedIn");
       setIsAuthenticated(false);
     }
   }
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if(token && !subscriptionPlan){
       getSubscriptionPlan();
     }

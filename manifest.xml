@@ -4,11 +4,11 @@
   <Version>1.0.1.0</Version>
   <ProviderName>Guardrail</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
-  <DisplayName DefaultValue="Guardrail Gateway for Office"/>
+  <DisplayName DefaultValue="Guardrail AI Suite"/>
   <Description DefaultValue="Guardrail AI Fact checking tool."/>
   <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png"/>
   <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-64.png"/>
-  <SupportUrl DefaultValue="https://guardrail.tech/help"/>
+  
   <AppDomains>
     <AppDomain>https://guardrail.tech/</AppDomain>
   </AppDomains>

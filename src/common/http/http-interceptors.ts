@@ -34,16 +34,26 @@ export const responseInterceptor: ResponseInterceptor = {
     if (error.response?.status === 401 && !hasRetryFlag(error?.config)) {
       // StoreProviderService.dispatch(profileActions.logout());
       // return HttpClient.fromConfig(setRetryFlag(error.config));
-      sessionStorage.removeItem("LoggedIn");
-      sessionStorage.removeItem("userId");
-      sessionStorage.removeItem("token");
+      // sessionStorage.removeItem("LoggedIn");
+      // sessionStorage.removeItem("userId");
+      // sessionStorage.removeItem("token");
+
+      localStorage.removeItem("LoggedIn");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("token");
+
       window.location.href = "/taskpane.html#login";
     }
     else if (error.response?.status === 403) {
       // StoreProviderService.dispatch(profileActions.logout());
-      sessionStorage.removeItem("LoggedIn");
-      sessionStorage.removeItem("userId");
-      sessionStorage.removeItem("token");
+      // sessionStorage.removeItem("LoggedIn");
+      // sessionStorage.removeItem("userId");
+      // sessionStorage.removeItem("token");
+
+      localStorage.removeItem("LoggedIn");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("token");
+
       window.location.href = "/taskpane.html#login";
     }
     const data: ErrorResponse | undefined = error.response?.data;
