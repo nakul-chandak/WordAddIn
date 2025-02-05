@@ -282,7 +282,7 @@ function PatternMgmt() {
     }, [userContext.subscriptionPlan]);
 
     return (
-        <div style={{ margin: "auto", paddingTop: '3.5rem' }}>
+        <div style={{ margin: "auto", paddingTop: '3.5rem', minHeight: "93vh"  }}>
             {isProUser && <div style={{ padding: '0 1rem 0 1rem' }}>
                 <h2 style={{ fontWeight: 600, fontSize: '0.9375rem', marginBottom: '1rem' }}>System Pattern Libraries</h2>
                 <p style={{ color: 'rgb(75 85 99)', fontSize: '.875rem', lineHeight: '1.25rem' }}>Patterns are libraries of terms that allow prompts to accurately detect labels and similar expressions related to specific compliance or information disclosure matters. <Link href="">Learn more</Link></p>
@@ -334,13 +334,12 @@ function PatternMgmt() {
                 </div>
                 <div style={{ flexWrap: "wrap", display: 'flex' }} >
                     {custPatternData.map((item, index) => (
-                        <div key={index} style={{ flexWrap: "wrap", display: 'flex', width: '300px' }} onMouseEnter={() => setIsHovered(item.id)}
-                            onMouseLeave={() => setIsHovered(null)}>
+                        <div key={index} style={{ flexWrap: "wrap", display: 'flex', width: '300px' }}>
                             <div key={item.id} style={{ display: 'flex', alignItems: 'flex-start' }} className={styles.checkboxWrapper}
                             >
                                 <Checkbox id={item.id} value={item.libraryGroup} onChange={handleCustCheckboxChange} checked={selectedCustOptions.includes(item.id)}></Checkbox>
                                 <Label size="small" style={{ padding: '.5rem' }}>{item.libraryGroup}</Label>
-                                {isHovered === item.id && (<div >
+                                {(<div >
                                     <Edit12Regular
                                         style={{
                                             height: '15px',

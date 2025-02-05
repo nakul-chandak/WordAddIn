@@ -333,7 +333,7 @@ function EditPattern() {
     }, []);
 
     return (
-        <div style={{ margin: "auto", paddingTop: '2.47rem' }}>
+        <div style={{ margin: "auto", paddingTop: '2.47rem',minHeight: "93vh" }}>
             <div className={styles.bigGray}>
                 <div className={styles.headerContainer}>
                     <Link to="/patterns-management" className={styles.nounderline}>
