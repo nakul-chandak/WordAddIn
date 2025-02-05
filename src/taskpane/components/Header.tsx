@@ -8,11 +8,12 @@ import {
   CodeText20Regular,
   DocumentOnePageSparkle24Regular,
   DocumentSave24Regular,
+  SignOut20Regular,
 } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 
 export interface HeaderProps {
-  ShowMenu:string[]
+  ShowMenu: string[]
   title: string;
   logo: string;
   message: string;
@@ -57,12 +58,19 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     navigate('/');
   }
 
+  function logoff() {
+    localStorage.removeItem("userId");
+    localStorage.removeItem("token");
+    localStorage.removeItem("LoggedIn");
+    navigate('/login')
+  }
+
   function handlePatternMgmtClick() {
     navigate('/patterns-management');
   }
 
   function handleRegenerateClick() {
-    window.location.reload(); 
+    window.location.reload();
   }
 
   return (
@@ -76,22 +84,28 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
 
         <div style={{ marginTop: "10px", float: 'right', marginRight: "15px" }}>
           <ul style={{ color: 'black', listStyleType: 'none', display: "inline-flex" }}>
-          
-          <li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handlePatternMgmtClick}>
-              <Stack style={{alignItems:"center"}}>
-                <CodeText20Regular width={24} height={24} style={{ marginLeft: "15px",width:24,height:24 }} />
+
+            <li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handlePatternMgmtClick}>
+              <Stack style={{ alignItems: "center" }}>
+                <CodeText20Regular width={24} height={24} style={{ marginLeft: "15px", width: 24, height: 24 }} />
                 <span style={{ fontSize: "10px" }}>Pattern Management</span>
               </Stack>
             </li>
             <Divider vertical />
-            { props.ShowMenu.indexOf("NewPrompt") > -1 ? (<><li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handleClick}>
-              <Stack style={{alignItems:"center"}}>
+            {props.ShowMenu.indexOf("NewPrompt") > -1 ? (<><li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handleClick}>
+              <Stack style={{ alignItems: "center" }}>
                 <ArrowCircleRight24Regular />
                 <span style={{ fontSize: "10px" }}>New Prompt</span>
               </Stack>
-            </li>  <Divider vertical /> </> ) : null }
-           
-            
+            </li>  <Divider vertical /> </>) : null}
+            {props.ShowMenu.indexOf("LogOut") > -1 ? (<><li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={logoff}>
+              <Stack style={{ alignItems: "center" }}>
+                <SignOut20Regular />
+                <span style={{ fontSize: "10px" }}>Log Off</span>
+              </Stack>
+            </li>  <Divider vertical /> </>) : null}
+
+
             {/* <Divider vertical/>
           <li className={styles.icon}>
             <Stack>

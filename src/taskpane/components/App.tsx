@@ -78,7 +78,7 @@ const App = (props: AppProps) => {
         {
           path: '/patterns-management',
           element: (
-            <> <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["NewPrompt"]} />
+            <> <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["NewPrompt","LogOut"]} />
               <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
                 <PatternMgmt />
               </React.Suspense>
@@ -88,7 +88,7 @@ const App = (props: AppProps) => {
         {
           path: '/patterns-management/edit-pattern/:id',
           element: (
-            <> <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["NewPrompt"]} />
+            <> <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["NewPrompt","LogOut"]} />
               <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
                 <EditPattern />
               </React.Suspense>
@@ -98,7 +98,7 @@ const App = (props: AppProps) => {
         {
           path: '/patterns-management/add-pattern',
           element: (
-            <> <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["NewPrompt"]} />
+            <> <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["NewPrompt","LogOut"]} />
               <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
                 <EditPattern />
               </React.Suspense>
@@ -109,7 +109,7 @@ const App = (props: AppProps) => {
           path: '/home',
           element: (
             <>
-              <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["PattenMgmt"]} />
+              <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["PattenMgmt","LogOut"]} />
               <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
                 <HomePage />
               </React.Suspense>
@@ -120,7 +120,7 @@ const App = (props: AppProps) => {
           path: '/optimized-prompt',
           element: (
             <>
-              <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["PattenMgmt"]} />
+              <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["PattenMgmt","LogOut"]} />
               <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}>
                 <OptimizedPromts />
               </React.Suspense>
@@ -132,7 +132,7 @@ const App = (props: AppProps) => {
           element: (
             <>
               {/* <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}> */}
-              <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["PattenMgmt", , "NewPrompt", "ReGenerate"]} />
+              <Header logo="assets/logo-filled.png" title={props.title} message="Guardrail-Better AI" ShowMenu={["PattenMgmt", , "NewPrompt", "ReGenerate","LogOut"]} />
               <InformationPage />
               {/* </React.Suspense> */}
             </>
