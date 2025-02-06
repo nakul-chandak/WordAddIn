@@ -1,6 +1,6 @@
 import { makeStyles, Image, Checkbox, Button, CounterBadge, Textarea } from "@fluentui/react-components";
 import * as React from "react";
-import log from "../../../../assets/logo.png";
+import log from "../../../../assets/guardrail-ai.png";
 import guardraiLogo from "../../../../assets/AI_Logos/guardrail.png";
 import chatgpt3Logo from "../../../../assets/AI_Logos/chatgpt3.png";
 import chatgpt4Logo from "../../../../assets/AI_Logos/chatgpt4.png";
@@ -118,7 +118,7 @@ const logoArray = [
     { label: "GPT 3", id: "gpt3", disable:false },
     { label: "GPT 4", id: "gpt4",  disable:false },
     { label: "Gemini", id: "gemini",  disable:false },
-    { label: "Guardrail LLM", id: "guardrail",  disable:true }
+    { label: "Guardrail AI", id: "guardrail",  disable:true }
 ];
 
 function HomePage() {
@@ -231,11 +231,11 @@ function HomePage() {
 
     return (
         <div style={{ marginTop: "3.5rem" }}>
-            <div style={{ marginTop: "25px", backgroundColor: "#3977D1", padding: "15px", color: "white", textAlign: "center" }}>
-                {/* Generate Better AI result with <br /> */}
+            {/* <div style={{ marginTop: "25px", backgroundColor: "#3977D1", padding: "15px", color: "white", textAlign: "center" }}>
+              
                 Prompt Protect and Fact <br />
                 Checker in just 3 easy steps
-            </div>
+            </div> */}
 
             <div className={styles.headerBar}>
                 <CounterBadge
@@ -243,7 +243,7 @@ function HomePage() {
                     className={styles.badge}
                     count={1}
                 />
-                Choose AI's To Prompt
+                Prompt
             </div>
             <form id="aiPromptForm" onSubmit={handleSubmit}>
 

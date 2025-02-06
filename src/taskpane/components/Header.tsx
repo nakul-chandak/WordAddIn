@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Image, tokens, makeStyles, Divider } from "@fluentui/react-components";
 import { Stack } from "@fluentui/react";
-import GuardrailLogo from "../../../assets/logo.png";
+import GuardrailLogo from "../../../assets/guardrail-ai.png";
 import {
   ArrowCircleRight24Regular,
   ArrowSync24Regular,

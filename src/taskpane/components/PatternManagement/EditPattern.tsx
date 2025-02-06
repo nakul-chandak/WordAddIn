@@ -3,7 +3,7 @@ import * as React from "react";
 import { useToaster } from "../../../hooks/useToast";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { PatternMgmtService } from "../../../common/services/pattern-mgmt/pattern-mgmt.service";
-import log from "../../../../assets/logo.png";
+import log from "../../../../assets/Guardrail_WithName.png";
 import { CustomLibrary, Pattern } from "../../../common/services/pattern-mgmt/models/CustomLibrary";
 import { bool, reach } from "yup";
 import { DeleteRegular, Edit12Regular, EditRegular } from "@fluentui/react-icons";
