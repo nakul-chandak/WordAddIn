@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { LlmService } from "../../../common/services/llm/llm.service";
 import { useToaster } from "../../../hooks/useToast";
 import PromptProtect from "./PromptProtect";
+import { AppContext } from "../../../context/appContext";
 
 const useStyles = makeStyles({
     root: {
@@ -124,6 +125,8 @@ function HomePage() {
     const styles = useStyles();
     const navigate = useNavigate();
     const toaster = useToaster();
+    const appContext = React.useContext(AppContext);
+
     const state = {
         button: 1
       };
@@ -145,6 +148,7 @@ function HomePage() {
             const data = res;
             data.originalInput = newValue;
             data.selectedOptions = selectedOptions;
+            appContext.setAITypes(selectedOptions);
             navigate('/optimized-prompt', { state: data });
         },(_error:any)=>{
             toaster.error("The application has encountered an error. Please try again later.");
@@ -216,9 +220,14 @@ function HomePage() {
             setSelectedOptions(result);
         }
         else {
+            appContext.setAITypes([]);
             setSelectedOptions([]);
         }
     }
+
+    React.useEffect(() => {
+        setSelectedOptions(appContext.aiTypes);
+    },[appContext.aiTypes])
 
     return (
         <div style={{ marginTop: "3.5rem" }}>

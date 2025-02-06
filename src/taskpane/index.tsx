@@ -4,6 +4,7 @@ import App from "./components/App";
 import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 import { ToastProvider } from "../context/toastContext";
 import { AuthProvider } from "../context/authContext";
+import { AppProvider } from "../context/appContext";
 
 /* global document, Office, module, require */
 
@@ -18,9 +19,11 @@ Office.onReady(() => {
     
     <FluentProvider theme={webLightTheme}>
        <ToastProvider>
+        <AppProvider>
       <AuthProvider>
         <App title={title} />
       </AuthProvider>
+      </AppProvider>
       </ToastProvider>
     </FluentProvider>
   );

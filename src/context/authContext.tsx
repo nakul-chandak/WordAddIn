@@ -4,7 +4,6 @@ import { UserService } from '../common/services/user/user.service';
 import { useToaster } from '../hooks/useToast';
 import { UserContextType } from '../interfaces/UserContextType';
 
-
 const AuthContext = createContext<UserContextType> ({
   isAuthenticated:false,
   subscriptionPlan:"free",
@@ -31,17 +30,11 @@ const AuthProvider = ({ children }) => {
 
   const setAuthenticated = (token) => {
     if(token) {
-      // sessionStorage.setItem("token",token);
-      // sessionStorage.setItem("LoggedIn","true");
-
       localStorage.setItem("token",token);
       localStorage.setItem("LoggedIn","true");
       setIsAuthenticated(true);
     }
     else {
-      // sessionStorage.removeItem("token");
-      // sessionStorage.removeItem("LoggedIn");
-
       localStorage.removeItem("token");
       localStorage.removeItem("LoggedIn");
       setIsAuthenticated(false);
