@@ -1,6 +1,6 @@
 import { makeStyles, Image } from "@fluentui/react-components";
 import React from "react";
-import log from "../../../../assets/logo.png";
+import log from "../../../../assets/Guardrail_WithName.png";
 
 const useStyles = makeStyles({
     root: {

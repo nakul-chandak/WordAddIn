@@ -3,7 +3,7 @@ import backgroundIng from "../../../../assets/login-background.png";
 import { Button, makeStyles, useId } from '@fluentui/react-components';
 import * as Yup from 'yup';
 import { ErrorMessage, Field, Formik, FormikHelpers, FormikValues } from 'formik';
-import componyLogo from "../../../../assets/logo.png"
+import componyLogo from "../../../../assets/guardrail-ai.png"
 import { useNavigate } from 'react-router-dom';
 import { userLogin } from '../../../common/services/user/models/userLogin';
 import { UserService } from '../../../common/services/user/user.service';
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
         marginBottom:"25px"
       },
     h2Login:{
-        fontFamily:"Poppins",
+        fontFamily:"sans-serif",
         textAlign:"center",
         fontWeight:"700",
         opacity:1,
@@ -101,7 +101,7 @@ function SignIn() {
   return (
    <>
           <div style={{ minHeight: "85vh", alignItems: "center",width:"100%", backgroundImage: "url(" + backgroundIng + ")" }}>
-              <div style={{ minHeight: "85vh", display: "flex", textAlign: "center", justifyContent: "center", height: "auto" }}>
+              <div style={{ minHeight: "85vh", textAlign: "center", justifyContent: "center", height: "auto" }}>
                   <div style={{ display: "flex", justifyContent: "center",textAlign:"left", alignItems:"center",marginBottom:"2.5rem",marginTop:"2.5rem" }}>
                      <div style={{backgroundColor:"white", width:"400px", height:"400px",zIndex:"10"}}> 
                             <div style={{display:"flex", flexDirection:"column", alignItems:"center",justifyContent:"center"}}>

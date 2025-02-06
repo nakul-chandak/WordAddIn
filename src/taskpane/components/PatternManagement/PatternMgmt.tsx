@@ -2,7 +2,7 @@ import { makeStyles, Image, Checkbox, Button, SearchBox, Label, Link } from "@fl
 
 import * as React from "react";
 import { InfoLabel } from "@fluentui/react-components";
-import log from "../../../../assets/logo.png";
+import log from "../../../../assets/Guardrail_WithName.png";
 import { useNavigate } from "react-router-dom";
 import { useToaster } from "../../../hooks/useToast";
 import { PatternMgmtService } from "../../../common/services/pattern-mgmt/pattern-mgmt.service";
