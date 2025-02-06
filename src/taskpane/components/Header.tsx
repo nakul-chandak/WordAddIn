@@ -4,20 +4,15 @@ import { Stack } from "@fluentui/react";
 import GuardrailLogo from "../../../assets/logo.png";
 import {
   ArrowCircleRight24Regular,
-  ArrowSync24Regular,
   CodeText20Regular,
-  DocumentOnePageSparkle24Regular,
-  DocumentSave24Regular,
-  SignOut20Regular,
+  SignOut24Regular,
+  TextAlignJustify24Filled,
 } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
-
-export interface HeaderProps {
-  ShowMenu: string[]
-  title: string;
-  logo: string;
-  message: string;
-}
+import { AppContext } from "../../context/appContext";
+import AppDrawer from "./sharedComponent/Drawer";
+import { HeaderProps } from "../../interfaces/HeaderProps";
+import { useMediaPredicate } from "react-media-hook";
 
 const useStyles = makeStyles({
   welcome__header: {
@@ -33,7 +28,8 @@ const useStyles = makeStyles({
     color: "#fff",
     height: "50px",
     width: "100%",
-    zIndex: "9"
+    zIndex: "9",
+    paddingTop:"10px"
   },
   message: {
     fontSize: tokens.fontSizeBase300,
@@ -49,10 +45,13 @@ const useStyles = makeStyles({
 });
 
 const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
-  const { title, logo, message } = props;
+
   const styles = useStyles();
 
   const navigate = useNavigate();
+  const appContext = React.useContext(AppContext);
+  const biggerThan520 = useMediaPredicate("(min-width: 520px)");
+  const biggerThan300 = useMediaPredicate("(min-width: 300px)");
 
   function handleClick() {
     navigate('/');
@@ -69,58 +68,58 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     navigate('/patterns-management');
   }
 
-  function handleRegenerateClick() {
-    window.location.reload();
-  }
+  function handleDrawer () {
+      appContext.drawerAction(true);
+  } 
+
 
   return (
     <section className={styles.welcome__header}>
-      <div style={{ width: '100%' }}>
-        <div style={{ marginTop: "10px", float: 'left' }}>
-          <ul style={{ listStyleType: 'none', paddingLeft: "5px" }}>
-            <Image style={{ marginTop: "7px", marginBottom: "7px" }} height={40} src={GuardrailLogo} />
-          </ul>
-        </div>
+      <AppDrawer ShowMenu={props.ShowMenu} />
 
-        <div style={{ marginTop: "10px", float: 'right', marginRight: "15px" }}>
-          <ul style={{ color: 'black', listStyleType: 'none', display: "inline-flex" }}>
+      <div className="ms-Grid" style={{ width: '100%' }}>
+        <div className="ms-Grid-row">
 
-            <li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handlePatternMgmtClick}>
-              <Stack style={{ alignItems: "center" }}>
-                <CodeText20Regular width={24} height={24} style={{ marginLeft: "15px", width: 24, height: 24 }} />
-                <span style={{ fontSize: "10px" }}>Pattern Management</span>
-              </Stack>
-            </li>
-            <Divider vertical />
-            {props.ShowMenu.indexOf("NewPrompt") > -1 ? (<><li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handleClick}>
-              <Stack style={{ alignItems: "center" }}>
-                <ArrowCircleRight24Regular />
-                <span style={{ fontSize: "10px" }}>New Prompt</span>
-              </Stack>
-            </li>  <Divider vertical /> </>) : null}
-            {props.ShowMenu.indexOf("LogOut") > -1 ? (<><li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={logoff}>
-              <Stack style={{ alignItems: "center" }}>
-                <SignOut20Regular />
-                <span style={{ fontSize: "10px" }}>Log Off</span>
-              </Stack>
-            </li>  <Divider vertical /> </>) : null}
+          {biggerThan300 && <div className="ms-Grid-col ms-sm4 ms-xl4" style={{ float: "left" }}>
+            <ul style={{ listStyleType: 'none', paddingLeft: "5px" }}>
+              <Image style={{ marginTop: "7px", marginBottom: "7px" }} height={40} src={GuardrailLogo} />
+            </ul>
+          </div>}
 
+          <div className="ms-Grid-col ms-sm8 ms-xl8" style={{ float: "right", textAlign: "right" }}>
+            {!biggerThan520 ? <div>
+              <ul style={{ color: 'black', listStyleType: 'none', display: "inline-flex", marginTop: "22px", marginRight: "7px" }}>
+                <li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handleDrawer}>
+                  <Stack style={{ alignItems: "center" }}>
+                    <TextAlignJustify24Filled width={24} height={24} style={{ marginLeft: "15px", width: 24, height: 24 }} />
+                  </Stack>
+                </li>
+              </ul>
+            </div> :
+              <ul style={{ color: 'black', listStyleType: 'none', display: "inline-flex" }}>
+                <li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handlePatternMgmtClick}>
+                  <Stack style={{ alignItems: "center" }}>
+                    <CodeText20Regular width={24} height={24} style={{ marginLeft: "15px", width: 24, height: 24 }} />
+                    <span style={{ fontSize: "10px" }}>Pattern Management</span>
+                  </Stack>
+                </li>
+                <Divider vertical />
 
-            {/* <Divider vertical/>
-          <li className={styles.icon}>
-            <Stack>
-            <DocumentOnePageSparkle24Regular style={{marginLeft:"5px"}}/>
-            <span style={{fontSize: "10px"}}>New AI</span>
-            </Stack>
-            </li>
-            <Divider vertical/>
-          <li className={styles.icon}>
-            <Stack>
-            <DocumentSave24Regular style={{marginLeft:"15px"}}/>
-            <span style={{fontSize: "10px"}}>Save Propmt</span>
-            </Stack>
-          </li> */}
-          </ul>
+                {props.ShowMenu.indexOf("NewPrompt") > -1 ? (<><li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handleClick}>
+                  <Stack style={{ alignItems: "center" }}>
+                    <ArrowCircleRight24Regular />
+                    <span style={{ fontSize: "10px" }}>New Prompt</span>
+                  </Stack>
+                </li>  <Divider vertical /> </>) : null}
+
+                {props.ShowMenu.indexOf("LogOut") > -1 ? (<><li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={logoff}>
+                  <Stack style={{ alignItems: "center" }}>
+                    <SignOut24Regular />
+                    <span style={{ fontSize: "10px" }}>Log Off</span>
+                  </Stack>
+                </li>  <Divider vertical /> </>) : null}
+              </ul>}
+          </div>
         </div>
       </div>
 
