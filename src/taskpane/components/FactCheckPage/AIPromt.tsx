@@ -13,6 +13,7 @@ import {
     TableHeader,
     TableHeaderCell,
     TableRow,
+    Radio,
 } from "@fluentui/react-components";
 import { AddRegular } from "@fluentui/react-icons";
 import React, { useState, useEffect } from "react";
@@ -92,6 +93,17 @@ const ContentPanel = (props: any) => {
     const [selectedChildTab, setChildTab] = useState('tab-0');
     const [checkedItems, setCheckedItems] = useState<any[]>([]);
     const [topRanks, setTopRanks] = useState<any[]>([]);
+
+    const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
+    const handleRadioChange = (itemId: string) => {
+      let index = articles.assertions.findIndex((art) => art.id === itemId);
+      setChildTab(`tab-${index}`);
+      setSelectedItem(itemId);
+      sendRanksDetails([itemId]); // Sending only the selected item
+    };
+
+
     // Safely check and set the articles based on props.data
     const [articles, setArticles] = React.useState(
         props?.data && props?.data[0]?.articles ? props?.data[0].articles : { assertions: [] }
@@ -256,88 +268,99 @@ const ContentPanel = (props: any) => {
 
 
     return (
-        <div>
-            <div className={styles.buttonWrapper} style={{ position: 'relative', left: '1rem' }}>
-                <Button disabled={checkedItems.length === 0 && topRanks.length === 0} shape="circular" icon={<AddRegular />} onClick={() => { addTextToDocumentFooter(); }}>Add Text To Document</Button>
-            </div>
-            <div style={{ display: "flex", padding: "0.5rem" }}>
-                <div style={{ display: "flex", padding: "0.5rem" }}>
-                    {/* Single loop for both checkbox and article name */}
-                    <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "1rem" }}>
-                        {articles.assertions.map((art: any, index: any) => {
-                            const color = colors[index] || '#FFFFFF'; // Default color if undefined
-                            return (
-                                <div key={`item-${index}`} style={{ display: "flex", alignItems: "center" }}>
-                                     <Checkbox
-                                        label=""
-                                        id={`checkbox-${index}`}
-                                        checked={checkedItems.includes(art.id)}
-                                        onChange={() => handleCheckboxChange(art.id)}
-                                        style={{
-                                            //marginRight: "0.5rem", // Ensure space between checkbox and article name
-                                        }}
-                                    /> 
-                                    {/* Article name with corresponding style */}
-                                    <span
-                                        style={{
-                                            backgroundColor: color,
-                                            padding: "5px",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            fontSize: 'small',
-                                            lineHeight:'1.1rem',
-                                            fontWeight:'normal'
-                                        }}
-                                    >
-                                        {art.articleName}
-                                        &nbsp;&nbsp;
-                                        <sup
-                                            style={{
-                                                position: "relative",
-                                                background: color,
-                                                display: "inline-block",
-                                                padding: "0 9px",
-                                                left: "0.3rem",
-                                            }}
-                                        >
-                                            {index + 1}
-                                        </sup>
-                                    </span>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-
-            </div>
-            <div style={{ display: "flex", padding: "0.5rem", flexDirection: "column", fontSize: "small" }}>
-                <TabList className={styles.tabList} selectedValue={selectedChildTab} onTabSelect={onChildTabSelect}>
-                    {articles.assertions.map((_, index) => {
-                        const color = colors[index] || '#FFFFFF'; // Default color if undefined
-                        const isSelected = selectedChildTab === `tab-${index}`;
-                        return (
-                            <Tab key={index} value={`tab-${index}`} className={`${styles.tab} ${isSelected ? styles.selectedTab : ''}`}>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <span
-                                        style={{
-                                            height: "15px",
-                                            width: "15px",
-                                            borderRadius: "10px",
-                                            backgroundColor: color,
-                                            display: "inline-block",
-                                            marginRight: "5px",
-                                        }}
-                                    ></span>
-                                    <span>{index + 1}</span>
-                                    {isSelected && <div className={styles.tabIndicator}></div>}
-                                </div>
-                            </Tab>
-                        );
-                    })}
-                </TabList>
-                <TablePanel data={articles.assertions} selectedChildTab={selectedChildTab} sendRanksDetails={sendRanksDetails} />
-            </div>
+      <div>
+        <div className={styles.buttonWrapper} style={{ position: "relative", left: "1rem" }}>
+          <Button
+            disabled={!selectedItem && topRanks.length === 0}
+            shape="circular"
+            icon={<AddRegular />}
+            onClick={() => {
+              addTextToDocumentFooter();
+            }}
+          >
+            Add Text To Document
+          </Button>
         </div>
+        <div style={{ display: "flex", padding: "0.5rem" }}>
+          <div style={{ display: "flex", padding: "0.5rem" }}>
+            <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "1rem" }}>
+              {articles.assertions.map((art: any, index: any) => {
+                const color = colors[index] || "#FFFFFF"; // Default color if undefined
+                return (
+                  <div key={`item-${index}`} style={{ display: "flex", alignItems: "center" }}>
+                    <Radio
+                      label=""
+                      id={`radio-${index}`}
+                      checked={selectedItem === art.id}
+                      onChange={() => handleRadioChange(art.id)}
+                    />
+                    <span
+                      style={{
+                        backgroundColor: color,
+                        padding: "5px",
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "small",
+                        lineHeight: "1.1rem",
+                        fontWeight: "normal",
+                      }}
+                    >
+                      {art.articleName}
+                      &nbsp;&nbsp;
+                      <sup
+                        style={{
+                          position: "relative",
+                          background: color,
+                          display: "inline-block",
+                          padding: "0 9px",
+                          left: "0.3rem",
+                        }}
+                      >
+                        {index + 1}
+                      </sup>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+        <div style={{ display: "flex", padding: "0.5rem", flexDirection: "column", fontSize: "small" }}>
+          <TabList className={styles.tabList} selectedValue={selectedChildTab} onTabSelect={onChildTabSelect}>
+            {articles.assertions.map((_, index) => {
+              const color = colors[index] || "#FFFFFF"; // Default color if undefined
+              const isSelected = selectedChildTab === `tab-${index}`;
+              return (
+                <Tab
+                  key={index}
+                  value={`tab-${index}`}
+                  className={`${styles.tab} ${isSelected ? styles.selectedTab : ""}`}
+                >
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <span
+                      style={{
+                        height: "15px",
+                        width: "15px",
+                        borderRadius: "10px",
+                        backgroundColor: color,
+                        display: "inline-block",
+                        marginRight: "5px",
+                      }}
+                    ></span>
+                    <span>{index + 1}</span>
+                    {isSelected && <div className={styles.tabIndicator}></div>}
+                  </div>
+                </Tab>
+              );
+            })}
+          </TabList>
+          <TablePanel
+            data={articles.assertions}
+            selectedChildTab={selectedChildTab}
+            sendRanksDetails={sendRanksDetails}
+          />
+        </div>
+      </div>
     );
 };
 
@@ -351,6 +374,7 @@ const TablePanel = (props: any) => {
     useEffect(() => {
         const currentTopRanks = props.data[childTab]?.topRanks || [];
         setTopRanks(currentTopRanks);
+        document.getElementById('selectAll').click()
     }, [childTab]);
 
     let tRanks = props.data[childTab]?.topRanks || [];
@@ -362,6 +386,8 @@ const TablePanel = (props: any) => {
     useEffect(() => {
         const selectedChildTab = props.selectedChildTab ? Number(props.selectedChildTab.split('-')[1]) : 0;
         setChildTab(selectedChildTab);
+        setSelectAllChecked(false)
+        setCheckedItemsLower([])
     }, [props.selectedChildTab]);
 
     const handleCheckboxChange = (itemId: string) => {
