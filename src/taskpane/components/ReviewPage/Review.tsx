@@ -143,7 +143,7 @@ function Review(props: any) {
 
   return (
     <>
-      <div style={{ width: "100%", marginTop: "10px" }}>
+      <div style={{ width: "100%", marginTop: "10px", display:props.disply?'block':'none'}} >
         {/* Show Spinner while loading */}
           <>
             
