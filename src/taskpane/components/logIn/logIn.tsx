@@ -78,7 +78,7 @@ function LogIn() {
   </div>
 
   <div style={{ textAlign: 'center', marginTop: '10px', padding: '10px' }}>
-    <Caption1>Guardrail Technologies Inc., ©2024</Caption1>
+    <Caption1>Guardrail Technologies Inc., ©2025</Caption1>
   </div>
 </>
 
