@@ -7,6 +7,7 @@ import {
   CodeText20Regular,
   SignOut24Regular,
   TextAlignJustify24Filled,
+  TextExpand24Regular,
 } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/appContext";
@@ -41,7 +42,8 @@ const useStyles = makeStyles({
     marginRight: "5px",
     marginLeft: "5px",
     marginTop: "5px",
-  },
+    "&:hover": { backgroundColor:"#E7EDF8" }
+  }
 });
 
 const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
@@ -99,7 +101,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
               <ul style={{ color: 'black', listStyleType: 'none', display: "inline-flex" }}>
                 <li style={{ color: 'black', cursor: 'pointer' }} className={styles.icon} onClick={handlePatternMgmtClick}>
                   <Stack style={{ alignItems: "center" }}>
-                    <CodeText20Regular width={24} height={24} style={{ marginLeft: "15px", width: 24, height: 24 }} />
+                    <TextExpand24Regular/>
                     <span style={{ fontSize: "10px" }}>Pattern Management</span>
                   </Stack>
                 </li>
