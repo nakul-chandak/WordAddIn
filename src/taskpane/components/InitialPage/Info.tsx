@@ -30,61 +30,90 @@ const useStyles = makeStyles({
 const InformationPage = () => {
   const location = useLocation();
   const [selectedValue, setSelectedValue] = React.useState<TabValue>("review");
+  const [tabValue, setTabValue] = React.useState<TabValue>("review");
   const [loading] = React.useState<boolean>(false); // Loading state
   const [error] = React.useState<string | null>(null); // Error state
   const [response, setResponse] = React.useState<String>('');
-  const [data] = React.useState();
+  const [data, setData] = React.useState();
   const styles = useStyles();
   const [promptType, setPromptType] = React.useState();
+  const [res, setRes] = React.useState(true);
+  const [previousState, setPreviousState] = React.useState();
 
   React.useEffect(() => {
     // Check if location.state is available
     if (location.state && location.state.prompt) {
       setResponse(location.state.prompt);
     }
-  }, [location.state]);
-  
+    console.log(selectedValue);
+  }, [location.state, selectedValue]);
+
   const onTabSelect = (_event: React.MouseEvent<HTMLElement>, data: { value: string }) => {
     setSelectedValue(data);
+    setTabValue(data.value);
   };
+
+  const showReviewTab = () => {
+    setSelectedValue('review');
+    setTabValue('review');
+    setRes(true);
+  }
+
+  const showFactCheckTab = () => {
+    if (previousState === null) {
+      return;
+    } else {
+      setPromptType(promptType);
+      setResponse(previousState);
+      setSelectedValue('factCheck');
+      setTabValue('factCheck');
+      setData(previousState);
+      location.state = location.state;
+      setRes(false);
+    }
+  }
 
   const redirectToFactCheck = (data: any) => {
     setPromptType(data.promptType)
     // setRequest(request);
     setResponse(data);
+    setTabValue('factCheck');
     setSelectedValue('factCheck');
+    setRes(false);
+    setPreviousState(data);
   }
 
   return (
     <div className={styles.root}>
-      <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
+      <TabList selectedValue={tabValue} onTabSelect={onTabSelect}>
         <Tab value="prompt"
-          style={{ pointerEvents: selectedValue !== 'prompt' ? 'none' : 'auto' }}>
+          style={{ pointerEvents: tabValue !== 'prompt' ? 'none' : 'auto' }}>
           <CounterBadge
             appearance="filled"
-            style={selectedValue === "prompt" ? { backgroundColor: "#8647D6", color: "white", pointerEvents: 'none', height: "23px !important", width: "23px !important" } : { backgroundColor: "#ebebeb", color: "#616161", height: "23px !important", width: "23px !important" }}
+            style={tabValue === "prompt" ? { backgroundColor: "#8647D6", color: "white", pointerEvents: 'none', height: "23px !important", width: "23px !important" } : { backgroundColor: "#ebebeb", color: "#616161", height: "23px !important", width: "23px !important" }}
             count={1}
             className={styles.badge}
           />
           Prompt
         </Tab>
-        <Tab value="review" 
-        style={{ pointerEvents: 'none'}}
+        <Tab value="review" onClick={showReviewTab}
+
         >
           <CounterBadge
             appearance="filled"
-            style={selectedValue === "review" ? { backgroundColor: "#8647D6", color: "white", height: "23px !important", width: "23px !important" } : { backgroundColor: "#ebebeb", color: "#616161", height: "23px !important", width: "23px !important" }}
+            style={tabValue === "review" ? { backgroundColor: "#8647D6", color: "white", height: "23px !important", width: "23px !important" } : { backgroundColor: "#ebebeb", color: "#616161", height: "23px !important", width: "23px !important" }}
             count={2}
             className={styles.badge}
           />
           Review
         </Tab>
         <Tab
-          value="factCheck"
-          style={{ pointerEvents: 'none'}}>
+          value="factCheck" onClick={showFactCheckTab}
+          style={{ pointerEvents: previousState == null ? 'none' : 'visible' }}
+        >
           <CounterBadge
             appearance="filled"
-            style={selectedValue === "factCheck"
+            style={tabValue === "factCheck"
               ? { backgroundColor: "#8647D6", color: "white", pointerEvents: 'none', height: "23px !important", width: "23px !important" }
               : { backgroundColor: "#ebebeb", color: "#616161", height: "23px !important", width: "23px !important" }}
             count={3}
@@ -94,11 +123,11 @@ const InformationPage = () => {
         </Tab>
       </TabList>
       {/* <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}> */}
-        <div style={{ width: '100%', border: 'solid 1px' }}>
-          {selectedValue === "prompt" && <HomePage />}
-          {selectedValue === "review" && <Review promptRequest={location.state} onFactCheckClick={redirectToFactCheck} />}
-          {selectedValue === "factCheck" && <FactCheck state={location.state} data={data} promptType={promptType} response={response} />}
-        </div>
+      <div style={{ width: '100%', border: 'solid 1px' }}>
+        {selectedValue === "prompt" && <HomePage />}
+        {<Review promptRequest={location.state} onFactCheckClick={redirectToFactCheck} disply={res} />}
+        {tabValue === "factCheck" && <FactCheck state={location.state} data={data} promptType={promptType} response={response} />}
+      </div>
       {/* </React.Suspense> */}
 
       {/* Error and Loading States */}
