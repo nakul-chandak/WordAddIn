@@ -374,7 +374,9 @@ const TablePanel = (props: any) => {
     useEffect(() => {
         const currentTopRanks = props.data[childTab]?.topRanks || [];
         setTopRanks(currentTopRanks);
-        document.getElementById('selectAll').click()
+        setTimeout(()=>{
+            document.getElementById('selectAll').click()
+        },100)
     }, [childTab]);
 
     let tRanks = props.data[childTab]?.topRanks || [];
