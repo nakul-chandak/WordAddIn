@@ -433,7 +433,7 @@ const TablePanel = (props: any) => {
                                 overflow: 'hidden',
                                 whiteSpace: 'nowrap',
                                 textOverflow: 'ellipsis',
-                                lineHeight: 'normal',
+                                lineHeight: 'normal'
                             }}>
                         <Checkbox
                             id="selectAll"
@@ -464,11 +464,12 @@ const TablePanel = (props: any) => {
             <TableBody>
                 {tRanks.map((rank: any, index: number) => (
                     <TableRow key={rank.id || index} style={{ height: '50px', display:'flex !important'}}>
-                        <TableCell style={{ textAlign: 'center', padding: '8px' }}>
+                        <TableCell style={{ textAlign: 'center', padding: '8px',
+                                paddingLeft:'0px' }}>
                             <Checkbox
                                 id={rank.id}
                                 checked={checkedItemsLower.includes(rank.id)}
-                                onChange={() => handleCheckboxChange(rank.id)}
+                                onChange={() => handleCheckboxChange(rank.id)} style={{marginLeft:'-5px'}}
                             />
                         </TableCell> 
                         <TableCell
@@ -478,7 +479,7 @@ const TablePanel = (props: any) => {
                                 textAlign: 'justify',
                                 textOverflow: 'ellipsis',
                                 lineHeight: 'normal',
-                                whiteSpace: 'nowrap',
+                                whiteSpace: 'nowrap'
                             }}
                             title={rank.source}
                         >
