@@ -25,6 +25,9 @@ const useStyles = makeStyles({
     width: "100%",
     border: "1px solid #dcdcdc",
   },
+  tabListStyle: {
+      flexFlow:"wrap"
+  }
 });
 
 const InformationPage = () => {
@@ -90,7 +93,7 @@ const InformationPage = () => {
 
   return (
     <div className={styles.root}>
-      <TabList selectedValue={tabValue} onTabSelect={onTabSelect}>
+      <TabList className={styles.tabListStyle} selectedValue={tabValue} onTabSelect={onTabSelect}>
         <Tab value="prompt">
           <CounterBadge
             appearance="filled"
