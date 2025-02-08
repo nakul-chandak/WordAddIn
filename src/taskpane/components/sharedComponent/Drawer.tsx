@@ -1,6 +1,6 @@
 import {Divider, Drawer, DrawerBody,makeStyles,useRestoreFocusSource } from '@fluentui/react-components'
-import { ArrowCircleRight24Regular, CodeText20Regular, SignOut24Regular, TextExpand24Regular } from '@fluentui/react-icons';
-import React, { useContext, useState } from 'react'
+import { ArrowCircleRight24Regular, SignOut24Regular, TextExpand24Regular } from '@fluentui/react-icons';
+import React, { useContext } from 'react'
 import { AppContext } from '../../../context/appContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,6 +37,11 @@ const useStyles = makeStyles({
       },
       logoStyle:{
         marginTop:"5px"
+      },
+      logoSingOut:{
+        width:"28px",
+        height:"28px",
+        margin:"5px -5px 0px 2px"
       }
     });
     
@@ -91,7 +96,7 @@ const AppDrawer:React.FC<any>=(props:any) => {
                       </li></>) : null}
                       {props.ShowMenu.indexOf("LogOut") > -1 ? (<><li className={`${styles.icon} ${styles.liStyle}`} onClick={logoff}>
                           <a className={styles.liAStyle}>
-                              <SignOut24Regular className={styles.logoStyle} />
+                              <SignOut24Regular className={styles.logoSingOut} />
                               <span style={{ fontSize: "15px" , marginLeft:"10px" }}>Log Off</span>
                           </a>
                       </li>  </>) : null
