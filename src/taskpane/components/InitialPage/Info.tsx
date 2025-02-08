@@ -39,6 +39,8 @@ const InformationPage = () => {
   const [promptType, setPromptType] = React.useState();
   const [res, setRes] = React.useState(true);
   const [previousState, setPreviousState] = React.useState();
+  const navigate = useNavigate();
+
 
   React.useEffect(() => {
     // Check if location.state is available
@@ -51,6 +53,9 @@ const InformationPage = () => {
   const onTabSelect = (_event: React.MouseEvent<HTMLElement>, data: { value: string }) => {
     setSelectedValue(data);
     setTabValue(data.value);
+    if (data.value === "prompt") {
+      navigate('/home');
+    }
   };
 
   const showReviewTab = () => {
@@ -86,8 +91,7 @@ const InformationPage = () => {
   return (
     <div className={styles.root}>
       <TabList selectedValue={tabValue} onTabSelect={onTabSelect}>
-        <Tab value="prompt"
-          style={{ pointerEvents: tabValue !== 'prompt' ? 'none' : 'auto' }}>
+        <Tab value="prompt">
           <CounterBadge
             appearance="filled"
             style={tabValue === "prompt" ? { backgroundColor: "#8647D6", color: "white", pointerEvents: 'none', height: "23px !important", width: "23px !important" } : { backgroundColor: "#ebebeb", color: "#616161", height: "23px !important", width: "23px !important" }}
@@ -124,7 +128,7 @@ const InformationPage = () => {
       </TabList>
       {/* <React.Suspense fallback={<div><Spinner style={{ position: "fixed", top: "50%", left: "50%" }} size={SpinnerSize.large} /></div>}> */}
       <div style={{ width: '100%', border: 'solid 1px' }}>
-        {selectedValue === "prompt" && <HomePage />}
+        {tabValue === "prompt" && <HomePage />}
         {<Review promptRequest={location.state} onFactCheckClick={redirectToFactCheck} disply={res} />}
         {tabValue === "factCheck" && <FactCheck state={location.state} data={data} promptType={promptType} response={response} />}
       </div>
