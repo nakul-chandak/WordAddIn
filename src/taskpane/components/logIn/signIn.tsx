@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import backgroundIng from "../../../../assets/login-background.png"; 
 import { Button, makeStyles, useId } from '@fluentui/react-components';
 import * as Yup from 'yup';
-import { ErrorMessage, Field, Formik, FormikHelpers, FormikProvider, FormikValues, useFormik, useFormikContext } from 'formik';
+import { ErrorMessage, Field, FormikProvider, useFormik} from 'formik';
 import componyLogo from "../../../../assets/guardrail-ai.png"
 import { useNavigate } from 'react-router-dom';
 import { userLogin } from '../../../common/services/user/models/userLogin';
@@ -42,11 +42,11 @@ function SignIn() {
       const styles = useStyles();
       const toaster = useToaster();
       const navigate = useNavigate();
-
+      const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       // set form
       const userFormValidationSchema = Yup.object().shape({
-        userName: Yup.string().required("Email Address is required.").email("Invalid email"),
-        password: Yup.string().required("Password is required.")
+        userName: Yup.string().required("Email Address is mandatory.").email("Please enter a valid email address.").matches(regex,"Email Address must be in the format: test@example.com"),
+        password: Yup.string().required("Password is mandatory.")
       });
 
       // initial values of sign in Page
@@ -68,10 +68,6 @@ function SignIn() {
               userContext.setAuthenticated(res.accessToken);
               userContext.setSubscriptionPlan();
               toaster.success("logged in successfully.");
-              if (values.rememberMe) {
-                window.localStorage.setItem("password", values.password);
-                window.localStorage.setItem("userName", values.userName);
-              }
               navigateToHome();
             }
           }, (error => {
@@ -91,15 +87,6 @@ function SignIn() {
   const userContext = useContext(AuthContext);
 
   useEffect(() => {
-    // Simulate a load event
-    const password = window.localStorage.getItem("password");
-    if (password) {
-      const userName = window.localStorage.getItem("userName");
-      formik.setFieldValue("password", password);
-      formik.setFieldValue("userName", userName);
-      formik.setFieldValue("rememberMe", true);
-    }
-
     const isUserAuthenticated = window.localStorage.getItem("LoggedIn");
     if (isUserAuthenticated != undefined
       && isUserAuthenticated != ''
@@ -127,12 +114,6 @@ function SignIn() {
                     <div className={styles.root}>
                       <Field type="email" placeholder="Email Address" name='userName' id={userId} value={formik.values.userName} className={styles.inputcss} />
                       <ErrorMessage component="div" name='userName' className={styles.error} />
-                      {/* {
-                                            errors.userName && touched.userName ? (
-                                                <div className={errors.userName ? styles.error:""}>{errors.userName as ReactNode}</div>
-                                            ):null
-                                          } */}
-
                     </div>
 
                     <div className={styles.root}>
@@ -140,22 +121,13 @@ function SignIn() {
                       <ErrorMessage component="div" name='password' className={styles.error} />
                     </div>
 
-                    <div className={styles.root}>
-                      <div style={{ display: "flex" }}><Field type="checkbox" checked={formik.values.rememberMe} onChange={(event) => formik.setFieldValue("rememberMe", event.target.checked)} name="rememberMe" /><span style={{ marginLeft: "5px" }}>Remember Me</span></div>
-
-                    </div>
                     <Button style={{ width: '100%' }} appearance="primary" type="submit" name="signIn"> Sign In </Button>
                   </form>
-
-
                 </div>
               </div>
               <div>
-
               </div>
-
             </div>
-
           </div>
         </div>
       </div>

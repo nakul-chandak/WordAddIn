@@ -134,6 +134,7 @@ function HomePage() {
     const [textInput, setTextInput] = React.useState("");
     const [dialog,setDialog] = React.useState(false);
     const [warmPromptList,setWarmPromptList] =React.useState([]);
+    const [checkedAll,setCheckedAll] = React.useState(false);
 
     //this flag is for setting up the content on FINDINGS on protected prompt screen
     const [flag, setFlag] = React.useState(false)
@@ -227,16 +228,17 @@ function HomePage() {
 
     React.useEffect(() => {
         setSelectedOptions(appContext.aiTypes);
+        const allSelected = appContext.aiTypes.length >=3 ? true : false;
+        setCheckedAll(allSelected);
     },[appContext.aiTypes])
+
+    React.useEffect(() => {
+        const allSelected = selectedOptions.length >=3 ? true : false;
+        setCheckedAll(allSelected);
+        },[selectedOptions])
 
     return (
         <div style={{ marginTop: "3.5rem" }}>
-            {/* <div style={{ marginTop: "25px", backgroundColor: "#3977D1", padding: "15px", color: "white", textAlign: "center" }}>
-              
-                Prompt Protect and Fact <br />
-                Checker in just 3 easy steps
-            </div> */}
-
             <div className={styles.headerBar}>
                 <CounterBadge
                     appearance="filled"
@@ -249,7 +251,7 @@ function HomePage() {
 
                 <div className={styles.bottomPortion}>
                 <div style={{ display: "inline-flex", marginLeft: "10px", fontWeight: 600,marginTop:"5px" }}>
-                    <Checkbox key="selectAll" id="selectAll" name="selectAllCheckBox" value="SelectAll" onChange={handleSelectAll} />
+                    <Checkbox key="selectAll" id="selectAll" name="selectAllCheckBox" value="SelectAll" checked ={checkedAll} onChange={handleSelectAll} />
                     <span style={{ marginTop: "5px" }}>Select All</span>
                 </div>
                     <div className={styles.checkboxContainer}>
