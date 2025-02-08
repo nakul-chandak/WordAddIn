@@ -1,7 +1,6 @@
-import { CounterBadge, Field, InfoLabel, Radio, RadioGroup } from "@fluentui/react-components";
+import { CounterBadge, Field, Radio, RadioGroup } from "@fluentui/react-components";
 import React, { useEffect } from "react";
-import { makeStyles, Image, Checkbox, Button } from "@fluentui/react-components";
-import log from "../../../../assets/Guardrail_WithName.png";
+import { makeStyles, Checkbox, Button } from "@fluentui/react-components";
 import guardraiLogo from "../../../../assets/AI_Logos/guardrail.png";
 import chatgpt3Logo from "../../../../assets/AI_Logos/chatgpt3.png";
 import chatgpt4Logo from "../../../../assets/AI_Logos/chatgpt4.png";
@@ -50,10 +49,10 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "flex-start",
     flexGrow: "1",
-    height: "100px",
+    marginTop:"15px",
     padding: "0 10px 10px 10px",
-    position: "relative",
     bottom: "2rem",
+    flexWrap:'wrap'
   },
   checkboxWrapper: {
     display: "flex",
@@ -94,11 +93,10 @@ const useStyles = makeStyles({
     marginTop: "8px",
   },
   bottomDiv: {
-    padding: "15px",
-    position: "relative",
+    padding: "5px 15px 15px 15px",
     bottom: "4.5rem",
     color: "black",
-    height: "380px",
+    height: "calc(100vh - 25vh)"
   },
   innerDiv: {
     height: "auto",
@@ -136,17 +134,17 @@ const getLogo = (id: string) => {
   }
 };
 const logoArray = [
-  { label: "GPT 3", id: "gpt3" },
-  { label: "GPT 4", id: "gpt4" },
-  { label: "Gemini", id: "gemini" },
-  { label: "Guardrail LLM", id: "guardrail" },
+    { label: "GPT 3", id: "gpt3", disable:true, flexSize:'0 0 103px' },
+    { label: "GPT 4", id: "gpt4",  disable:true , flexSize:'0 0 103px'},
+    { label: "Gemini", id: "gemini",  disable:true , flexSize:'0 0 103px'},
+    { label: "Guardrail AI", id: "guardrail",  disable:true , flexSize:'0 0 143px'}
 ];
 
 const OptimizedPromts = () => {
   const styles = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
-  const [selectedOptions, setSelectedOptions] = React.useState<string[] | null>([]);
+  const [selectedOptions,setSelectedOptions] = React.useState<string[] | null>([]);
   const [originalPrompt, setOriginalPrompt] = React.useState<string>("");
   const [optimizedPrompt, setOptimizedPrompt] = React.useState<string>("");
 
@@ -190,16 +188,16 @@ const OptimizedPromts = () => {
       </div>
       <form id="aiPromptForm" onSubmit={handleSubmit}>
         <div className={styles.bottomPortion}>
-          <div
-            className={styles.checkboxContainer}
-            style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}
-          >
-            {/* <Button onClick={() => navigate("/home")}>Back</Button> */}
-            <IconButton style={{color:'black'}} onClick={() => navigate("/home")} title="Back">
+        <IconButton style={{color:'black', marginLeft:"5px"}} onClick={() => navigate("/home")} title="Back">
               <ArrowLeft24Regular />
             </IconButton>
-            {logoArray.map(({ label, id }) => (
-              <div key={id} className={styles.checkboxWrapper} style={{ display: "flex", alignItems: "center" }}>
+          <div
+            className={styles.checkboxContainer}
+            style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}
+          >
+            
+            {logoArray.map(({ label, id, flexSize }) => (
+              <div key={id} className={styles.checkboxWrapper} style={{ display: "flex", alignItems: "center",flex: flexSize}}>
                 <Checkbox
                   id={id}
                   name="checkboxOptions"
@@ -214,6 +212,7 @@ const OptimizedPromts = () => {
                   src={getLogo(id)}
                   alt={`${label} logo`}
                 />
+                 <span style={{paddingLeft: "5px", paddingRight: "5px"}}>{label}</span>
               </div>
             ))}
           </div>
@@ -242,9 +241,6 @@ const OptimizedPromts = () => {
 
                   <div
                     style={{
-                      // display: 'flex',
-                      // justifyContent: 'flex-start',
-                      // alignItems: 'center',
                       gap: "1rem",
                       marginTop: "10px",
                       float: "right",
@@ -282,24 +278,9 @@ const OptimizedPromts = () => {
                         </Button>
                       </div>
                     </div>
-
-                    {/* <Button
-                                            disabled={textInput.length === 0 || selectedOptions.length === 0}
-                                            appearance="primary"
-                                            type="submit"
-                                            name="checkBoxButton"
-                                            className={styles.button}
-                                        >
-                                            Submit
-                                        </Button> */}
+                  
                   </div>
                 </div>
-              </div>
-            </div>
-            <div style={{ width: "119px" }}>
-              <div className={styles.infoLabel}>
-                <InfoLabel info={<>This is example information for prompting.</>}></InfoLabel>
-                <span style={{ marginTop: "0px", float: "right" }}>Prompting Tips</span>
               </div>
             </div>
           </div>
