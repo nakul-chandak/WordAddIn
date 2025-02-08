@@ -130,7 +130,7 @@ function HomePage() {
     const state = {
         button: 1
       };
-    const [selectedOptions, setSelectedOptions] = React.useState<string[] | null>([]);
+    const [selectedOptions, setSelectedOptions] = React.useState<string[] | null>(["gpt3"]);
     const [textInput, setTextInput] = React.useState("");
     const [dialog,setDialog] = React.useState(false);
     const [warmPromptList,setWarmPromptList] =React.useState([]);
@@ -227,10 +227,15 @@ function HomePage() {
     }
 
     React.useEffect(() => {
-        setSelectedOptions(appContext.aiTypes);
+        if(appContext.aiTypes.length == 0) {
+            setSelectedOptions(["gpt3"]);
+        }
+        else{
+            setSelectedOptions(appContext.aiTypes);
+        }
         const allSelected = appContext.aiTypes.length >=3 ? true : false;
         setCheckedAll(allSelected);
-    },[appContext.aiTypes])
+    },[])
 
     React.useEffect(() => {
         const allSelected = selectedOptions.length >=3 ? true : false;
