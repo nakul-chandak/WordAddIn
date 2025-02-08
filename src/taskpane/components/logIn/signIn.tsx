@@ -102,10 +102,10 @@ function SignIn() {
 
   return (
     <FormikProvider value={formik}>
-      <div style={{ minHeight: "85vh", alignItems: "center", width: "100%", backgroundImage: "url(" + backgroundIng + ")" }}>
+      <div style={{ minHeight: "100vh", alignItems: "center", width: "100%", backgroundImage: "url(" + backgroundIng + ")" }}>
         <div style={{ minHeight: "85vh",textAlign: "center", justifyContent: "center", height: "auto" }}>
-          <div style={{ display: "flex", justifyContent: "center", textAlign: "left", alignItems: "center", marginBottom: "2.5rem", marginTop: "2.5rem" }}>
-            <div style={{ backgroundColor: "white", width: "400px", height: "400px", zIndex: "10" }}>
+          <div style={{ display: "flex", justifyContent: "center", textAlign: "left", alignItems: "center", }}>
+            <div style={{ backgroundColor: "white", width: "400px", height: "400px", zIndex: "10", marginBottom: "2.5rem", marginTop: "2.5rem" }}>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                 <img style={{ width: "180px", height: "50px", marginTop: "10px" }} src={componyLogo} />
                 <h2 className={styles.h2Login}>Sign in</h2>

@@ -44,7 +44,7 @@ const useStyles = makeStyles({
         width: "23px !important"
     },
     bottomPortion: {
-        height: '350px',
+        height: '86vh',
         background: 'rgb(247,247,247)',
         overflowX:'hidden'
     },
@@ -56,7 +56,8 @@ const useStyles = makeStyles({
         position: 'relative',
         bottom: '1rem',
         marginTop:"1rem",
-        marginBottom:"2rem"
+        marginBottom:"2rem",
+        flexWrap:'wrap'
     },
     checkboxWrapper: {
         display: "flex",
@@ -115,10 +116,10 @@ const getLogo = (id: string) => {
 };
 const logoArray = [
     
-    { label: "GPT 3", id: "gpt3", disable:false },
-    { label: "GPT 4", id: "gpt4",  disable:false },
-    { label: "Gemini", id: "gemini",  disable:false },
-    { label: "Guardrail AI", id: "guardrail",  disable:true }
+    { label: "GPT 3", id: "gpt3", disable:false, flexSize:'0 0 103px' },
+    { label: "GPT 4", id: "gpt4",  disable:false , flexSize:'0 0 103px'},
+    { label: "Gemini", id: "gemini",  disable:false , flexSize:'0 0 103px'},
+    { label: "Guardrail AI", id: "guardrail",  disable:true , flexSize:'0 0 143px'}
 ];
 
 function HomePage() {
@@ -244,14 +245,14 @@ function HomePage() {
 
     return (
         <div style={{ marginTop: "3.5rem" }}>
-            <div className={styles.headerBar}>
+            {/* <div className={styles.headerBar}>
                 <CounterBadge
                     appearance="filled"
                     className={styles.badge}
                     count={1}
                 />
                 Prompt
-            </div>
+            </div> */}
             <form id="aiPromptForm" onSubmit={handleSubmit}>
 
                 <div className={styles.bottomPortion}>
@@ -260,8 +261,8 @@ function HomePage() {
                     <span style={{ marginTop: "5px" }}>Select All</span>
                 </div>
                     <div className={styles.checkboxContainer}>
-                        {logoArray.map(({ label, id, disable }) => (
-                            <div key={id} className={styles.checkboxWrapper}>
+                        {logoArray.map(({ label, id, disable,flexSize }) => (
+                            <div key={id} className={styles.checkboxWrapper} style={{flex: flexSize}}>
                                 <Checkbox
                                     id={id}
                                     name="checkboxOptions"
@@ -300,7 +301,7 @@ function HomePage() {
                                 flag={flag} handleChange={handleChange}/>
                         </div>
                     </div>
-                    <div style={{width: "119px"}}>
+                    {/* <div style={{width: "119px"}}>
                         <div className={styles.infoLabel}>
                             <InfoLabel
                                 info={
@@ -312,7 +313,7 @@ function HomePage() {
                             </InfoLabel>
                             <span style={{marginTop: "0px", float: "right"}}>Prompting Tips</span>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </form>
         </div>
