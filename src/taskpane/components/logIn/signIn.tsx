@@ -23,6 +23,7 @@ const useStyles = makeStyles({
         textAlign:"center",
         fontWeight:"700",
         opacity:1,
+        marginTop:"3rem"
     },
     formDiv:{
         width:"90%",
@@ -105,9 +106,9 @@ function SignIn() {
       <div style={{ minHeight: "100vh", alignItems: "center", width: "100%", backgroundImage: "url(" + backgroundIng + ")" }}>
         <div style={{ minHeight: "85vh",textAlign: "center", justifyContent: "center", height: "auto" }}>
           <div style={{ display: "flex", justifyContent: "center", textAlign: "left", alignItems: "center", }}>
-            <div style={{ backgroundColor: "white", width: "400px", height: "400px", zIndex: "10", marginBottom: "2.5rem", marginTop: "2.5rem" }}>
+            <div style={{ backgroundColor: "white", width: "400px", height: "400px", zIndex: "10", marginBottom: "2.5rem", marginTop: "10rem" }}>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                <img style={{ width: "180px", height: "50px", marginTop: "10px" }} src={componyLogo} />
+                <img style={{ width: "180px", height: "50px", marginTop: "30px" }} src={componyLogo} />
                 <h2 className={styles.h2Login}>Sign in</h2>
                 <div className={styles.formDiv}>
                   <form noValidate id="aiSignInForm" onSubmit={formik.handleSubmit} >
