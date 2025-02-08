@@ -30,7 +30,7 @@ const useStyles = makeStyles({
     headerBar: {
         height: "50px",
         background: "white",
-        padding: "10px",
+        padding: "1.3rem 10px 10px 10px",
         display: "flex",
         justifyContent: "flex-start",
         alignItems: "center",
@@ -44,7 +44,7 @@ const useStyles = makeStyles({
         width: "23px !important"
     },
     bottomPortion: {
-        height: '86vh',
+        height: '82vh',
         background: 'rgb(247,247,247)',
         overflowX:'hidden'
     },
@@ -245,14 +245,14 @@ function HomePage() {
 
     return (
         <div style={{ marginTop: "3.5rem" }}>
-            {/* <div className={styles.headerBar}>
+            <div className={styles.headerBar}>
                 <CounterBadge
                     appearance="filled"
                     className={styles.badge}
                     count={1}
                 />
                 Prompt
-            </div> */}
+            </div>
             <form id="aiPromptForm" onSubmit={handleSubmit}>
 
                 <div className={styles.bottomPortion}>
