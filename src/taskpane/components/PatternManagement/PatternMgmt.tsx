@@ -334,12 +334,14 @@ function PatternMgmt() {
                 </div>
                 <div style={{ flexWrap: "wrap", display: 'flex' }} >
                     {custPatternData.map((item, index) => (
-                        <div key={index} style={{ flexWrap: "wrap", display: 'flex', width: '300px' }}>
+                        <div key={index} style={{ flexWrap: "wrap", display: 'flex', width: '300px', justifyContent:'space-between' }}>
                             <div key={item.id} style={{ display: 'flex', alignItems: 'flex-start' }} className={styles.checkboxWrapper}
                             >
                                 <Checkbox id={item.id} value={item.libraryGroup} onChange={handleCustCheckboxChange} checked={selectedCustOptions.includes(item.id)}></Checkbox>
                                 <Label size="small" style={{ padding: '.5rem' }}>{item.libraryGroup}</Label>
-                                {(<div >
+                                
+                            </div>
+                            {(<div style={{marginRight:'2rem'}}>
                                     <Edit12Regular
                                         style={{
                                             height: '15px',
@@ -350,7 +352,6 @@ function PatternMgmt() {
                                         }} onClick={() => editPattern(item.id)}>
                                     </Edit12Regular>
                                 </div>)}
-                            </div>
                         </div>
                     ))}
                 </div>
