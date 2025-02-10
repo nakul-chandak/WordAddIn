@@ -452,7 +452,8 @@ const ContentPanel = (props: any) => {
                                   textAlign: 'justify',
                                   textOverflow: 'ellipsis',
                                   lineHeight: 'normal',
-                                  whiteSpace: 'nowrap'
+                                  whiteSpace: 'nowrap',
+                                  wordBreak:'break-all'
                               }}
                               title={rank.source}
                           >
