@@ -132,7 +132,7 @@ const ContentPanel = (props: any) => {
         return color;
     };
 
-    const onChildTabSelect = (value: any) => {
+    const onChildTabSelect = () => {
         return ;
         // setChildTab(value.currentTarget.value);
         // sendRanksDetails([])
