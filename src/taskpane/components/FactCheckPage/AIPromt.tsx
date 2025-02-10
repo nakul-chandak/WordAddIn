@@ -36,7 +36,7 @@ const useStyles = makeStyles({
         padding: "0 10px",
         "& th": {
             textAlign: "center",
-            padding: "0 30px 0 0",
+            //padding: "0 30px 0 0",
         },
     },
     buttonWrapper: {
@@ -90,7 +90,7 @@ const ContentPanel = (props: any) => {
     const styles = useStyles();
     const [uniqueColor, setUniqueColor] = useState('');
     const [colors, setColors] = useState<string[]>([]);
-    const [selectedChildTab, setChildTab] = useState('tab-0');
+    const [selectedChildTab, setChildTab] = useState('');
     const [checkedItems, setCheckedItems] = useState<any[]>([]);
     const [topRanks, setTopRanks] = useState<any[]>([]);
 
@@ -120,7 +120,7 @@ const ContentPanel = (props: any) => {
         // Generate random colors based on the number of assertions
         const generateColors = () => articles.assertions.map(() => getRandomLightColor());
         setColors(generateColors());
-        setChildTab('tab-0');
+        //setChildTab('tab-0');
     }, [articles]);
 
     const getRandomLightColor = () => {
@@ -132,21 +132,10 @@ const ContentPanel = (props: any) => {
         return color;
     };
 
-    const handleCheckboxChange = (item: any) => {
-        setCheckedItems((prev) => {
-            if (prev.includes(item)) {
-                return prev.filter((i) => i !== item);
-            }
-            return [...prev, item];
-        });
-        console.log(item);
-        let index = articles.assertions.findIndex((art) => art.id === item);
-        setChildTab(`tab-${index}`);
-        //props.sendRanksDetails();
-    };
     const onChildTabSelect = (value: any) => {
-        setChildTab(value.currentTarget.value);
-        sendRanksDetails([])
+        return ;
+        // setChildTab(value.currentTarget.value);
+        // sendRanksDetails([])
     };
 
     const sendRanksDetails = (value: any) => {
@@ -156,8 +145,6 @@ const ContentPanel = (props: any) => {
 
 
     let previouslyInsertedItems: Set<string> = new Set(); // Global state to track inserted items
-    let footerCount = 0;
-    let docuementCount =0;
     const addTextToDocumentFooter = async () => {
         if (topRanks.length > 0) {
             try {
@@ -241,7 +228,7 @@ const ContentPanel = (props: any) => {
     
                                     // Mark the item as inserted
                                     previouslyInsertedItems.add(item);
-                                    topRanks.splice(i, 1); // Remove the inserted item from topRanks
+                                    //topRanks.splice(i, 1); // Remove the inserted item from topRanks
                                     i--; // Adjust loop index
                                 }
                             }
@@ -249,7 +236,7 @@ const ContentPanel = (props: any) => {
                     }
     
                     // Update state for topRanks after processing
-                    setTopRanks([...topRanks]);
+                    //setTopRanks([...topRanks]);
     
                     // Sync changes to Word
                     await context.sync();
@@ -260,12 +247,6 @@ const ContentPanel = (props: any) => {
         }
     };
     
-    
-    
-    
-    
-    
-
 
     return (
       <div>
@@ -358,169 +339,162 @@ const ContentPanel = (props: any) => {
             data={articles.assertions}
             selectedChildTab={selectedChildTab}
             sendRanksDetails={sendRanksDetails}
+            selectedItem={selectedItem}
           />
         </div>
       </div>
     );
 };
 
+  const TablePanel = (props: any) => {
+      const [checkedItemsLower, setCheckedItemsLower] = useState<any[]>([]);
+      const [topRanks, setTopRanks] = useState<any[]>([]);
+      const [childTab, setChildTab] = useState(0);
+      const [selectAllChecked, setSelectAllChecked] = useState(false); // Track Select All state
+      const [radioSelection, setRadioSelection] = useState(props.selectedItem)
 
-const TablePanel = (props: any) => {
-    const [checkedItemsLower, setCheckedItemsLower] = useState<any[]>([]);
-    const [topRanks, setTopRanks] = useState<any[]>([]);
-    const [childTab, setChildTab] = useState(0);
-    const [selectAllChecked, setSelectAllChecked] = useState(false); // Track Select All state
-
-    useEffect(() => {
-        const currentTopRanks = props.data[childTab]?.topRanks || [];
-        setTopRanks(currentTopRanks);
-        setTimeout(()=>{
-            document.getElementById('selectAll').click()
-        },100)
-    }, [childTab]);
-
-    let tRanks = props.data[childTab]?.topRanks || [];
-    tRanks = tRanks.map((_item, _index) => ({
-        ..._item,
-        id: _index + '_' + props.data[childTab]?.id
-    }));
 
     useEffect(() => {
+        console.log(radioSelection)
+        // Extract child tab index from props
         const selectedChildTab = props.selectedChildTab ? Number(props.selectedChildTab.split('-')[1]) : 0;
+        // Update childTab state
         setChildTab(selectedChildTab);
         setSelectAllChecked(false)
-        setCheckedItemsLower([])
-    }, [props.selectedChildTab]);
+        // Reset selected checkboxes
+        setCheckedItemsLower([]);
+        
+        // Fetch topRanks for the selected tab
+        //const currentTopRanks = mockData[selectedChildTab]?.topRanks || [];
+         const currentTopRanks = props.data[selectedChildTab]?.topRanks || [];
+        setTopRanks(currentTopRanks);
+      
+        // Optional: Auto-click the "Select All" checkbox (if needed)
+        setTimeout(() => {
+             let tRanks = props.data[childTab]?.topRanks || [];
+            //let tRanks = mockData[childTab]?.topRanks || [];
+          props.selectedItem && tRanks.length > 0 && document.getElementById('selectAll')?.click();
+        }, 100);
+      }, [props.selectedChildTab]);
+      
 
-    const handleCheckboxChange = (itemId: string) => {
-        setCheckedItemsLower((prev) => {
-            const updatedItems = prev.includes(itemId)
-                ? prev.filter((id) => id !== itemId)
-                : [...prev, itemId];
-            // Update Select All checkbox state
-            setSelectAllChecked(updatedItems.length === tRanks.length);
-            props.sendRanksDetails(updatedItems);
-            return updatedItems;
-        });
-    };
-    const handleSelectAllChange = () => {
-        const newSelectAllState = !selectAllChecked;
-        setSelectAllChecked(newSelectAllState);
 
-        const allItemIds = newSelectAllState ? tRanks.map((rank) => rank.id) : [];
-        setCheckedItemsLower(allItemIds);
-        props.sendRanksDetails(allItemIds);
-    };
-
-    const columns = [
-        { columnKey: "checkbox", label: "SELECT", width: "10%" },
-        { columnKey: "link", label: "LINK", width: "40%" },
-        { columnKey: "excerpt", label: "EXCERPT", width: "40%" },
-        { columnKey: "score", label: "SCORE", width: "10%" },
-    ];
-
-    return (
-        <Table role="grid" aria-label="Table with grid keyboard navigation" style={{ width: '100%', tableLayout: 'fixed' }}>
-            <TableHeader>
-                <TableRow>
-                    <TableHeaderCell                          
-                        style={{
-                                padding: '8px',
-                                width: columns[0].width,
-                                textAlign: 'left',
-                                backgroundColor: '#f4f4f4',
-                                fontWeight: 'bold',
-                                overflow: 'hidden',
-                                whiteSpace: 'nowrap',
-                                textOverflow: 'ellipsis',
-                                lineHeight: 'normal'
-                            }}>
-                        <Checkbox
-                            id="selectAll"
-                            checked={selectAllChecked}
-                            onChange={handleSelectAllChange}
-                        />
-                    </TableHeaderCell>
-                    {columns.slice(1).map((column) => (
-                        <TableHeaderCell
-                            key={column.columnKey}
-                            style={{
-                                padding: '8px',
-                                width: column.width,
-                                textAlign: 'left',
-                                backgroundColor: '#f4f4f4',
-                                fontWeight: 'bold',
-                                overflow: 'hidden',
-                                whiteSpace: 'nowrap',
-                                textOverflow: 'ellipsis',
-                                lineHeight: 'normal'
-                            }}
-                        >
-                            {column.label}
-                        </TableHeaderCell>
-                    ))}
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {tRanks.map((rank: any, index: number) => (
-                    <TableRow key={rank.id || index} style={{ height: '50px', display:'flex !important'}}>
-                        <TableCell style={{ textAlign: 'center', padding: '8px',
-                                paddingLeft:'0px' }}>
-                            <Checkbox
-                                id={rank.id}
-                                checked={checkedItemsLower.includes(rank.id)}
-                                onChange={() => handleCheckboxChange(rank.id)} style={{marginLeft:'-5px'}}
-                            />
-                        </TableCell> 
-                        <TableCell
-                            style={{
-                                padding: '8px',
-                                overflow: 'hidden',
-                                textAlign: 'justify',
-                                textOverflow: 'ellipsis',
-                                lineHeight: 'normal',
-                                whiteSpace: 'nowrap'
-                            }}
-                            title={rank.source}
-                        >
-                            <TableCellLayout style={{ whiteSpace: "normal" }}>
-                                <a href={rank.source} target="_blank" rel="noopener noreferrer">
-                                    {rank.source || 'Link'}
-                                </a>
-                            </TableCellLayout>
-                        </TableCell>
-                        <TableCell
-                            style={{
-                                padding: '8px',
-                                overflow: 'hidden',
-                                textAlign: 'justify',
-                                textOverflow: 'ellipsis',
-                                fontWeight: 'normal',
-                                lineHeight: 'normal',
-                            }}
-                            title={rank.excerpt}
-                        >
-                            {rank.excerpt || 'No Excerpt'}
-                        </TableCell>
-                        <TableCell
-                            style={{
-                                padding: '8px',
-                                overflow: 'hidden',
-                                whiteSpace: 'nowrap',
-                                textOverflow: 'ellipsis',
-                                fontWeight: 'normal',
-                                lineHeight: 'normal'
-                            }}
-                            title={rank.score ? `${(rank.score * 100).toFixed(2)}%` : 'N/A'}
-                        >
-                            {rank.score ? (rank.score * 100).toFixed(2) + '%' : 'N/A'}
-                        </TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
-    );
-};
+      let tRanks = props.data[childTab]?.topRanks || [];
+      //let tRanks = mockData[childTab]?.topRanks || [];
+      tRanks = tRanks.map((_item, _index) => ({
+          ..._item,
+           id: _index + '_' + props.data[childTab]?.id
+          //id: _index + '_' + mockData[childTab]?.id
+      }));
+  
+      const handleCheckboxChange = (itemId: string) => {
+          setCheckedItemsLower((prev) => {
+              const updatedItems = prev.includes(itemId)
+                  ? prev.filter((id) => id !== itemId)
+                  : [...prev, itemId];
+              // Update Select All checkbox state
+              setSelectAllChecked(updatedItems.length === tRanks.length);
+              props.sendRanksDetails(updatedItems);
+              return updatedItems;
+          });
+      };
+      const handleSelectAllChange = () => {
+          const newSelectAllState = !selectAllChecked;
+          setSelectAllChecked(newSelectAllState);
+  
+          const allItemIds = newSelectAllState ? tRanks.map((rank) => rank.id) : [];
+          setCheckedItemsLower(allItemIds);
+          props.sendRanksDetails(allItemIds);
+      };
+  
+      const columns = [
+          { columnKey: "checkbox", label: "SELECT", width: "1%" },
+          { columnKey: "link", label: "LINK", width: "40%" },
+          { columnKey: "excerpt", label: "EXCERPT", width: "55%" },
+          { columnKey: "score", label: "SCORE", width: "4%" },
+      ];
+  
+      return (
+          <Table role="grid" aria-label="Table with grid keyboard navigation" style={{ width: '100%', tableLayout: 'fixed' }}>
+              <TableHeader>
+                  <TableRow>
+                      <TableHeaderCell style={{ width: '2rem' }}>
+                          <Checkbox
+                              id="selectAll"
+                              checked={selectAllChecked}
+                              onChange={handleSelectAllChange}
+                          />
+                      </TableHeaderCell>
+                      {columns.slice(1).map((column) => (
+                          <TableHeaderCell
+                              key={column.columnKey} 
+                              style={{ width: column.columnKey === 'source' || column.columnKey === 'excerpt' ? 'auto' : 'max-content' }}
+                          >
+                              {column.label}
+                          </TableHeaderCell>
+                      ))}
+                  </TableRow>
+              </TableHeader>
+              <TableBody>
+                  {tRanks.map((rank: any, index: number) => (
+                      <TableRow key={rank.id || index} style={{ height: '50px', display: 'flex !important' }}>
+                          <TableCell style={{ width: '50px' }}>
+                              <Checkbox
+                                  id={rank.id}
+                                  checked={checkedItemsLower.includes(rank.id)}
+                                  onChange={() => handleCheckboxChange(rank.id)}
+                              />
+                          </TableCell> 
+                          <TableCell
+                              style={{
+                                  padding: '8px',
+                                  overflow: 'hidden',
+                                  textAlign: 'justify',
+                                  textOverflow: 'ellipsis',
+                                  lineHeight: 'normal',
+                                  whiteSpace: 'nowrap'
+                              }}
+                              title={rank.source}
+                          >
+                              <TableCellLayout style={{ whiteSpace: "normal" }}>
+                                  <a href={rank.source} target="_blank" rel="noopener noreferrer">
+                                      {rank.source || 'Link'}
+                                  </a>
+                              </TableCellLayout>
+                          </TableCell>
+                          <TableCell
+                              style={{
+                                  padding: '8px',
+                                  overflow: 'hidden',
+                                  textAlign: 'justify',
+                                  textOverflow: 'ellipsis',
+                                  fontWeight: 'normal',
+                                  lineHeight: 'normal',
+                              }}
+                              title={rank.excerpt}
+                          >
+                              {rank.excerpt || 'No Excerpt'}
+                          </TableCell>
+                          <TableCell
+                              style={{
+                                  padding: '8px',
+                                  overflow: 'hidden',
+                                  whiteSpace: 'nowrap',
+                                  textOverflow: 'ellipsis',
+                                  fontWeight: 'normal',
+                                  lineHeight: 'normal'
+                              }}
+                              title={rank.score ? `${(rank.score * 100).toFixed(2)}%` : 'N/A'}
+                          >
+                              {rank.score ? (rank.score * 100).toFixed(2) + '%' : 'N/A'}
+                          </TableCell>
+                      </TableRow>
+                  ))}
+              </TableBody>
+          </Table>
+      );
+  };
+  
 
 
 
