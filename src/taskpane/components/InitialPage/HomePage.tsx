@@ -293,7 +293,7 @@ function HomePage() {
                                 className={styles.button}
                                 style={{right:"1.2rem", top:"4.2rem"}}
                             >
-                                Prompt Protect
+                                Next
                             </Button>
                             <PromptProtect 
                                 textInput={textInput} warmPromptList={warmPromptList} openDialog ={dialog} 
