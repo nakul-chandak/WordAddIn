@@ -352,9 +352,58 @@ const ContentPanel = (props: any) => {
       const [childTab, setChildTab] = useState(0);
       const [selectAllChecked, setSelectAllChecked] = useState(false); // Track Select All state
       const [radioSelection, setRadioSelection] = useState(props.selectedItem)
-
+      let useMockData = false;
+      const mockData = [
+        {
+          id: '1',
+          topRanks: [
+            {
+              id: '1_1',
+              source: 'https://example.com/1',
+              excerpt: 'This is the first rank excerpt for rank 1.',
+              score: 0.85,
+            },
+            {
+              id: '2_1',
+              source: 'https://example.com/2',
+              excerpt: 'This is the second rank excerpt for rank 2.',
+              score: 0.92,
+            },
+            {
+              id: '3_1',
+              source: 'https://example.com/3',
+              excerpt: 'This is the third rank excerpt for rank 3.',
+              score: 0.76,
+            },
+          ],
+        },
+        {
+          id: '2',
+          topRanks: [
+            {
+              id: '1_2',
+              source: 'https://anotherlink.com/1',
+              excerpt: 'This is the first rank excerpt for rank 1 in child tab 2This is the first rank excerpt for rank 1 in child tab 2This is the first rank excerpt for rank 1 in child tab 2This is the first rank excerpt for rank 1 in child tab 2This is the first rank excerpt for rank 1 in child tab 2This is the first rank excerpt for rank 1 in child tab 2This is the first rank excerpt for rank 1 in child tab 2This is the first rank excerpt for rank 1 in child tab 2This is the first rank excerpt for rank 1 in child tab 2.',
+              score: 0.91,
+            },
+            {
+              id: '2_2',
+              source: 'https://anotherlink.com/2',
+              excerpt: 'This is the second rank excerpt for rank 2 in child tab 2.',
+              score: 0.88,
+            },
+            {
+              id: '3_2',
+              source: 'https://anotherlink.com/3',
+              excerpt: 'This is the third rank excerpt for rank 3 in child tab 2.',
+              score: 0.72,
+            },
+          ],
+        },
+      ];
 
     useEffect(() => {
+        
         console.log(radioSelection)
         // Extract child tab index from props
         const selectedChildTab = props.selectedChildTab ? Number(props.selectedChildTab.split('-')[1]) : 0;
@@ -365,26 +414,34 @@ const ContentPanel = (props: any) => {
         setCheckedItemsLower([]);
         
         // Fetch topRanks for the selected tab
-        //const currentTopRanks = mockData[selectedChildTab]?.topRanks || [];
-         const currentTopRanks = props.data[selectedChildTab]?.topRanks || [];
+        const currentTopRanks = useMockData ? mockData[selectedChildTab]?.topRanks || [] : props.data[selectedChildTab]?.topRanks || [];
+         //const currentTopRanks = props.data[selectedChildTab]?.topRanks || [];
         setTopRanks(currentTopRanks);
       
         // Optional: Auto-click the "Select All" checkbox (if needed)
         setTimeout(() => {
-             let tRanks = props.data[childTab]?.topRanks || [];
-            //let tRanks = mockData[childTab]?.topRanks || [];
-          props.selectedItem && tRanks.length > 0 && document.getElementById('selectAll')?.click();
+             //let tRanks = props.data[childTab]?.topRanks || [];
+            let tRanks = useMockData ?  mockData[childTab]?.topRanks || [] : props.data[childTab]?.topRanks || [];
+        //   props.selectedItem && tRanks.length > 0 && document.getElementById('selectAll')?.click();
+          if(props.selectedItem && tRanks.length > 0){
+            document.getElementById('selectAll')?.click();
+          }else{
+            if(tRanks.length === 0){
+                setSelectAllChecked(true);
+                document.getElementById('selectAll')?.click();
+            }
+          }
         }, 100);
       }, [props.selectedChildTab]);
       
 
 
-      let tRanks = props.data[childTab]?.topRanks || [];
-      //let tRanks = mockData[childTab]?.topRanks || [];
+      //let tRanks = props.data[childTab]?.topRanks || [];
+      let tRanks = useMockData ?  mockData[childTab]?.topRanks || [] : props.data[childTab]?.topRanks || [];
       tRanks = tRanks.map((_item, _index) => ({
           ..._item,
-           id: _index + '_' + props.data[childTab]?.id
-          //id: _index + '_' + mockData[childTab]?.id
+           //id: _index + '_' + props.data[childTab]?.id
+          id: useMockData ?  _index + '_' + mockData[childTab]?.id : _index + '_' + props.data[childTab]?.id
       }));
   
       const handleCheckboxChange = (itemId: string) => {
