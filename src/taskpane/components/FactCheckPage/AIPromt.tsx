@@ -475,7 +475,7 @@ const ContentPanel = (props: any) => {
           <Table role="grid" aria-label="Table with grid keyboard navigation" style={{ width: '100%', tableLayout: 'fixed' }}>
               <TableHeader>
                   <TableRow>
-                      <TableHeaderCell style={{ width: '2rem' }}>
+                      <TableHeaderCell style={{ width: '1rem' }}>
                           <Checkbox
                               id="selectAll"
                               checked={selectAllChecked}
@@ -485,7 +485,7 @@ const ContentPanel = (props: any) => {
                       {columns.slice(1).map((column) => (
                           <TableHeaderCell
                               key={column.columnKey} 
-                              style={{ width: column.columnKey === 'source' || column.columnKey === 'excerpt' ? 'auto' : 'max-content' }}
+                              style={{ width: '3rem' }}
                           >
                               {column.label}
                           </TableHeaderCell>
