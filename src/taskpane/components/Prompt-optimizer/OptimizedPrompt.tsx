@@ -220,7 +220,7 @@ const OptimizedPromts = () => {
             <span style={{ fontWeight: "bolder" }}>Optimize Prompt - get better AI results</span>
             <div className={styles.innerDiv}>
               <div style={{ flex: "1", borderRadius: "10px" }}>
-                <div style={{ padding: "0px 10px 10px 10px" }}>
+                <div style={{ padding: "0px 10px 10px 10px", wordBreak:'break-all' }}>
                   <p style={{ fontWeight: "bold" }}>ORIGINAL PROMPT</p>
                   <Field label="">
                     <RadioGroup value={originalPrompt} onChange={setPrompt1}>
