@@ -456,7 +456,7 @@ const ContentPanel = (props: any) => {
           });
       };
       const handleSelectAllChange = () => {
-          const newSelectAllState = !selectAllChecked;
+          const newSelectAllState = !selectAllChecked && !(topRanks.length === 0);
           setSelectAllChecked(newSelectAllState);
   
           const allItemIds = newSelectAllState ? tRanks.map((rank) => rank.id) : [];
