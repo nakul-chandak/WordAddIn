@@ -466,90 +466,145 @@ const ContentPanel = (props: any) => {
   
       const columns = [
           { columnKey: "checkbox", label: "SELECT", width: "1%" },
-          { columnKey: "link", label: "LINK", width: "40%" },
-          { columnKey: "excerpt", label: "EXCERPT", width: "55%" },
-          { columnKey: "score", label: "SCORE", width: "4%" },
+          { columnKey: "link", label: "Select All", width: "40%" },
+        //   { columnKey: "excerpt", label: "EXCERPT", width: "55%" },
+        //   { columnKey: "score", label: "SCORE", width: "4%" },
       ];
   
       return (
-          <Table role="grid" aria-label="Table with grid keyboard navigation" style={{ width: '100%', tableLayout: 'fixed' }}>
-              <TableHeader>
-                  <TableRow>
-                      <TableHeaderCell style={{ width: '1rem' }}>
-                          <Checkbox
-                              id="selectAll"
-                              checked={selectAllChecked}
-                              onChange={handleSelectAllChange}
-                          />
-                      </TableHeaderCell>
-                      {columns.slice(1).map((column) => (
-                          <TableHeaderCell
-                              key={column.columnKey} 
-                              style={{ width: '3rem' }}
+        <Table
+          role="grid"
+          aria-label="Table with grid keyboard navigation"
+          style={{ width: "100%", tableLayout: "fixed" }}
+        >
+          <TableHeader>
+            <TableRow>
+              <TableHeaderCell style={{ width: "1rem" }}>
+                <Checkbox id="selectAll" checked={selectAllChecked} onChange={handleSelectAllChange} />
+              </TableHeaderCell>
+              {columns.slice(1).map((column) => (
+                <TableHeaderCell key={column.columnKey} style={{ width: "19rem" }}>
+                  {column.label}
+                </TableHeaderCell>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {tRanks.map((rank: any, index: number) => (
+              <TableRow key={rank.id || index} style={{ height: "50px", display: "flex !important" }}>
+                <TableCell style={{ width: "50px", flex: "1" }}>
+                  <Checkbox
+                    id={rank.id}
+                    checked={checkedItemsLower.includes(rank.id)}
+                    onChange={() => handleCheckboxChange(rank.id)}
+                  />
+                </TableCell>
+                <TableCell
+                  style={{
+                    padding: "8px",
+                    overflow: "hidden",
+                    textAlign: "justify",
+                    textOverflow: "ellipsis",
+                    lineHeight: "normal",
+                    whiteSpace: "nowrap",
+                    wordBreak: "break-all",
+                    width: "100%",
+                  }}
+                  title={rank.source}
+                >
+                  <TableCellLayout>
+                    <table width="100%" style={{ borderCollapse: "collapse" }}>
+                      <tbody>
+                        {/* Title */}
+                        <tr style={{ wordWrap: "break-word", whiteSpace: "normal" }}>
+                          <th style={{ textAlign: "left", width: "5rem", padding: "8px" }}>
+                            Title:
+                          </th>
+                          <td
+                          colSpan={4}
+                            style={{
+                              wordBreak: "break-word",
+                              padding: "8px",
+                              fontWeight: "normal"
+                            }}
                           >
-                              {column.label}
-                          </TableHeaderCell>
-                      ))}
-                  </TableRow>
-              </TableHeader>
-              <TableBody>
-                  {tRanks.map((rank: any, index: number) => (
-                      <TableRow key={rank.id || index} style={{ height: '50px', display: 'flex !important' }}>
-                          <TableCell style={{ width: '50px' }}>
-                              <Checkbox
-                                  id={rank.id}
-                                  checked={checkedItemsLower.includes(rank.id)}
-                                  onChange={() => handleCheckboxChange(rank.id)}
-                              />
-                          </TableCell> 
-                          <TableCell
-                              style={{
-                                  padding: '8px',
-                                  overflow: 'hidden',
-                                  textAlign: 'justify',
-                                  textOverflow: 'ellipsis',
-                                  lineHeight: 'normal',
-                                  whiteSpace: 'nowrap',
-                                  wordBreak:'break-all'
-                              }}
-                              title={rank.source}
+                            {rank.title}
+                          </td>
+                        </tr>
+
+                        {/* Link */}
+                        <tr style={{ wordWrap: "break-word", whiteSpace: "normal" }}>
+                          <th style={{ textAlign: "left", width: "5rem", padding: "8px" }}>
+                            Link:
+                          </th>
+                          <td colSpan={4} style={{ wordBreak: "break-word", padding: "8px" }}>
+                            <a href={rank.source} target="_blank" rel="noopener noreferrer">
+                              {rank.source || "Link"}
+                            </a>
+                          </td>
+                        </tr>
+
+                        {/* Excerpt and Score in the same row */}
+                        <tr style={{ wordWrap: "break-word", whiteSpace: "normal" }}>
+                          <th style={{ textAlign: "left", width: "5rem", padding: "8px",  }}>
+                            Excerpt:
+                          </th>
+                          <td
+                            style={{
+                              padding: "8px",
+                              fontWeight: "normal",
+                              wordBreak: "break-word",
+                              overflowWrap: "break-word",
+                              whiteSpace: "normal",
+                            }}
+                            title={rank.excerpt}
                           >
-                              <TableCellLayout style={{ whiteSpace: "normal" }}>
-                                  <a href={rank.source} target="_blank" rel="noopener noreferrer">
-                                      {rank.source || 'Link'}
-                                  </a>
-                              </TableCellLayout>
-                          </TableCell>
-                          <TableCell
-                              style={{
-                                  padding: '8px',
-                                  overflow: 'hidden',
-                                  textAlign: 'justify',
-                                  textOverflow: 'ellipsis',
-                                  fontWeight: 'normal',
-                                  lineHeight: 'normal',
-                              }}
-                              title={rank.excerpt}
+                          </td>
+                          <th
+                            style={{
+                              textAlign: "right",
+                              padding: "8px",
+                              fontWeight: "bold",
+                              whiteSpace: "nowrap",
+                            }}
                           >
-                              {rank.excerpt || 'No Excerpt'}
-                          </TableCell>
-                          <TableCell
-                              style={{
-                                  padding: '8px',
-                                  overflow: 'hidden',
-                                  whiteSpace: 'nowrap',
-                                  textOverflow: 'ellipsis',
-                                  fontWeight: 'normal',
-                                  lineHeight: 'normal'
-                              }}
-                              title={rank.score ? `${(rank.score * 100).toFixed(2)}%` : 'N/A'}
+                            Score:
+                          </th>
+                          <td
+                            style={{
+                              padding: "8px",
+                              fontWeight: "bold",
+                              textAlign: "right",
+                              whiteSpace: "nowrap"
+                            }}
+                            title={rank.score ? `${(rank.score * 100).toFixed(2)}%` : "N/A"}
                           >
-                              {rank.score ? (rank.score * 100).toFixed(2) + '%' : 'N/A'}
-                          </TableCell>
-                      </TableRow>
-                  ))}
-              </TableBody>
-          </Table>
+                            {rank.score ? (rank.score * 100).toFixed(2) + "%" : "N/A"}
+                          </td>
+                        </tr>
+                        <tr style={{ wordWrap: "break-word", whiteSpace: "normal" }}>
+                          <td
+                          colSpan={4}
+                            style={{
+                              padding: "8px",
+                              fontWeight: "normal",
+                              wordBreak: "break-word",
+                              overflowWrap: "break-word",
+                              whiteSpace: "normal"
+                            }}
+                            title={rank.excerpt}
+                          >
+                            {rank.excerpt || "No Excerpt"}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </TableCellLayout>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       );
   };
   
