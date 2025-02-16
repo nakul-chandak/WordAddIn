@@ -470,6 +470,19 @@ const ContentPanel = (props: any) => {
         //   { columnKey: "excerpt", label: "EXCERPT", width: "55%" },
         //   { columnKey: "score", label: "SCORE", width: "4%" },
       ];
+
+      const gridStyles = {
+        display: "grid",
+        gridTemplateColumns: "2rem auto", // Fixed width for headers, flexible content
+        gap: "8px",
+        width: "100%",
+        alignItems: "start",
+      
+        // Responsive layout for smaller screens
+        "@media (max-width: 600px)": {
+          gridTemplateColumns: "1fr", // Switch to single-column layout on mobile
+        }
+      };
   
       return (
         <Table
@@ -483,7 +496,7 @@ const ContentPanel = (props: any) => {
                 <Checkbox id="selectAll" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </TableHeaderCell>
               {columns.slice(1).map((column) => (
-                <TableHeaderCell key={column.columnKey} style={{ width: "19rem" }}>
+                <TableHeaderCell key={column.columnKey} style={{ width: "10rem" }}>
                   {column.label}
                 </TableHeaderCell>
               ))}
@@ -501,6 +514,7 @@ const ContentPanel = (props: any) => {
                 </TableCell>
                 <TableCell
                   style={{
+                    flex: "10",
                     padding: "8px",
                     overflow: "hidden",
                     textAlign: "justify",
@@ -512,93 +526,41 @@ const ContentPanel = (props: any) => {
                   }}
                   title={rank.source}
                 >
-                  <TableCellLayout>
-                    <table width="100%" style={{ borderCollapse: "collapse" }}>
-                      <tbody>
-                        {/* Title */}
-                        <tr style={{ wordWrap: "break-word", whiteSpace: "normal" }}>
-                          <th style={{ textAlign: "left", width: "5rem", padding: "8px" }}>
-                            Title:
-                          </th>
-                          <td
-                          colSpan={4}
-                            style={{
-                              wordBreak: "break-word",
-                              padding: "8px",
-                              fontWeight: "normal"
-                            }}
-                          >
-                            {rank.title}
-                          </td>
-                        </tr>
+                  <TableCellLayout style={{ whiteSpace: "normal" }}>
+                    <div style={gridStyles}>
+                      {/* Title Section */}
+                      <div style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>Title:</div>
+                      <div style={{ fontWeight: "normal", wordBreak: "break-word" }}>{rank.title}</div>
 
-                        {/* Link */}
-                        <tr style={{ wordWrap: "break-word", whiteSpace: "normal" }}>
-                          <th style={{ textAlign: "left", width: "5rem", padding: "8px" }}>
-                            Link:
-                          </th>
-                          <td colSpan={4} style={{ wordBreak: "break-word", padding: "8px" }}>
-                            <a href={rank.source} target="_blank" rel="noopener noreferrer">
-                              {rank.source || "Link"}
-                            </a>
-                          </td>
-                        </tr>
+                      {/* Link Section */}
+                      <div style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>Link:</div>
+                      <div style={{ fontWeight: "normal", wordBreak: "break-word" }}>
+                        <a href={rank.source} target="_blank" rel="noopener noreferrer">
+                          {rank.source || "Link"}
+                        </a>
+                      </div>
 
-                        {/* Excerpt and Score in the same row */}
-                        <tr style={{ wordWrap: "break-word", whiteSpace: "normal" }}>
-                          <th style={{ textAlign: "left", width: "5rem", padding: "8px",  }}>
-                            Excerpt:
-                          </th>
-                          <td
-                            style={{
-                              padding: "8px",
-                              fontWeight: "normal",
-                              wordBreak: "break-word",
-                              overflowWrap: "break-word",
-                              whiteSpace: "normal",
-                            }}
-                            title={rank.excerpt}
-                          >
-                          </td>
-                          <th
-                            style={{
-                              textAlign: "right",
-                              padding: "8px",
-                              fontWeight: "bold",
-                              whiteSpace: "nowrap",
-                            }}
-                          >
-                            Score:
-                          </th>
-                          <td
-                            style={{
-                              padding: "8px",
-                              fontWeight: "bold",
-                              textAlign: "right",
-                              whiteSpace: "nowrap"
-                            }}
-                            title={rank.score ? `${(rank.score * 100).toFixed(2)}%` : "N/A"}
-                          >
-                            {rank.score ? (rank.score * 100).toFixed(2) + "%" : "N/A"}
-                          </td>
-                        </tr>
-                        <tr style={{ wordWrap: "break-word", whiteSpace: "normal" }}>
-                          <td
-                          colSpan={4}
-                            style={{
-                              padding: "8px",
-                              fontWeight: "normal",
-                              wordBreak: "break-word",
-                              overflowWrap: "break-word",
-                              whiteSpace: "normal"
-                            }}
-                            title={rank.excerpt}
-                          >
-                            {rank.excerpt || "No Excerpt"}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                      {/* Excerpt & Score on the Same Line */}
+                      <div style={{ display: "flex", gap: "16px" }}>
+                        <div style={{display:'grid', gridTemplateColumns: "100px 10rem", }}>
+                          <span style={{ fontWeight: "bold" }}>Excerpt:</span>
+                          <div style={{position:'relative', left:'0.5rem', display:'flex', gap:'1rem'}}>
+                            <span style={{ fontWeight: "bold" }}>Score:</span>
+                            <span title={rank.score ? `${(rank.score * 100).toFixed(2)}%` : "N/A"}>
+                              {rank.score ? (rank.score * 100).toFixed(2) + "%" : "N/A"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Excerpt Content (Full Row) */}
+                      <div
+                        style={{ gridColumn: "1 / -1", fontWeight: "normal", wordBreak: "break-word" }}
+                        title={rank.excerpt}
+                      >
+                        {rank.excerpt || "No Excerpt"}
+                      </div>
+                    </div>
                   </TableCellLayout>
                 </TableCell>
               </TableRow>
