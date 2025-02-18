@@ -146,7 +146,6 @@ const ContentPanel = (props: any) => {
 
     let previouslyInsertedItems: Set<string> = new Set(); // Global state to track inserted items
     const addTextToDocumentFooter = async () => {
-        if (topRanks.length > 0) {
             try {
                 await Word.run(async (context) => {
                     // Get the footer and the body of the document
@@ -184,7 +183,7 @@ const ContentPanel = (props: any) => {
                     );
     
                     let articleIds = []; // To track inserted article IDs
-    
+                    if (topRanks.length > 0) {
                     for (let i = 0; i < topRanks.length; i++) {
                         const item = topRanks[i];
     
@@ -234,17 +233,28 @@ const ContentPanel = (props: any) => {
                             }
                         }
                     }
-    
-                    // Update state for topRanks after processing
-                    //setTopRanks([...topRanks]);
-    
-                    // Sync changes to Word
+                  }else{
+                    const id = selectedChildTab.split("-")[1]
+                    const article = articles.assertions[id];
+                    const textToInsert = article.articleName;
+                    const textId = article.id;
+                    // Insert into body
+                    if (!articleIds.includes(textId)) {
+                      articleIds.push(textId);
+
+                      // Insert article text and superscript in the body
+                      const bodyParagraph = body.insertHtml("<br>" + textToInsert, Word.InsertLocation.end);
+                      bodyParagraph.insertHtml(``, Word.InsertLocation.end);
+                    } else {
+                      body.insertHtml(``, Word.InsertLocation.end);
+                    }
+                  }
+                  // Sync changes to Word
                     await context.sync();
                 });
             } catch (error) {
                 console.error("Error inserting content into Word document and footer:", error);
             }
-        }
     };
     
 
