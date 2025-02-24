@@ -259,23 +259,13 @@ const ContentPanel = (props: any) => {
     
 
     return (
-      <div>
-        <div className={styles.buttonWrapper} style={{ position: "relative", left: "1rem" }}>
-          <Button
-            disabled={!selectedItem && topRanks.length === 0}
-            shape="circular"
-            icon={<AddRegular />}
-            onClick={() => {
-              addTextToDocumentFooter();
-            }}
-          >
-            Add Text To Document
-          </Button>
-        </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         <div style={{ display: "flex", padding: "0.5rem" }}>
           <div style={{ display: "flex", padding: "0.5rem" }}>
             <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "1rem" }}>
-              {articles.assertions.map((art: any, index: any) => {
+              {
+              articles.assertions && articles.assertions.length > 0 &&
+              articles.assertions.map((art: any, index: any) => {
                 const color = colors[index] || "#FFFFFF"; // Default color if undefined
                 return (
                   <div key={`item-${index}`} style={{ display: "flex", alignItems: "center" }}>
@@ -316,41 +306,62 @@ const ContentPanel = (props: any) => {
             </div>
           </div>
         </div>
+        <div className={styles.buttonWrapper} style={{ position: "relative", left: "1rem" }}>
+          {(articles.assertions || articles.assertions.length > 0) && (
+            <Button
+              disabled={!selectedItem && topRanks.length === 0}
+              shape="circular"
+              icon={<AddRegular />}
+              onClick={() => {
+                addTextToDocumentFooter();
+              }}
+            >
+              Add Text To Document
+            </Button>
+          )}
+        </div>
         <div style={{ display: "flex", padding: "0.5rem", flexDirection: "column", fontSize: "small" }}>
           <TabList className={styles.tabList} selectedValue={selectedChildTab} onTabSelect={onChildTabSelect}>
-            {articles.assertions.map((_, index) => {
-              const color = colors[index] || "#FFFFFF"; // Default color if undefined
-              const isSelected = selectedChildTab === `tab-${index}`;
-              return (
-                <Tab
-                  key={index}
-                  value={`tab-${index}`}
-                  className={`${styles.tab} ${isSelected ? styles.selectedTab : ""}`}
-                >
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <span
-                      style={{
-                        height: "15px",
-                        width: "15px",
-                        borderRadius: "10px",
-                        backgroundColor: color,
-                        display: "inline-block",
-                        marginRight: "5px",
-                      }}
-                    ></span>
-                    <span>{index + 1}</span>
-                    {isSelected && <div className={styles.tabIndicator}></div>}
-                  </div>
-                </Tab>
-              );
-            })}
+            {!articles.assertions || articles.assertions.length === 0 ? (
+              <div style={{position:'relative', left:'0.8rem'}}>No Data Available</div>
+            ) : (
+              articles.assertions.map((_: any, index: any) => {
+                const color = colors[index] || "#FFFFFF"; // Default color if undefined
+                const tabValue = `tab-${index}`;
+                const isSelected = selectedChildTab === tabValue;
+
+                // Only render the selected tab
+                if (!isSelected) return null;
+
+                return (
+                  <Tab key={index} value={tabValue} className={`${styles.tab} ${isSelected ? styles.selectedTab : ""}`}>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <span
+                        style={{
+                          height: "15px",
+                          width: "15px",
+                          borderRadius: "10px",
+                          backgroundColor: color,
+                          display: "inline-block",
+                          marginRight: "5px",
+                        }}
+                      ></span>
+                      <span>{index + 1}</span>
+                      {(isSelected || index === 0) && !(index > 0) && <div className={styles.tabIndicator}></div>}
+                    </div>
+                  </Tab>
+                );
+              })
+            )}
           </TabList>
-          <TablePanel
-            data={articles.assertions}
-            selectedChildTab={selectedChildTab}
-            sendRanksDetails={sendRanksDetails}
-            selectedItem={selectedItem}
-          />
+          {selectedChildTab && (
+            <TablePanel
+              data={articles.assertions}
+              selectedChildTab={selectedChildTab}
+              sendRanksDetails={sendRanksDetails}
+              selectedItem={selectedItem}
+            />
+          )}
         </div>
       </div>
     );
@@ -616,57 +627,86 @@ function AIPrompt(props: any) {
     };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column" }}>
-            <div>
-                <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
-                    {props.state.sourceTypes.includes("guardrail") && (
-                        <Tab value="guardrail" id="guardrail">
-                            <Image alt="Guardrail" src={icon32} height={30} width={30} />
-                        </Tab>
-                    )}
-                    {props.state.sourceTypes.includes("gpt3") && (
-                        <Tab value="chatGPT" id="chatGPT">
-                            <Image alt="Chat GPT" src={chatGPT} height={30} width={30} />
-                        </Tab>
-                    )}
-                    {props.state.sourceTypes.includes("copilot") && (
-                        <Tab value="copilot" id="copilot">
-                            <Image alt="Copilot" src={copilot} height={30} width={30} />
-                        </Tab>
-                    )}
-                    {props.state.sourceTypes.includes("gemini") && (
-                        <Tab value="gemini" id="gemini">
-                            <Image alt="Gemini" src={gemini} height={30} width={30} />
-                        </Tab>
-                    )}
-                    {props.state.sourceTypes.includes("gpt4") && (
-                        <Tab value="chatGPT4" id="chatGPT4">
-                            <Image alt="chatGPT4" src={chatGPT4} height={30} width={30} />
-                        </Tab>
-                    )}
-                </TabList>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", margin: "1rem 0" }}>
-
-                <div className={styles.panels}>
-                    {selectedValue === "guardrail" && props.state.sourceTypes.includes("guardrail") && (
-                        <ContentPanel title="Guardrail Content" data={data && data.filter((d: any) => d.promptType === selectedGPT)} />
-                    )}
-                    {selectedValue === "chatGPT" && props.state.sourceTypes.includes("gpt3") && (
-                        <ContentPanel title="Chat GPT Content" data={data && data.filter((d: any) => d.promptType === selectedGPT)} />
-                    )}
-                    {selectedValue === "chatGPT4" && props.state.sourceTypes.includes("gpt4") && (
-                        <ContentPanel title="Chat GPT4 Content" data={data && data.filter((d: any) => d.promptType === selectedGPT)} />
-                    )}
-                    {selectedValue === "copilot" && props.state.sourceTypes.includes("copilot") && (
-                        <ContentPanel title="Copilot Content" data={data && data.filter((d: any) => d.promptType === selectedGPT)} />
-                    )}
-                    {selectedValue === "gemini" && props.state.sourceTypes.includes("gemini") && (
-                        <ContentPanel title="Gemini Content" data={data && data.filter((d: any) => d.promptType === selectedGPT)} />
-                    )}
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div>
+          <TabList style={{flexFlow:'wrap'}} selectedValue={selectedValue} onTabSelect={onTabSelect}>
+            {props.state.sourceTypes.includes("guardrail") && (
+              <Tab value="guardrail" id="guardrail">
+                <div style={{ display: "flex", justifyContent: "space-evenly", alignItems: "center", width:'5rem' }}>
+                  <Image alt="Guardrail" src={icon32} height={30} width={30} />
+                  <span style={{position:'relative', left:'1rem'}}>Guardrail AI</span>
                 </div>
-            </div>
+              </Tab>
+            )}
+            {props.state.sourceTypes.includes("gpt3") && (
+              <Tab value="chatGPT" id="chatGPT">
+                <div style={{ display: "flex", justifyContent: "space-evenly", alignItems: "center",width:'6rem' }}>
+                  <Image alt="Chat GPT" src={chatGPT} height={30} width={30} />
+                  <span>GPT 3</span>
+                </div>
+              </Tab>
+            )}
+            {props.state.sourceTypes.includes("copilot") && (
+              <Tab value="copilot" id="copilot">
+                <div style={{ display: "flex", justifyContent: "space-evenly", alignItems: "center", width:'6rem' }}>
+                  <Image alt="Copilot" src={copilot} height={30} width={30} />
+                  <span>Copilot</span>
+                </div>
+              </Tab>
+            )}
+            {props.state.sourceTypes.includes("gemini") && (
+              <Tab value="gemini" id="gemini">
+                <div style={{ display: "flex", justifyContent: "space-evenly", alignItems: "center", width:'6rem' }}>
+                  <Image alt="Gemini" src={gemini} height={30} width={30} />
+                  <span>Gemini</span>
+                </div>
+              </Tab>
+            )}
+            {props.state.sourceTypes.includes("gpt4") && (
+              <Tab value="chatGPT4" id="chatGPT4">
+                <div style={{ display: "flex", justifyContent: "space-evenly", alignItems: "center", width:'6rem' }}>
+                  <Image alt="chatGPT4" src={chatGPT4} height={30} width={30} />
+                  <span>GPT 4</span>
+                </div>
+              </Tab>
+            )}
+          </TabList>
         </div>
+        <div style={{ display: "flex", justifyContent: "space-between", margin: "1rem 0" }}>
+          <div className={styles.panels}>
+            {selectedValue === "guardrail" && props.state.sourceTypes.includes("guardrail") && (
+              <ContentPanel
+                title="Guardrail Content"
+                data={data && data.filter((d: any) => d.promptType === selectedGPT)}
+              />
+            )}
+            {selectedValue === "chatGPT" && props.state.sourceTypes.includes("gpt3") && (
+              <ContentPanel
+                title="Chat GPT Content"
+                data={data && data.filter((d: any) => d.promptType === selectedGPT)}
+              />
+            )}
+            {selectedValue === "chatGPT4" && props.state.sourceTypes.includes("gpt4") && (
+              <ContentPanel
+                title="Chat GPT4 Content"
+                data={data && data.filter((d: any) => d.promptType === selectedGPT)}
+              />
+            )}
+            {selectedValue === "copilot" && props.state.sourceTypes.includes("copilot") && (
+              <ContentPanel
+                title="Copilot Content"
+                data={data && data.filter((d: any) => d.promptType === selectedGPT)}
+              />
+            )}
+            {selectedValue === "gemini" && props.state.sourceTypes.includes("gemini") && (
+              <ContentPanel
+                title="Gemini Content"
+                data={data && data.filter((d: any) => d.promptType === selectedGPT)}
+              />
+            )}
+          </div>
+        </div>
+      </div>
     );
 }
 
